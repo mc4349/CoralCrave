@@ -171,8 +171,9 @@ export function StreamingProvider({ children }: { children: React.ReactNode }) {
         categories,
         agora: {
           channel: channelName,
-          broadcasterUid: uid
-        }
+          broadcasterUid: uid.toString()
+        },
+        startedAt: serverTimestamp()
       })
 
       const streamData: LiveStream = {
