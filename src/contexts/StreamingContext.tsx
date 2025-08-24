@@ -122,9 +122,32 @@ export function StreamingProvider({ children }: { children: React.ReactNode }) {
       const token = await getAgoraToken(channelName, uid, 'publisher')
 
       // Create local tracks - this will trigger browser permission popup
-      const tracks = await createLocalTracks()
-      const audioTrack = tracks.audioTrack
-      const videoTrack = tracks.videoTrack
+      console.log('Attempting to create local tracks...')
+      let audioTrack: IMicrophoneAudioTrack
+      let videoTrack: ICameraVideoTrack
+      
+      try {
+        const tracks = await createLocalTracks()
+        audioTrack = tracks.audioTrack
+        videoTrack = tracks.videoTrack
+        console.log('Local tracks created successfully')
+      } catch (trackError: any) {
+        console.error('Error creating local tracks:', trackError)
+        console.error('Error name:', trackError.name)
+        console.error('Error code:', trackError.code)
+        console.error('Error message:', trackError.message)
+        
+        // Re-throw the error with more specific information
+        if (trackError.name === 'NotAllowedError') {
+          throw new Error('Camera and microphone permissions were denied. Please click "Allow" when prompted and try again.')
+        } else if (trackError.name === 'NotFoundError') {
+          throw new Error('No camera or microphone found. Please connect your devices and try again.')
+        } else if (trackError.name === 'NotReadableError') {
+          throw new Error('Camera or microphone is already in use by another application.')
+        } else {
+          throw new Error(`Failed to access camera and microphone: ${trackError.message}`)
+        }
+      }
 
       localAudioTrackRef.current = audioTrack
       localVideoTrackRef.current = videoTrack
