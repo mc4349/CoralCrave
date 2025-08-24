@@ -1,0 +1,32 @@
+2025-08-24 10:53:52 [ERROR]: uncaughtException: ⨯ Unable to compile TypeScript:
+src/socket/handlers.ts(265,1): error TS1005: ',' expected.
+src/socket/handlers.ts(330,1): error TS1005: ')' expected.
+
+Error: ⨯ Unable to compile TypeScript:
+src/socket/handlers.ts(265,1): error TS1005: ',' expected.
+src/socket/handlers.ts(330,1): error TS1005: ')' expected.
+
+    at Object.<anonymous> (D:\CoralCrave\server\src\socket\handlers.ts:1:7)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1554:14)
+    at Module._compile (D:\CoralCrave\server\node_modules\source-map-support\source-map-support.js:521:25)
+    at Module.m._compile (C:\Users\scole\AppData\Local\Temp\ts-node-dev-hook-8861558875370938.js:69:33)
+    at node:internal/modules/cjs/loader:1706:10
+    at require.extensions..jsx.require.extensions..js (C:\Users\scole\AppData\Local\Temp\ts-node-dev-hook-8861558875370938.js:114:20)
+    at require.extensions.<computed> (C:\Users\scole\AppData\Local\Temp\ts-node-dev-hook-8861558875370938.js:71:20)
+    at Object.nodeDevHook [as .ts] (D:\CoralCrave\server\node_modules\ts-node-dev\lib\hook.js:63:13)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+    at Function._load (node:internal/modules/cjs/loader:1108:12) {"error":{},"exception":true,"date":"Sun Aug 24 2025 10:53:52 GMT-0400 (Eastern Daylight Time)","process":{"pid":11236,"uid":null,"gid":null,"cwd":"D:\\CoralCrave\\server","execPath":"C:\\Program Files\\nodejs\\node.exe","version":"v22.14.0","argv":["C:\\Program Files\\nodejs\\node.exe","src/index.ts"],"memoryUsage":{"rss":97689600,"heapTotal":58228736,"heapUsed":37549728,"external":2392748,"arrayBuffers":122355}},"os":{"loadavg":[0,0,0],"uptime":1167752.984},"trace":[{"column":7,"file":"D:\\CoralCrave\\server\\src\\socket\\handlers.ts","function":null,"line":1,"method":null,"native":false},{"column":14,"file":"node:internal/modules/cjs/loader","function":null,"line":1554,"method":null,"native":false},{"column":25,"file":"D:\\CoralCrave\\server\\node_modules\\source-map-support\\source-map-support.js","function":"Module._compile","line":521,"method":"_compile","native":false},{"column":33,"file":"C:\\Users\\scole\\AppData\\Local\\Temp\\ts-node-dev-hook-8861558875370938.js","function":"Module.m._compile","line":69,"method":"_compile","native":false},{"column":10,"file":"node:internal/modules/cjs/loader","function":null,"line":1706,"method":null,"native":false},{"column":20,"file":"C:\\Users\\scole\\AppData\\Local\\Temp\\ts-node-dev-hook-8861558875370938.js","function":"require.extensions..jsx.require.extensions..js","line":114,"method":".js","native":false},{"column":20,"file":"C:\\Users\\scole\\AppData\\Local\\Temp\\ts-node-dev-hook-8861558875370938.js","function":"require.extensions.<computed>","line":71,"method":"<computed>","native":false},{"column":13,"file":"D:\\CoralCrave\\server\\node_modules\\ts-node-dev\\lib\\hook.js","function":"Object.nodeDevHook [as .ts]","line":63,"method":"ts]","native":false},{"column":32,"file":"node:internal/modules/cjs/loader","function":"Module.load","line":1289,"method":"load","native":false},{"column":12,"file":"node:internal/modules/cjs/loader","function":"Function._load","line":1108,"method":"_load","native":false}],"service":"coralcrave-auction-engine"}
+Error: ⨯ Unable to compile TypeScript:
+src/socket/handlers.ts(265,1): error TS1005: ',' expected.
+src/socket/handlers.ts(330,1): error TS1005: ')' expected.
+
+    at Object.<anonymous> (D:\CoralCrave\server\src\socket\handlers.ts:1:7)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1554:14)
+    at Module._compile (D:\CoralCrave\server\node_modules\source-map-support\source-map-support.js:521:25)
+    at Module.m._compile (C:\Users\scole\AppData\Local\Temp\ts-node-dev-hook-8861558875370938.js:69:33)
+    at node:internal/modules/cjs/loader:1706:10
+    at require.extensions..jsx.require.extensions..js (C:\Users\scole\AppData\Local\Temp\ts-node-dev-hook-8861558875370938.js:114:20)
+    at require.extensions.<computed> (C:\Users\scole\AppData\Local\Temp\ts-node-dev-hook-8861558875370938.js:71:20)
+    at Object.nodeDevHook [as .ts] (D:\CoralCrave\server\node_modules\ts-node-dev\lib\hook.js:63:13)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+    at Function._load (node:internal/modules/cjs/loader:1108:12)

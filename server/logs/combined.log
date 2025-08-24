@@ -1,0 +1,512 @@
+2025-08-24 10:43:33 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-24 10:43:33 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:33 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:33 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:33 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:33 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:33 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:33 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:34 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:34 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:34 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:35 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:35 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:36 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:37 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:37 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:38 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:39 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:40 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:40 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:41 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:42 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:43 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:44 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:45 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:46 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:47 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:48 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:49 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:50 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:51 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:52 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:53 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:54 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:55 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:56 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:57 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:58 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:43:59 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:00 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:01 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:02 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:03 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:04 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:05 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:06 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:07 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:08 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:09 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:10 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:12 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:13 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:14 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:15 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:16 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:17 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:18 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:19 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:20 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:21 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:22 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:23 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:24 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:25 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:26 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:27 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:28 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:29 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:30 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:31 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:32 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:33 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:34 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:35 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:36 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:37 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:38 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:39 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:40 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:41 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:42 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:43 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:44 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:45 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:46 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:47 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:48 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:49 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:50 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:51 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:52 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:53 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:54 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:55 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:56 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:57 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:58 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:44:59 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:45:00 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:45:01 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:45:02 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:45:03 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:45:04 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:45:05 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:45:06 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:45:07 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:45:08 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:45:09 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:45:10 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:46:02 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-24 10:46:02 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:46:02 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:46:02 [WARN]: Redis not available, falling back to in-memory storage: {"service":"coralcrave-auction-engine"}
+2025-08-24 10:46:02 [INFO]: In-memory service initialized {"service":"coralcrave-auction-engine"}
+2025-08-24 10:46:02 [INFO]: In-memory cache service initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-24 10:46:02 [INFO]: API routes set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-24 10:46:02 [INFO]: Auction engine event listeners set up {"service":"coralcrave-auction-engine"}
+2025-08-24 10:46:02 [INFO]: Socket.IO handlers set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-24 10:46:02 [INFO]: 🚀 CoralCrave Auction Engine running on port 3001 {"service":"coralcrave-auction-engine"}
+2025-08-24 10:46:02 [INFO]: 📡 WebSocket server ready for real-time bidding {"service":"coralcrave-auction-engine"}
+2025-08-24 10:46:02 [INFO]: 🔥 Environment: development {"service":"coralcrave-auction-engine"}
+2025-08-24 10:46:02 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:46:02 [ERROR]: Failed to get all auction states: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:46:02 [INFO]: Recovered 0 auction states from Redis {"service":"coralcrave-auction-engine"}
+2025-08-24 10:46:02 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:46:02 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:51:02 [ERROR]: Redis cleanup failed: The client is closed {"service":"coralcrave-auction-engine"}
+Error: The client is closed
+    at Commander._RedisClient_sendCommand (D:\CoralCrave\server\node_modules\@redis\client\dist\lib\client\index.js:520:31)
+    at Commander.commandsExecutor (D:\CoralCrave\server\node_modules\@redis\client\dist\lib\client\index.js:190:154)
+    at Commander.BaseClass.<computed> [as keys] (D:\CoralCrave\server\node_modules\@redis\client\dist\lib\commander.js:8:29)
+    at RedisService.cleanup (D:\CoralCrave\server\src\services\RedisService.ts:266:44)
+    at Timeout._onTimeout (D:\CoralCrave\server\src\socket\handlers.ts:257:18)
+    at listOnTimeout (node:internal/timers:594:17)
+    at processTimers (node:internal/timers:529:7)
+2025-08-24 10:54:03 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-24 10:54:03 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:54:03 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:54:03 [WARN]: Redis not available, falling back to in-memory storage: {"service":"coralcrave-auction-engine"}
+2025-08-24 10:54:03 [INFO]: In-memory service initialized {"service":"coralcrave-auction-engine"}
+2025-08-24 10:54:03 [INFO]: In-memory cache service initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-24 10:54:03 [INFO]: API routes set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-24 10:54:03 [INFO]: Auction engine event listeners set up {"service":"coralcrave-auction-engine"}
+2025-08-24 10:54:03 [INFO]: Socket.IO handlers set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-24 10:54:03 [INFO]: 🚀 CoralCrave Auction Engine running on port 3001 {"service":"coralcrave-auction-engine"}
+2025-08-24 10:54:03 [INFO]: 📡 WebSocket server ready for real-time bidding {"service":"coralcrave-auction-engine"}
+2025-08-24 10:54:03 [INFO]: 🔥 Environment: development {"service":"coralcrave-auction-engine"}
+2025-08-24 10:54:03 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:54:03 [ERROR]: Failed to get all auction states: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:54:03 [INFO]: Recovered 0 auction states from Redis {"service":"coralcrave-auction-engine"}
+2025-08-24 10:54:03 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-24 10:54:03 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)

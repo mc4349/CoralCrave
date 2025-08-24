@@ -1,0 +1,149 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isSeller(channel) {
+      return isSignedIn() &&
+        request.auth.uid == get(/databases/$(database)/documents/livestreams/$(channel)).data.sellerUid;
+    }
+
+    // Users collection - MISSING FROM YOUR CURRENT RULES
+    match /users/{userId} {
+      // Users can read any user's public profile data
+      allow read: if true;
+      
+      // Users can only create/update/delete their own profile
+      allow create, update, delete: if isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Livestream document (one per channel)
+    match /livestreams/{channel} {
+      allow read: if true; // <-- allow public read so Explore page works
+
+      // Seller controls stream doc
+      allow create, update, delete: if isSeller(channel);
+
+      // Items in the stream
+      match /items/{itemId} {
+        allow read: if true; // <-- allow public read for explore/account tab
+
+        // Seller can create/update/delete any item fields
+        allow create, update, delete: if isSeller(channel);
+
+        // Buyers can only RAISE the highest bid while item is ACTIVE and before endsAt.
+        allow update: if isSignedIn() &&
+          request.resource.data.highestBid is number &&
+          request.resource.data.highestBidderUid == request.auth.uid &&
+          request.resource.data.highestBid > resource.data.highestBid &&
+          resource.data.status == "active" &&
+          request.time.toMillis() < resource.data.endsAt &&
+          // Prevent changing any other fields
+          request.resource.data.name == resource.data.name &&
+          request.resource.data.startingPrice == resource.data.startingPrice &&
+          request.resource.data.durationSec == resource.data.durationSec &&
+          request.resource.data.status == resource.data.status &&
+          request.resource.data.createdAt == resource.data.createdAt &&
+          request.resource.data.endsAt == resource.data.endsAt;
+      }
+
+      // Chat messages
+      match /messages/{msgId} {
+        allow read: if true; // <-- allow public read for explore/account tab
+        allow create: if isSignedIn() &&
+          request.resource.data.text is string &&
+          request.resource.data.text.size() > 0 &&
+          request.resource.data.text.size() <= 400 &&
+          request.resource.data.uid == request.auth.uid;
+        // (optional) allow delete by seller
+        allow delete: if isSeller(channel);
+      }
+
+      // Viewer presence
+      match /viewers/{viewerId} {
+        allow read: if isSignedIn(); // only authenticated users can read viewer docs
+        allow create: if isSignedIn() && request.auth.uid == viewerId;
+        allow delete: if isSignedIn() && (request.auth.uid == viewerId || isSeller(channel));
+        // Optionally, allow update if you need (not required for your use)
+      }
+    }
+
+    // Orders collection (buyers and sellers)
+    match /orders/{orderId} {
+      // Only allow signed-in users to read their orders
+      allow read: if isSignedIn() &&
+        (request.auth.uid == resource.data.buyerUid ||
+         request.auth.uid == resource.data.sellerUid);
+
+      // Only allow the system/server, seller, or buyer to create orders
+      allow create: if isSignedIn();
+
+      // Only allow the seller to update order status, or buyer to mark as paid/completed/cancelled
+      allow update: if isSignedIn() &&
+        (
+          // Seller can change status except to 'paid', 'completed' (those are buyer actions)
+          (request.auth.uid == resource.data.sellerUid) ||
+          // Buyer can change status to 'paid', 'completed', 'cancelled'
+          (request.auth.uid == resource.data.buyerUid)
+        );
+
+      // Only allow the seller or buyer to delete the order
+      allow delete: if isSignedIn() &&
+        (request.auth.uid == resource.data.sellerUid ||
+         request.auth.uid == resource.data.buyerUid);
+    }
+
+    // Alerts collection (per user)
+    match /alerts/{alertId} {
+      // Only allow signed-in users to read their alerts
+      allow read: if isSignedIn() && request.auth.uid == resource.data.uid;
+      // Only allow system/server or the user to create alerts for themselves
+      allow create: if isSignedIn() && request.auth.uid == request.resource.data.uid;
+      // Only allow the user to delete their own alerts
+      allow delete: if isSignedIn() && request.auth.uid == resource.data.uid;
+    }
+
+    // Additional collections that might be needed for CoralCrave
+    
+    // Reviews collection
+    match /reviews/{reviewId} {
+      allow read: if true; // Public read for displaying reviews
+      allow create: if isSignedIn() && request.auth.uid == request.resource.data.reviewerId;
+      allow update, delete: if isSignedIn() && request.auth.uid == resource.data.reviewerId;
+    }
+
+    // Messages/DMs collection
+    match /messages/{threadId} {
+      allow read, write: if isSignedIn() && 
+        request.auth.uid in resource.data.participants;
+      
+      match /msgs/{msgId} {
+        allow read, write: if isSignedIn() && 
+          request.auth.uid in get(/databases/$(database)/documents/messages/$(threadId)).data.participants;
+      }
+    }
+
+    // Referrals collection
+    match /referrals/{referralId} {
+      allow read: if isSignedIn() && 
+        (request.auth.uid == resource.data.referrerId || 
+         request.auth.uid == resource.data.refereeId);
+      allow create: if isSignedIn();
+      allow update: if isSignedIn(); // System updates for qualification status
+    }
+
+    // Credits collection
+    match /credits/{creditId} {
+      allow read: if isSignedIn() && request.auth.uid == resource.data.uid;
+      allow create, update: if isSignedIn(); // System creates/updates credits
+    }
+
+    // Notifications collection
+    match /notifications/{userId}/events/{eventId} {
+      allow read, write: if isSignedIn() && request.auth.uid == userId;
+    }
+  }
+}
