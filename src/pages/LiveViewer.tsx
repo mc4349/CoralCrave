@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useStreaming } from '../contexts/StreamingContext'
 import { useAuth } from '../contexts/AuthContext'
 import AuctionPanel from '../components/AuctionPanel'
@@ -8,6 +8,7 @@ import { AuctionItem } from '../services/auctionEngine'
 
 const LiveViewer = () => {
   const { id } = useParams()
+  const navigate = useNavigate()
   const { currentUser } = useAuth()
   const { 
     isViewing, 
@@ -44,6 +45,12 @@ const LiveViewer = () => {
     setCurrentItem(item)
   }
 
+  const handleSellerClick = () => {
+    if (currentStream?.hostId) {
+      navigate(`/profile/${currentStream.hostId}`)
+    }
+  }
+
   return (
     <div className="h-screen flex">
       {/* Main Video Area */}
@@ -65,13 +72,28 @@ const LiveViewer = () => {
           )}
           
           {/* Stream info overlay */}
-          <div className="absolute top-4 left-4 text-white">
-            <h2 className="text-lg font-semibold">
-              {currentStream?.hostUsername || 'Coral Seller'}
-            </h2>
-            <p className="text-sm opacity-75">
-              {viewerCount} viewer{viewerCount !== 1 ? 's' : ''}
-            </p>
+          <div className="absolute top-4 left-4">
+            <div className="bg-black bg-opacity-50 rounded-lg p-3 text-white">
+              <button
+                onClick={handleSellerClick}
+                className="text-left hover:bg-white hover:bg-opacity-10 rounded p-1 -m-1 transition-colors"
+              >
+                <h2 className="text-lg font-semibold hover:text-coral-400 transition-colors">
+                  {currentStream?.hostUsername || 'Coral Seller'}
+                </h2>
+                <div className="flex items-center space-x-2 text-sm opacity-75">
+                  <div className="flex items-center space-x-1">
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                      <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd"/>
+                    </svg>
+                    <span>{viewerCount} viewer{viewerCount !== 1 ? 's' : ''}</span>
+                  </div>
+                  <span>•</span>
+                  <span>Click to view profile</span>
+                </div>
+              </button>
+            </div>
           </div>
 
           {/* Live indicator */}
