@@ -573,6 +573,7 @@ export default function GoLive() {
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Enter your stream title..."
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coral-500 focus:border-coral-500"
+                  autoComplete="off"
                 />
               </div>
 

@@ -61,25 +61,9 @@ export const checkMediaPermissions = async () => {
 
 // Create local tracks for broadcasting
 export const createLocalTracks = async () => {
-  // First, request permissions using native browser API to ensure popup appears
-  console.log('Requesting media permissions...')
+  console.log('Creating Agora tracks (this will request permissions)...')
   
-  try {
-    // This will trigger the browser permission popup
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true
-    })
-    
-    // Stop the stream immediately as we only needed it for permissions
-    stream.getTracks().forEach(track => track.stop())
-    console.log('Permissions granted, creating Agora tracks...')
-  } catch (error: any) {
-    console.error('Permission request failed:', error)
-    throw error // This will be caught by the calling function
-  }
-  
-  // Now create Agora tracks (permissions should already be granted)
+  // Let Agora handle the permission request directly
   const [audioTrack, videoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks(
     {
       // Audio config
@@ -98,6 +82,7 @@ export const createLocalTracks = async () => {
     }
   )
   
+  console.log('Agora tracks created successfully')
   return { audioTrack, videoTrack }
 }
 
