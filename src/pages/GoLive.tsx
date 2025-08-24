@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useStreaming } from '../contexts/StreamingContext'
+import { checkMediaPermissions } from '../lib/agora'
 import LiveChat from '../components/LiveChat'
 
 interface QueueItem {
@@ -164,12 +165,35 @@ export default function GoLive() {
     }
 
     try {
+      // First check media permissions
+      const permissionCheck = await checkMediaPermissions()
+      
+      if (!permissionCheck.granted) {
+        alert(permissionCheck.error || 'Camera and microphone permissions are required to start streaming. Please allow access and try again.')
+        return
+      }
+
+      // If permissions are granted, start the stream
       await startStream(title, selectedCategories)
       // Show success message briefly before navigating
       // The navigation will happen automatically when isStreaming becomes true
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to start stream:', error)
-      alert('Failed to start stream. Please check your camera and microphone permissions and try again.')
+      
+      // Provide specific error messages
+      let errorMessage = 'Failed to start stream. Please try again.'
+      
+      if (error.message.includes('permission') || error.message.includes('Permission')) {
+        errorMessage = 'Camera and microphone permissions are required. Please allow access in your browser and try again.'
+      } else if (error.message.includes('device') || error.message.includes('Device')) {
+        errorMessage = 'No camera or microphone found. Please connect your devices and try again.'
+      } else if (error.message.includes('use') || error.message.includes('busy')) {
+        errorMessage = 'Camera or microphone is already in use. Please close other applications and try again.'
+      } else if (error.message) {
+        errorMessage = error.message
+      }
+      
+      alert(errorMessage)
     }
   }
 

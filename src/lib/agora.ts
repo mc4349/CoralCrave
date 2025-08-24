@@ -22,6 +22,43 @@ export const createAgoraClient = () => {
   })
 }
 
+// Check camera and microphone permissions
+export const checkMediaPermissions = async () => {
+  try {
+    // Check if getUserMedia is supported
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      throw new Error('Your browser does not support camera and microphone access')
+    }
+
+    // Request permissions by trying to get media stream
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true
+    })
+    
+    // Stop the stream immediately as we only wanted to check permissions
+    stream.getTracks().forEach(track => track.stop())
+    
+    return { granted: true, error: null }
+  } catch (error: any) {
+    console.error('Permission check failed:', error)
+    
+    let errorMessage = 'Failed to access camera and microphone'
+    
+    if (error.name === 'NotAllowedError') {
+      errorMessage = 'Camera and microphone permissions denied. Please allow access in your browser settings and refresh the page.'
+    } else if (error.name === 'NotFoundError') {
+      errorMessage = 'No camera or microphone found. Please connect a camera and microphone.'
+    } else if (error.name === 'NotReadableError') {
+      errorMessage = 'Camera or microphone is already in use by another application.'
+    } else if (error.name === 'OverconstrainedError') {
+      errorMessage = 'Camera or microphone does not meet the required specifications.'
+    }
+    
+    return { granted: false, error: errorMessage }
+  }
+}
+
 // Create local tracks for broadcasting
 export const createLocalTracks = async () => {
   const [audioTrack, videoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks(
