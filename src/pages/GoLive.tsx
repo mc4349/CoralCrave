@@ -165,18 +165,8 @@ export default function GoLive() {
     }
 
     try {
-      // First check media permissions
-      const permissionCheck = await checkMediaPermissions()
-      
-      if (!permissionCheck.granted) {
-        alert(permissionCheck.error || 'Camera and microphone permissions are required to start streaming. Please allow access and try again.')
-        return
-      }
-
-      // If permissions are granted, start the stream
+      // Start the stream - this will trigger the browser permission popup
       await startStream(title, selectedCategories)
-      // Show success message briefly before navigating
-      // The navigation will happen automatically when isStreaming becomes true
     } catch (error: any) {
       console.error('Failed to start stream:', error)
       
