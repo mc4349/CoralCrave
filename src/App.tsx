@@ -9,6 +9,7 @@ import LiveViewer from './pages/LiveViewer'
 import Activity from './pages/Activity'
 import Account from './pages/Account'
 import SellerHub from './pages/SellerHub'
+import Profile from './pages/Profile'
 import Auth from './pages/Auth'
 import SetupUsername from './pages/SetupUsername'
 
@@ -28,6 +29,7 @@ function App() {
                 <Route path="/activity" element={<Activity />} />
                 <Route path="/account" element={<Account />} />
                 <Route path="/seller-hub" element={<SellerHub />} />
+                <Route path="/profile/:userId" element={<Profile />} />
                 <Route path="/auth/setup-username" element={<SetupUsername />} />
                 <Route path="/auth/*" element={<Auth />} />
               </Routes>
