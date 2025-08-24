@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../lib/firebase'
 import { livestreamService } from '../services/livestreamService'
+import { userService } from '../services/userService'
+import { useAuth } from '../contexts/AuthContext'
 
 interface UserProfile {
   id: string
@@ -29,17 +31,62 @@ interface LivestreamData {
 
 export default function Profile() {
   const { userId } = useParams()
+  const { currentUser, userProfile } = useAuth()
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [pastStreams, setPastStreams] = useState<LivestreamData[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [isFollowing, setIsFollowing] = useState(false)
+  const [followLoading, setFollowLoading] = useState(false)
 
   useEffect(() => {
     if (userId) {
       loadProfile()
       loadPastStreams()
+      checkFollowStatus()
     }
-  }, [userId])
+  }, [userId, userProfile])
+
+  const checkFollowStatus = async () => {
+    if (!currentUser || !userId || currentUser.uid === userId) return
+    
+    try {
+      const currentUserProfile = await userService.getUserProfile(currentUser.uid)
+      if (currentUserProfile) {
+        setIsFollowing(currentUserProfile.follows.includes(userId))
+      }
+    } catch (err) {
+      console.error('Error checking follow status:', err)
+    }
+  }
+
+  const handleFollowToggle = async () => {
+    if (!currentUser || !userId || currentUser.uid === userId) return
+    
+    setFollowLoading(true)
+    try {
+      if (isFollowing) {
+        await userService.unfollowUser(currentUser.uid, userId)
+        setIsFollowing(false)
+        // Update follower count in profile
+        if (profile) {
+          setProfile({ ...profile, followers: (profile.followers || 0) - 1 })
+        }
+      } else {
+        await userService.followUser(currentUser.uid, userId)
+        setIsFollowing(true)
+        // Update follower count in profile
+        if (profile) {
+          setProfile({ ...profile, followers: (profile.followers || 0) + 1 })
+        }
+      }
+    } catch (err) {
+      console.error('Error toggling follow:', err)
+      alert('Failed to update follow status. Please try again.')
+    } finally {
+      setFollowLoading(false)
+    }
+  }
 
   const loadProfile = async () => {
     try {
@@ -112,7 +159,7 @@ export default function Profile() {
   }
 
   const renderStars = (rating: number) => {
-    const stars = []
+    const stars: JSX.Element[] = []
     const fullStars = Math.floor(rating)
     const hasHalfStar = rating % 1 !== 0
     
@@ -204,7 +251,29 @@ export default function Profile() {
           </div>
           
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">{profile.username}</h1>
+            <div className="flex items-center space-x-4 mb-2">
+              <h1 className="text-3xl font-bold text-gray-900">{profile.username}</h1>
+              {currentUser && currentUser.uid !== userId && (
+                <button
+                  onClick={handleFollowToggle}
+                  disabled={followLoading}
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                    isFollowing
+                      ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      : 'bg-coral-500 text-white hover:bg-coral-600'
+                  } ${followLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  {followLoading ? (
+                    <div className="flex items-center space-x-2">
+                      <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                      <span>{isFollowing ? 'Unfollowing...' : 'Following...'}</span>
+                    </div>
+                  ) : (
+                    isFollowing ? 'Following' : 'Follow'
+                  )}
+                </button>
+              )}
+            </div>
             
             {profile.bio && (
               <p className="text-gray-600 mb-4">{profile.bio}</p>

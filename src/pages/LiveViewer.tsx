@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext'
 import AuctionPanel from '../components/AuctionPanel'
 import LiveChat from '../components/LiveChat'
 import { AuctionItem } from '../services/auctionEngine'
+import { userService } from '../services/userService'
 
 const LiveViewer = () => {
   const { id } = useParams()
@@ -20,6 +21,8 @@ const LiveViewer = () => {
   } = useStreaming()
   
   const [currentItem, setCurrentItem] = useState<AuctionItem | undefined>(undefined)
+  const [isFollowing, setIsFollowing] = useState(false)
+  const [followLoading, setFollowLoading] = useState(false)
   const videoRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -40,6 +43,46 @@ const LiveViewer = () => {
       remoteVideoTrack.play(videoRef.current)
     }
   }, [remoteVideoTracks])
+
+  useEffect(() => {
+    // Check follow status when stream loads
+    if (currentUser && currentStream?.hostId && currentUser.uid !== currentStream.hostId) {
+      checkFollowStatus()
+    }
+  }, [currentUser, currentStream])
+
+  const checkFollowStatus = async () => {
+    if (!currentUser || !currentStream?.hostId) return
+    
+    try {
+      const currentUserProfile = await userService.getUserProfile(currentUser.uid)
+      if (currentUserProfile) {
+        setIsFollowing(currentUserProfile.follows.includes(currentStream.hostId))
+      }
+    } catch (err) {
+      console.error('Error checking follow status:', err)
+    }
+  }
+
+  const handleFollowToggle = async () => {
+    if (!currentUser || !currentStream?.hostId || currentUser.uid === currentStream.hostId) return
+    
+    setFollowLoading(true)
+    try {
+      if (isFollowing) {
+        await userService.unfollowUser(currentUser.uid, currentStream.hostId)
+        setIsFollowing(false)
+      } else {
+        await userService.followUser(currentUser.uid, currentStream.hostId)
+        setIsFollowing(true)
+      }
+    } catch (err) {
+      console.error('Error toggling follow:', err)
+      alert('Failed to update follow status. Please try again.')
+    } finally {
+      setFollowLoading(false)
+    }
+  }
 
   const handleItemChange = (item: AuctionItem) => {
     setCurrentItem(item)
@@ -74,25 +117,49 @@ const LiveViewer = () => {
           {/* Stream info overlay */}
           <div className="absolute top-4 left-4">
             <div className="bg-black bg-opacity-50 rounded-lg p-3 text-white">
-              <button
-                onClick={handleSellerClick}
-                className="text-left hover:bg-white hover:bg-opacity-10 rounded p-1 -m-1 transition-colors"
-              >
-                <h2 className="text-lg font-semibold hover:text-coral-400 transition-colors">
-                  {currentStream?.hostUsername || 'Coral Seller'}
-                </h2>
-                <div className="flex items-center space-x-2 text-sm opacity-75">
-                  <div className="flex items-center space-x-1">
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
-                      <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd"/>
-                    </svg>
-                    <span>{viewerCount} viewer{viewerCount !== 1 ? 's' : ''}</span>
+              <div className="flex items-start justify-between space-x-4">
+                <button
+                  onClick={handleSellerClick}
+                  className="text-left hover:bg-white hover:bg-opacity-10 rounded p-1 -m-1 transition-colors flex-1"
+                >
+                  <h2 className="text-lg font-semibold hover:text-coral-400 transition-colors">
+                    {currentStream?.hostUsername || 'Coral Seller'}
+                  </h2>
+                  <div className="flex items-center space-x-2 text-sm opacity-75">
+                    <div className="flex items-center space-x-1">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                        <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd"/>
+                      </svg>
+                      <span>{viewerCount} viewer{viewerCount !== 1 ? 's' : ''}</span>
+                    </div>
+                    <span>•</span>
+                    <span>Click to view profile</span>
                   </div>
-                  <span>•</span>
-                  <span>Click to view profile</span>
-                </div>
-              </button>
+                </button>
+                
+                {/* Follow Button */}
+                {currentUser && currentStream?.hostId && currentUser.uid !== currentStream.hostId && (
+                  <button
+                    onClick={handleFollowToggle}
+                    disabled={followLoading}
+                    className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+                      isFollowing
+                        ? 'bg-white bg-opacity-20 text-white hover:bg-opacity-30'
+                        : 'bg-coral-500 text-white hover:bg-coral-600'
+                    } ${followLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  >
+                    {followLoading ? (
+                      <div className="flex items-center space-x-1">
+                        <div className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                        <span>{isFollowing ? 'Unfollowing' : 'Following'}</span>
+                      </div>
+                    ) : (
+                      isFollowing ? 'Following' : 'Follow'
+                    )}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
 

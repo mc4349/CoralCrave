@@ -165,12 +165,11 @@ export default function GoLive() {
 
     try {
       await startStream(title, selectedCategories)
-      // Navigate to the live stream page
-      if (currentStream) {
-        navigate(`/live/${currentStream.id}`)
-      }
+      // Show success message briefly before navigating
+      // The navigation will happen automatically when isStreaming becomes true
     } catch (error) {
       console.error('Failed to start stream:', error)
+      alert('Failed to start stream. Please check your camera and microphone permissions and try again.')
     }
   }
 
