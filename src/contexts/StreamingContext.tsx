@@ -168,7 +168,7 @@ export function StreamingProvider({ children }: { children: React.ReactNode }) {
       setIsStreaming(true)
 
       // Listen for viewer count updates
-      const unsubscribe = onSnapshot(doc(db, 'livestreams', streamId), (doc) => {
+      const unsubscribe = onSnapshot(doc(db, 'livestreams', createdStreamId), (doc) => {
         if (doc.exists()) {
           const data = doc.data() as LiveStream
           setViewerCount(data.viewerCount || 0)
