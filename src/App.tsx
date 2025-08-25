@@ -10,6 +10,7 @@ import Activity from './pages/Activity'
 import Account from './pages/Account'
 import SellerHub from './pages/SellerHub'
 import Profile from './pages/Profile'
+import Notifications from './pages/Notifications'
 import Auth from './pages/Auth'
 import SetupUsername from './pages/SetupUsername'
 
@@ -18,7 +19,7 @@ function App() {
     <AuthProvider>
       <StreamingProvider>
         <Router>
-          <div className="min-h-screen bg-gray-50">
+          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
             <Header />
             <main>
               <Routes>
@@ -30,6 +31,7 @@ function App() {
                 <Route path="/account" element={<Account />} />
                 <Route path="/seller-hub" element={<SellerHub />} />
                 <Route path="/profile/:userId" element={<Profile />} />
+                <Route path="/notifications" element={<Notifications />} />
                 <Route path="/auth/setup-username" element={<SetupUsername />} />
                 <Route path="/auth/*" element={<Auth />} />
               </Routes>

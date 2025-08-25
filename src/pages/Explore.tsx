@@ -1,119 +1,199 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { collection, query, where, orderBy, limit, getDocs } from 'firebase/firestore'
+import { db } from '../lib/firebase'
+
+interface LiveStream {
+  id: string
+  title: string
+  hostId: string
+  hostUsername: string
+  viewerCount: number
+  status: 'live' | 'offline' | 'ended'
+  categories: string[]
+  startedAt: any
+}
 
 const Explore = () => {
   const [activeFilter, setActiveFilter] = useState<string | null>('For You')
-  const [expandedSections, setExpandedSections] = useState<string[]>([])
+  const [liveStreams, setLiveStreams] = useState<LiveStream[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchLiveStreams = async () => {
+      try {
+        const liveQuery = query(
+          collection(db, 'livestreams'),
+          where('status', '==', 'live'),
+          orderBy('startedAt', 'desc'),
+          limit(20)
+        )
+        
+        const snapshot = await getDocs(liveQuery)
+        const streams = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        })) as LiveStream[]
+        
+        setLiveStreams(streams)
+      } catch (error) {
+        console.error('Error fetching live streams:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchLiveStreams()
+  }, [])
 
   const handleFilterClick = (filter: string) => {
-    // If clicking the same filter, deselect it
     if (activeFilter === filter) {
       setActiveFilter(null)
     } else {
       setActiveFilter(filter)
     }
-    // Reset expanded sections when changing filters
-    setExpandedSections([])
   }
 
-  const getFilteredSections = () => {
-    if (!activeFilter) {
-      // Default explore sections when no filter is active
-      return ['Recommended', 'Popular', 'Fish Only', 'Coral', 'Both', 'Sit & Talk']
+  const getFilteredStreams = () => {
+    if (!activeFilter || activeFilter === 'For You') {
+      return liveStreams
     }
     
-    // When a filter is active, show sections related to that filter
-    const filterSections: { [key: string]: string[] } = {
-      'For You': ['For You Recommended', 'For You Popular', 'For You Recent', 'For You Trending'],
-      'Followed': ['Followed Live Now', 'Followed Recent', 'Followed Popular', 'Followed Upcoming'],
-      'Coral': ['Coral Live', 'Coral Popular', 'Coral New Arrivals', 'Coral Rare Finds'],
-      'Fish': ['Fish Live', 'Fish Popular', 'Fish New Arrivals', 'Fish Rare Species'],
-      'Both': ['Both Live', 'Both Popular', 'Both Mixed Collections', 'Both Featured']
-    }
-    
-    return filterSections[activeFilter] || ['Recommended', 'Popular', 'Fish Only', 'Coral', 'Both', 'Sit & Talk']
-  }
-
-  const handleSeeMore = (section: string) => {
-    setExpandedSections((prev: string[]) => 
-      prev.includes(section) 
-        ? prev.filter(s => s !== section)
-        : [...prev, section]
-    )
-  }
-
-  const getItemsToShow = (section: string) => {
-    return expandedSections.includes(section) ? 6 : 3
+    return liveStreams.filter(stream => {
+      switch (activeFilter) {
+        case 'Coral':
+          return stream.categories?.includes('coral')
+        case 'Fish':
+          return stream.categories?.includes('fish')
+        case 'Both':
+          return stream.categories?.includes('coral') && stream.categories?.includes('fish')
+        default:
+          return true
+      }
+    })
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">
-        {activeFilter ? `${activeFilter} Live Streams` : 'Explore Live Streams'}
-      </h1>
-      
-      {/* Filter Tabs */}
-      <div className="flex space-x-4 mb-8">
-        {['For You', 'Followed', 'Coral', 'Fish', 'Both'].map((filter) => (
-          <button
-            key={filter}
-            onClick={() => handleFilterClick(filter)}
-            className={`px-4 py-2 rounded-lg border transition-colors ${
-              activeFilter === filter
-                ? 'bg-coral-500 text-white border-coral-500'
-                : 'bg-white border-gray-300 hover:bg-gray-50'
-            }`}
-          >
-            {filter}
-          </button>
-        ))}
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-800">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 opacity-10 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-32 h-32 bg-blue-400 rounded-full animate-pulse"></div>
+        <div className="absolute top-40 right-20 w-24 h-24 bg-teal-400 rounded-full animate-bounce"></div>
+        <div className="absolute bottom-20 left-1/4 w-20 h-20 bg-cyan-400 rounded-full animate-pulse"></div>
+        <div className="absolute bottom-40 right-1/3 w-28 h-28 bg-blue-300 rounded-full animate-bounce"></div>
       </div>
 
-      {/* Sections */}
-      {getFilteredSections().map((section) => (
-        <div key={section} className="mb-12">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">{section}</h2>
-            <button 
-              onClick={() => handleSeeMore(section)}
-              className="text-coral-500 hover:text-coral-600 font-medium transition-colors"
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="text-center mb-16">
+          <h1 className="text-6xl font-bold text-white mb-6 leading-tight">
+            {activeFilter ? (
+              <>Explore <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">{activeFilter}</span> Streams</>
+            ) : (
+              <>Discover <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">Live</span> Auctions</>
+            )}
+          </h1>
+          <p className="text-2xl text-blue-100 mb-12 max-w-3xl mx-auto leading-relaxed">
+            Join live auctions featuring rare corals, exotic fish, and marine treasures from passionate sellers worldwide.
+          </p>
+        </div>
+        
+        {/* Filter Tabs */}
+        <div className="flex flex-wrap gap-4 mb-8 justify-center">
+          {['For You', 'Followed', 'Coral', 'Fish', 'Both'].map((filter) => (
+            <button
+              key={filter}
+              onClick={() => handleFilterClick(filter)}
+              className={`px-6 py-3 rounded-lg border transition-all duration-300 font-medium ${
+                activeFilter === filter
+                  ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white border-cyan-400 shadow-lg shadow-cyan-500/25 transform scale-105'
+                  : 'bg-slate-800/50 border-slate-600 text-slate-300 hover:bg-slate-700/50 hover:border-cyan-400/50 hover:text-cyan-300 backdrop-blur-sm'
+              }`}
             >
-              {expandedSections.includes(section) ? 'Show less' : 'See more'}
+              {filter}
             </button>
+          ))}
+        </div>
+
+        {/* Live Streams */}
+        <div className="mb-12">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-slate-100">
+              {activeFilter ? `${activeFilter} Streams` : 'Live Now'}
+            </h2>
+            <span className="text-slate-400 text-sm">
+              {getFilteredStreams().length} live streams
+            </span>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array.from({ length: getItemsToShow(section) }, (_, i) => i + 1).map((i) => (
-              <Link 
-                key={i} 
-                to={`/live/${section.toLowerCase().replace(' ', '-')}-${i}`}
-                className="card hover:shadow-md transition-shadow cursor-pointer block"
-              >
-                <div className="aspect-video bg-gray-200 rounded-lg mb-4 relative">
-                  <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded text-sm font-medium">
-                    LIVE
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-400"></div>
+              <p className="text-slate-400 mt-4">Loading live streams...</p>
+            </div>
+          ) : getFilteredStreams().length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {getFilteredStreams().map((stream) => (
+                <Link 
+                  key={stream.id} 
+                  to={`/live/${stream.id}`}
+                  className="bg-slate-700/50 backdrop-blur-sm rounded-2xl p-6 border border-blue-500/20 hover:border-cyan-400/40 transition-all duration-300 hover:transform hover:scale-105 group block"
+                >
+                  <div className="aspect-video bg-gradient-to-br from-slate-700 to-slate-800 rounded-lg mb-4 relative overflow-hidden">
+                    {/* Animated water effect */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent"></div>
+                    <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-cyan-500/5 to-transparent animate-pulse"></div>
+                    
+                    <div className="absolute top-3 left-3 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
+                      LIVE
+                    </div>
+                    <div className="absolute bottom-3 right-3 bg-slate-900/80 backdrop-blur-sm text-slate-100 px-3 py-1 rounded-full text-sm border border-slate-700">
+                      {stream.viewerCount || 0} viewers
+                    </div>
+                    
+                    {/* Floating bubbles effect */}
+                    <div className="absolute bottom-4 left-4 w-2 h-2 bg-cyan-400/40 rounded-full animate-bounce"></div>
+                    <div className="absolute bottom-8 left-8 w-1 h-1 bg-blue-400/60 rounded-full animate-pulse"></div>
                   </div>
-                  <div className="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm">
-                    {Math.floor(Math.random() * 300) + 25} viewers
+                  
+                  <div>
+                    <h3 className="font-semibold text-slate-100 mb-2 group-hover:text-cyan-300 transition-colors duration-300">
+                      {stream.title}
+                    </h3>
+                    <p className="text-slate-400 text-sm mb-3">by @{stream.hostUsername || stream.hostId}</p>
+                    <div className="flex justify-between items-center">
+                      <div className="flex space-x-1">
+                        {stream.categories?.map((category) => (
+                          <span key={category} className="text-xs px-2 py-1 bg-slate-800/50 text-slate-300 rounded-full border border-slate-600">
+                            {category}
+                          </span>
+                        ))}
+                      </div>
+                      <span className="text-sm text-slate-500 bg-slate-800/50 px-2 py-1 rounded-full">
+                        Live
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-2">
-                  {section} Stream #{i}
-                </h3>
-                <p className="text-gray-600 text-sm mb-2">by @seller{i}</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-coral-500 font-medium">
-                    Current bid: ${(Math.random() * 80 + 15).toFixed(2)}
-                  </span>
-                  <span className="text-sm text-gray-500">
-                    {Math.floor(Math.random() * 120)}s left
-                  </span>
-                </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <div className="w-16 h-16 bg-slate-700/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-slate-100 mb-2">No Live Streams</h3>
+              <p className="text-slate-400 mb-6">
+                {activeFilter ? `No ${activeFilter.toLowerCase()} streams are currently live.` : 'No streams are currently live.'}
+              </p>
+              <Link to="/go-live" className="btn-primary">
+                Start Your Stream
               </Link>
-            ))}
-          </div>
+            </div>
+          )}
         </div>
-      ))}
+      </div>
     </div>
   )
 }

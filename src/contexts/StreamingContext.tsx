@@ -13,7 +13,7 @@ import {
   type IRemoteAudioTrack
 } from '../lib/agora'
 import { useAuth } from './AuthContext'
-import { doc, updateDoc, onSnapshot, serverTimestamp, getDoc } from 'firebase/firestore'
+import { doc, updateDoc, onSnapshot, serverTimestamp, getDoc, Timestamp } from 'firebase/firestore'
 import { db } from '../lib/firebase'
 import { livestreamService } from '../services/livestreamService'
 
@@ -173,7 +173,7 @@ export function StreamingProvider({ children }: { children: React.ReactNode }) {
           channel: channelName,
           broadcasterUid: uid.toString()
         },
-        startedAt: serverTimestamp()
+        startedAt: serverTimestamp() as Timestamp
       })
 
       const streamData: LiveStream = {

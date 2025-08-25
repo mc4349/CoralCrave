@@ -95,11 +95,19 @@ const LiveViewer = () => {
   }
 
   return (
-    <div className="h-screen flex">
+    <div className="h-screen flex bg-gradient-to-b from-slate-900 via-blue-900 to-slate-800">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 opacity-5 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-32 h-32 bg-blue-400 rounded-full animate-pulse"></div>
+        <div className="absolute top-40 right-20 w-24 h-24 bg-teal-400 rounded-full animate-bounce"></div>
+        <div className="absolute bottom-20 left-1/4 w-20 h-20 bg-cyan-400 rounded-full animate-pulse"></div>
+        <div className="absolute bottom-40 right-1/3 w-28 h-28 bg-blue-300 rounded-full animate-bounce"></div>
+      </div>
+
       {/* Main Video Area */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col relative">
         {/* Video */}
-        <div className="flex-1 bg-gray-900 relative">
+        <div className="flex-1 bg-slate-900 relative rounded-lg m-2 overflow-hidden border border-slate-700/50">
           {/* Video container */}
           <div 
             ref={videoRef}
@@ -116,16 +124,16 @@ const LiveViewer = () => {
           
           {/* Stream info overlay */}
           <div className="absolute top-4 left-4">
-            <div className="bg-black bg-opacity-50 rounded-lg p-3 text-white">
+            <div className="bg-slate-800/80 backdrop-blur-sm rounded-lg p-3 text-white border border-slate-700/50">
               <div className="flex items-start justify-between space-x-4">
                 <button
                   onClick={handleSellerClick}
-                  className="text-left hover:bg-white hover:bg-opacity-10 rounded p-1 -m-1 transition-colors flex-1"
+                  className="text-left hover:bg-slate-700/50 rounded p-1 -m-1 transition-colors flex-1"
                 >
-                  <h2 className="text-lg font-semibold hover:text-coral-400 transition-colors">
+                  <h2 className="text-lg font-semibold hover:text-cyan-300 transition-colors">
                     {currentStream?.hostUsername || 'Coral Seller'}
                   </h2>
-                  <div className="flex items-center space-x-2 text-sm opacity-75">
+                  <div className="flex items-center space-x-2 text-sm text-slate-300">
                     <div className="flex items-center space-x-1">
                       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
@@ -145,8 +153,8 @@ const LiveViewer = () => {
                     disabled={followLoading}
                     className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
                       isFollowing
-                        ? 'bg-white bg-opacity-20 text-white hover:bg-opacity-30'
-                        : 'bg-coral-500 text-white hover:bg-coral-600'
+                        ? 'bg-slate-700/50 text-slate-100 hover:bg-slate-600/50'
+                        : 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:from-cyan-600 hover:to-blue-600'
                     } ${followLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     {followLoading ? (
@@ -166,7 +174,7 @@ const LiveViewer = () => {
           {/* Live indicator */}
           {currentStream?.status === 'live' && (
             <div className="absolute top-4 right-4">
-              <div className="flex items-center space-x-2 bg-red-600 text-white px-3 py-1 rounded-full">
+              <div className="flex items-center space-x-2 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1 rounded-full shadow-lg">
                 <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
                 <span className="text-sm font-medium">LIVE</span>
               </div>
@@ -175,13 +183,13 @@ const LiveViewer = () => {
         </div>
 
         {/* Chat */}
-        <div className="h-64">
+        <div className="h-64 m-2 mt-0">
           <LiveChat liveId={id || ''} />
         </div>
       </div>
 
       {/* Auction Panel */}
-      <div className="w-80">
+      <div className="w-80 m-2 ml-0">
         <AuctionPanel 
           liveId={id || ''}
           currentItem={currentItem}

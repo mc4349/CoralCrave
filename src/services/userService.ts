@@ -9,7 +9,8 @@ import {
   orderBy, 
   limit,
   serverTimestamp,
-  Timestamp
+  Timestamp,
+  addDoc
 } from 'firebase/firestore'
 import { db } from '../lib/firebase'
 
@@ -83,6 +84,26 @@ export interface UserAnalytics {
 }
 
 class UserService {
+  // Create notification
+  private async createNotification(
+    userId: string,
+    type: 'follow' | 'follow_back' | 'live_start' | 'auction_win' | 'message',
+    data: any
+  ): Promise<void> {
+    try {
+      await addDoc(collection(db, 'notifications'), {
+        userId,
+        type,
+        data,
+        read: false,
+        createdAt: serverTimestamp()
+      })
+    } catch (error) {
+      console.error('Error creating notification:', error)
+      throw error
+    }
+  }
+
   // Get user profile
   async getUserProfile(uid: string): Promise<UserProfile | null> {
     try {
@@ -150,9 +171,17 @@ class UserService {
       const followerData = followerSnap.data() as UserProfile
       const followeeData = followeeSnap.data() as UserProfile
       
+      // Check if already following
+      if (followerData.follows?.includes(followeeId)) {
+        return // Already following
+      }
+      
       // Update follows array
       const updatedFollows = [...(followerData.follows || []), followeeId]
       const updatedFollowers = [...(followeeData.followers || []), followerId]
+      
+      // Check if this is a mutual follow (follow back)
+      const isFollowBack = followeeData.follows?.includes(followerId) || false
       
       // Update both users
       await Promise.all([
@@ -167,6 +196,16 @@ class UserService {
           lastActiveAt: serverTimestamp()
         })
       ])
+      
+      // Create notification for the followee
+      await this.createNotification(followeeId, isFollowBack ? 'follow_back' : 'follow', {
+        fromUserId: followerId,
+        fromUsername: followerData.username,
+        fromPhotoURL: followerData.photoURL,
+        message: isFollowBack 
+          ? `${followerData.username} followed you back!` 
+          : `${followerData.username} started following you!`
+      })
     } catch (error) {
       console.error('Error following user:', error)
       throw error

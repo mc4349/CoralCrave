@@ -33,7 +33,6 @@ function SignIn() {
       const result = await loginWithGoogle()
       
       if (result.needsUsername) {
-        // Redirect to username setup (we'll handle this in the auth flow)
         navigate('/auth/setup-username')
       } else {
         navigate('/')
@@ -46,29 +45,37 @@ function SignIn() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 py-12 px-4 sm:px-6 lg:px-8">
+      {/* Floating ocean elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-4 h-4 bg-cyan-400/20 rounded-full animate-pulse"></div>
+        <div className="absolute top-40 right-20 w-6 h-6 bg-blue-400/20 rounded-full animate-bounce"></div>
+        <div className="absolute bottom-40 left-1/4 w-3 h-3 bg-cyan-300/30 rounded-full animate-pulse"></div>
+        <div className="absolute bottom-60 right-1/3 w-5 h-5 bg-blue-300/20 rounded-full animate-bounce"></div>
+      </div>
+
+      <div className="relative max-w-md w-full space-y-8">
         <div>
-          <div className="mx-auto h-12 w-12 bg-gradient-to-r from-coral-500 to-ocean-500 rounded-lg flex items-center justify-center">
+          <div className="mx-auto h-12 w-12 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg flex items-center justify-center shadow-lg shadow-cyan-500/25">
             <span className="text-white font-bold text-xl">CC</span>
           </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-slate-100">
             Sign in to CoralCrave
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-center text-sm text-slate-400">
             Or{' '}
-            <Link to="/auth/signup" className="font-medium text-coral-600 hover:text-coral-500">
+            <Link to="/auth/signup" className="font-medium text-cyan-400 hover:text-cyan-300 transition-colors duration-300">
               create a new account
             </Link>
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md">
+            <div className="bg-red-900/50 border border-red-500/50 text-red-300 px-4 py-3 rounded-lg backdrop-blur-sm">
               {error}
             </div>
           )}
-          <div className="rounded-md shadow-sm -space-y-px">
+          <div className="space-y-4">
             <div>
               <label htmlFor="email-address" className="sr-only">
                 Email address
@@ -79,7 +86,7 @@ function SignIn() {
                 type="email"
                 autoComplete="email"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-coral-500 focus:border-coral-500 focus:z-10 sm:text-sm"
+                className="input-primary"
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -95,7 +102,7 @@ function SignIn() {
                 type="password"
                 autoComplete="current-password"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-coral-500 focus:border-coral-500 focus:z-10 sm:text-sm"
+                className="input-primary"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -104,7 +111,7 @@ function SignIn() {
           </div>
 
           <div className="flex items-center justify-between">
-            <Link to="/auth/reset" className="text-sm text-coral-600 hover:text-coral-500">
+            <Link to="/auth/reset" className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors duration-300">
               Forgot your password?
             </Link>
           </div>
@@ -113,7 +120,7 @@ function SignIn() {
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-coral-600 hover:bg-coral-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coral-500 disabled:opacity-50"
+              className="btn-primary w-full disabled:opacity-50"
             >
               {loading ? 'Signing in...' : 'Sign in'}
             </button>
@@ -122,10 +129,10 @@ function SignIn() {
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300" />
+                <div className="w-full border-t border-slate-600" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-gray-50 text-gray-500">Or continue with</span>
+                <span className="px-2 bg-slate-900 text-slate-400">Or continue with</span>
               </div>
             </div>
 
@@ -134,7 +141,7 @@ function SignIn() {
                 type="button"
                 onClick={handleGoogleSignIn}
                 disabled={googleLoading}
-                className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+                className="w-full inline-flex justify-center py-3 px-4 border border-slate-600 rounded-lg shadow-sm bg-slate-800/50 backdrop-blur-sm text-sm font-medium text-slate-300 hover:bg-slate-700/50 hover:border-cyan-400/50 disabled:opacity-50 transition-all duration-300"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -189,23 +196,49 @@ function SignUp() {
     setLoading(false)
   }
 
+  const handleGoogleSignUp = async () => {
+    try {
+      setError('')
+      setGoogleLoading(true)
+      const result = await loginWithGoogle()
+      
+      if (result.needsUsername) {
+        navigate('/auth/setup-username')
+      } else {
+        navigate('/')
+      }
+    } catch (error: any) {
+      setError('Failed to sign up with Google: ' + error.message)
+    }
+    
+    setGoogleLoading(false)
+  }
+
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 py-12 px-4 sm:px-6 lg:px-8">
+        {/* Floating ocean elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-10 w-4 h-4 bg-cyan-400/20 rounded-full animate-pulse"></div>
+          <div className="absolute top-40 right-20 w-6 h-6 bg-blue-400/20 rounded-full animate-bounce"></div>
+          <div className="absolute bottom-40 left-1/4 w-3 h-3 bg-cyan-300/30 rounded-full animate-pulse"></div>
+          <div className="absolute bottom-60 right-1/3 w-5 h-5 bg-blue-300/20 rounded-full animate-bounce"></div>
+        </div>
+
+        <div className="relative max-w-md w-full space-y-8">
           <div className="text-center">
-            <div className="mx-auto h-12 w-12 bg-green-100 rounded-full flex items-center justify-center">
-              <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="mx-auto h-12 w-12 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center shadow-lg shadow-green-500/25">
+              <svg className="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-slate-100">
               Account Created!
             </h2>
-            <p className="mt-2 text-center text-sm text-gray-600">
+            <p className="mt-2 text-center text-sm text-slate-400">
               Please check your email to verify your account before signing in.
             </p>
-            <Link to="/auth/signin" className="mt-4 inline-block font-medium text-coral-600 hover:text-coral-500">
+            <Link to="/auth/signin" className="mt-4 inline-block font-medium text-cyan-400 hover:text-cyan-300 transition-colors duration-300">
               Go to Sign In
             </Link>
           </div>
@@ -215,31 +248,39 @@ function SignUp() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 py-12 px-4 sm:px-6 lg:px-8">
+      {/* Floating ocean elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-4 h-4 bg-cyan-400/20 rounded-full animate-pulse"></div>
+        <div className="absolute top-40 right-20 w-6 h-6 bg-blue-400/20 rounded-full animate-bounce"></div>
+        <div className="absolute bottom-40 left-1/4 w-3 h-3 bg-cyan-300/30 rounded-full animate-pulse"></div>
+        <div className="absolute bottom-60 right-1/3 w-5 h-5 bg-blue-300/20 rounded-full animate-bounce"></div>
+      </div>
+
+      <div className="relative max-w-md w-full space-y-8">
         <div>
-          <div className="mx-auto h-12 w-12 bg-gradient-to-r from-coral-500 to-ocean-500 rounded-lg flex items-center justify-center">
+          <div className="mx-auto h-12 w-12 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg flex items-center justify-center shadow-lg shadow-cyan-500/25">
             <span className="text-white font-bold text-xl">CC</span>
           </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-slate-100">
             Create your account
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-center text-sm text-slate-400">
             Or{' '}
-            <Link to="/auth/signin" className="font-medium text-coral-600 hover:text-coral-500">
+            <Link to="/auth/signin" className="font-medium text-cyan-400 hover:text-cyan-300 transition-colors duration-300">
               sign in to your existing account
             </Link>
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md">
+            <div className="bg-red-900/50 border border-red-500/50 text-red-300 px-4 py-3 rounded-lg backdrop-blur-sm">
               {error}
             </div>
           )}
           <div className="space-y-4">
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="username" className="block text-sm font-medium text-slate-300">
                 Username
               </label>
               <input
@@ -247,14 +288,14 @@ function SignUp() {
                 name="username"
                 type="text"
                 required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-coral-500 focus:border-coral-500 sm:text-sm"
+                className="input-primary mt-1"
                 placeholder="Choose a username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="email" className="block text-sm font-medium text-slate-300">
                 Email address
               </label>
               <input
@@ -263,14 +304,14 @@ function SignUp() {
                 type="email"
                 autoComplete="email"
                 required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-coral-500 focus:border-coral-500 sm:text-sm"
+                className="input-primary mt-1"
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="password" className="block text-sm font-medium text-slate-300">
                 Password
               </label>
               <input
@@ -279,14 +320,14 @@ function SignUp() {
                 type="password"
                 autoComplete="new-password"
                 required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-coral-500 focus:border-coral-500 sm:text-sm"
+                className="input-primary mt-1"
                 placeholder="Password (min 6 characters)"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <div>
-              <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="confirm-password" className="block text-sm font-medium text-slate-300">
                 Confirm Password
               </label>
               <input
@@ -295,7 +336,7 @@ function SignUp() {
                 type="password"
                 autoComplete="new-password"
                 required
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-coral-500 focus:border-coral-500 sm:text-sm"
+                className="input-primary mt-1"
                 placeholder="Confirm password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
@@ -307,7 +348,7 @@ function SignUp() {
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-coral-600 hover:bg-coral-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coral-500 disabled:opacity-50"
+              className="btn-primary w-full disabled:opacity-50"
             >
               {loading ? 'Creating account...' : 'Create account'}
             </button>
@@ -316,36 +357,19 @@ function SignUp() {
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300" />
+                <div className="w-full border-t border-slate-600" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-gray-50 text-gray-500">Or sign up with</span>
+                <span className="px-2 bg-slate-900 text-slate-400">Or sign up with</span>
               </div>
             </div>
 
             <div className="mt-6">
               <button
                 type="button"
-                onClick={async () => {
-                  try {
-                    setError('')
-                    setGoogleLoading(true)
-                    const result = await loginWithGoogle()
-                    
-                    if (result.needsUsername) {
-                      // Redirect to username setup for Google users
-                      navigate('/auth/setup-username')
-                    } else {
-                      navigate('/')
-                    }
-                  } catch (error: any) {
-                    setError('Failed to sign up with Google: ' + error.message)
-                  }
-                  
-                  setGoogleLoading(false)
-                }}
+                onClick={handleGoogleSignUp}
                 disabled={googleLoading}
-                className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+                className="w-full inline-flex justify-center py-3 px-4 border border-slate-600 rounded-lg shadow-sm bg-slate-800/50 backdrop-blur-sm text-sm font-medium text-slate-300 hover:bg-slate-700/50 hover:border-cyan-400/50 disabled:opacity-50 transition-all duration-300"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -389,35 +413,43 @@ function ResetPassword() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 py-12 px-4 sm:px-6 lg:px-8">
+      {/* Floating ocean elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-4 h-4 bg-cyan-400/20 rounded-full animate-pulse"></div>
+        <div className="absolute top-40 right-20 w-6 h-6 bg-blue-400/20 rounded-full animate-bounce"></div>
+        <div className="absolute bottom-40 left-1/4 w-3 h-3 bg-cyan-300/30 rounded-full animate-pulse"></div>
+        <div className="absolute bottom-60 right-1/3 w-5 h-5 bg-blue-300/20 rounded-full animate-bounce"></div>
+      </div>
+
+      <div className="relative max-w-md w-full space-y-8">
         <div>
-          <div className="mx-auto h-12 w-12 bg-gradient-to-r from-coral-500 to-ocean-500 rounded-lg flex items-center justify-center">
+          <div className="mx-auto h-12 w-12 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg flex items-center justify-center shadow-lg shadow-cyan-500/25">
             <span className="text-white font-bold text-xl">CC</span>
           </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-slate-100">
             Reset your password
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-center text-sm text-slate-400">
             Or{' '}
-            <Link to="/auth/signin" className="font-medium text-coral-600 hover:text-coral-500">
+            <Link to="/auth/signin" className="font-medium text-cyan-400 hover:text-cyan-300 transition-colors duration-300">
               back to sign in
             </Link>
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md">
+            <div className="bg-red-900/50 border border-red-500/50 text-red-300 px-4 py-3 rounded-lg backdrop-blur-sm">
               {error}
             </div>
           )}
           {message && (
-            <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-md">
+            <div className="bg-green-900/50 border border-green-500/50 text-green-300 px-4 py-3 rounded-lg backdrop-blur-sm">
               {message}
             </div>
           )}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="email" className="block text-sm font-medium text-slate-300">
               Email address
             </label>
             <input
@@ -426,7 +458,7 @@ function ResetPassword() {
               type="email"
               autoComplete="email"
               required
-              className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-coral-500 focus:border-coral-500 sm:text-sm"
+              className="input-primary mt-1"
               placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -437,7 +469,7 @@ function ResetPassword() {
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-coral-600 hover:bg-coral-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coral-500 disabled:opacity-50"
+              className="btn-primary w-full disabled:opacity-50"
             >
               {loading ? 'Sending...' : 'Reset Password'}
             </button>
