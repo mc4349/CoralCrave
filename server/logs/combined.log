@@ -510,3 +510,691 @@ AggregateError:
 AggregateError: 
     at internalConnectMultiple (node:net:1139:18)
     at afterConnectMultiple (node:net:1712:7)
+2025-08-26 14:26:33 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-26 14:26:33 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-26 14:26:33 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-26 14:26:33 [WARN]: Redis not available, falling back to in-memory storage: {"service":"coralcrave-auction-engine"}
+2025-08-26 14:26:33 [INFO]: In-memory service initialized {"service":"coralcrave-auction-engine"}
+2025-08-26 14:26:33 [INFO]: In-memory cache service initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-26 14:26:33 [INFO]: API routes set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-26 14:26:33 [INFO]: Auction engine event listeners set up {"service":"coralcrave-auction-engine"}
+2025-08-26 14:26:33 [INFO]: Socket.IO handlers set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-26 14:26:33 [INFO]: 🚀 CoralCrave Auction Engine running on port 3001 {"service":"coralcrave-auction-engine"}
+2025-08-26 14:26:33 [INFO]: 📡 WebSocket server ready for real-time bidding {"service":"coralcrave-auction-engine"}
+2025-08-26 14:26:33 [INFO]: 🔥 Environment: development {"service":"coralcrave-auction-engine"}
+2025-08-26 14:26:33 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-26 14:26:33 [ERROR]: Failed to get all auction states: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-26 14:26:33 [INFO]: Recovered 0 auction states from Redis {"service":"coralcrave-auction-engine"}
+2025-08-26 14:26:33 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-26 14:26:33 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 09:56:32 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 09:56:32 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 09:56:32 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 09:56:32 [WARN]: Redis not available, falling back to in-memory storage: {"service":"coralcrave-auction-engine"}
+2025-08-27 09:56:32 [INFO]: In-memory service initialized {"service":"coralcrave-auction-engine"}
+2025-08-27 09:56:32 [INFO]: In-memory cache service initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 09:56:32 [INFO]: API routes set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 09:56:32 [INFO]: Auction engine event listeners set up {"service":"coralcrave-auction-engine"}
+2025-08-27 09:56:32 [INFO]: Socket.IO handlers set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 09:56:33 [INFO]: 🚀 CoralCrave Auction Engine running on port 3001 {"service":"coralcrave-auction-engine"}
+2025-08-27 09:56:33 [INFO]: 📡 WebSocket server ready for real-time bidding {"service":"coralcrave-auction-engine"}
+2025-08-27 09:56:33 [INFO]: 🔥 Environment: development {"service":"coralcrave-auction-engine"}
+2025-08-27 09:56:33 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 09:56:33 [ERROR]: Failed to get all auction states: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 09:56:33 [INFO]: Recovered 0 auction states from Redis {"service":"coralcrave-auction-engine"}
+2025-08-27 09:56:33 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 09:56:33 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 09:57:31 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 09:57:31 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 09:57:31 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 09:57:31 [WARN]: Redis not available, falling back to in-memory storage: {"service":"coralcrave-auction-engine"}
+2025-08-27 09:57:31 [INFO]: In-memory service initialized {"service":"coralcrave-auction-engine"}
+2025-08-27 09:57:31 [INFO]: In-memory cache service initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 09:57:31 [INFO]: API routes set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 09:57:31 [INFO]: Auction engine event listeners set up {"service":"coralcrave-auction-engine"}
+2025-08-27 09:57:31 [INFO]: Socket.IO handlers set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 09:57:31 [INFO]: 🚀 CoralCrave Auction Engine running on port 3001 {"service":"coralcrave-auction-engine"}
+2025-08-27 09:57:31 [INFO]: 📡 WebSocket server ready for real-time bidding {"service":"coralcrave-auction-engine"}
+2025-08-27 09:57:31 [INFO]: 🔥 Environment: development {"service":"coralcrave-auction-engine"}
+2025-08-27 09:57:31 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 09:57:31 [ERROR]: Failed to get all auction states: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 09:57:31 [INFO]: Recovered 0 auction states from Redis {"service":"coralcrave-auction-engine"}
+2025-08-27 09:57:31 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 09:57:31 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 09:57:58 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 09:57:58 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 09:57:58 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 09:57:58 [WARN]: Redis not available, falling back to in-memory storage: {"service":"coralcrave-auction-engine"}
+2025-08-27 09:57:58 [INFO]: In-memory service initialized {"service":"coralcrave-auction-engine"}
+2025-08-27 09:57:58 [INFO]: In-memory cache service initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 09:57:58 [INFO]: API routes set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 09:57:58 [INFO]: Auction engine event listeners set up {"service":"coralcrave-auction-engine"}
+2025-08-27 09:57:58 [INFO]: Socket.IO handlers set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 09:57:58 [INFO]: 🚀 CoralCrave Auction Engine running on port 3001 {"service":"coralcrave-auction-engine"}
+2025-08-27 09:57:58 [INFO]: 📡 WebSocket server ready for real-time bidding {"service":"coralcrave-auction-engine"}
+2025-08-27 09:57:58 [INFO]: 🔥 Environment: development {"service":"coralcrave-auction-engine"}
+2025-08-27 09:57:58 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 09:57:58 [ERROR]: Failed to get all auction states: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 09:57:58 [INFO]: Recovered 0 auction states from Redis {"service":"coralcrave-auction-engine"}
+2025-08-27 09:57:58 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 09:57:58 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 10:16:59 [INFO]: Client connected: ApfJPdE3lM_-6CayAAAB {"service":"coralcrave-auction-engine"}
+2025-08-27 10:48:09 [INFO]: Client connected: b51XtqQ-gHMRs7ofAAAD {"service":"coralcrave-auction-engine"}
+2025-08-27 10:50:28 [INFO]: Client connected: jF6nmRxC7cFi2NRGAAAF {"service":"coralcrave-auction-engine"}
+2025-08-27 10:51:43 [INFO]: Client connected: DWyDge0DBtQRRqImAAAH {"service":"coralcrave-auction-engine"}
+2025-08-27 10:56:50 [INFO]: Client connected: alK0_zkPUEgv-a_BAAAK {"service":"coralcrave-auction-engine"}
+2025-08-27 11:11:45 [INFO]: Client connected: oZw8JB7k5K6gKTcGAAAM {"service":"coralcrave-auction-engine"}
+2025-08-27 11:13:29 [INFO]: Client connected: aT73iNO8i4cpDXqYAAAO {"service":"coralcrave-auction-engine"}
+2025-08-27 11:18:44 [INFO]: Client connected: cRLKynOhBZtVnJ7bAAAQ {"service":"coralcrave-auction-engine"}
+2025-08-27 11:20:10 [INFO]: Client connected: QrWX3PU2-4Y8apkVAAAS {"service":"coralcrave-auction-engine"}
+2025-08-27 11:22:18 [INFO]: Client connected: jnH5v2d_Cp2Fcq7QAAAU {"service":"coralcrave-auction-engine"}
+2025-08-27 11:23:42 [INFO]: Client connected: wPd8LkD2SU4hGwFJAAAW {"service":"coralcrave-auction-engine"}
+2025-08-27 11:25:40 [INFO]: Client connected: h55qDdNj_bKRFsvaAAAY {"service":"coralcrave-auction-engine"}
+2025-08-27 11:27:48 [INFO]: Client connected: g9jn5aJvLDw0PWeAAAAa {"service":"coralcrave-auction-engine"}
+2025-08-27 11:29:17 [INFO]: Client connected: 4mCGGLaEJQceXFIfAAAc {"service":"coralcrave-auction-engine"}
+2025-08-27 11:31:29 [INFO]: Client connected: 7u9QuF11XVuLL6tOAAAe {"service":"coralcrave-auction-engine"}
+2025-08-27 11:33:17 [INFO]: Client connected: WOh3NIsBf9hOlInqAAAg {"service":"coralcrave-auction-engine"}
+2025-08-27 11:35:48 [INFO]: Client connected: 2ONGXefbWYM8vgYCAAAi {"service":"coralcrave-auction-engine"}
+2025-08-27 11:38:09 [INFO]: Client connected: -b2EfNSZOMWU_NrQAAAk {"service":"coralcrave-auction-engine"}
+2025-08-27 11:40:28 [INFO]: Client connected: sw_FdfR2BI4nHMZ1AAAm {"service":"coralcrave-auction-engine"}
+2025-08-27 11:43:13 [INFO]: Client connected: n6Cu2VkXuA9cZtHGAAAo {"service":"coralcrave-auction-engine"}
+2025-08-27 11:45:20 [INFO]: Client connected: mqyWq3-kDCU1JDn6AAAq {"service":"coralcrave-auction-engine"}
+2025-08-27 11:50:22 [INFO]: Client connected: Xu_RBRJevMXCa3okAAAt {"service":"coralcrave-auction-engine"}
+2025-08-27 11:55:45 [INFO]: Client connected: _AgpLG0toTvHnc7LAAAw {"service":"coralcrave-auction-engine"}
+2025-08-27 12:01:49 [INFO]: Client connected: rk9DxuuvdcVpbFirAAAz {"service":"coralcrave-auction-engine"}
+2025-08-27 12:03:42 [INFO]: Client connected: _y4orD8ny_NQ8FmnAAA1 {"service":"coralcrave-auction-engine"}
+2025-08-27 12:10:19 [INFO]: Client connected: -_8sYk05H7vQkMhSAAA4 {"service":"coralcrave-auction-engine"}
+2025-08-27 12:17:11 [INFO]: Client connected: ss6eSB6aduDf6lfaAAA7 {"service":"coralcrave-auction-engine"}
+2025-08-27 12:25:43 [INFO]: Client connected: JSdKxwSKBTZlpbUFAAA- {"service":"coralcrave-auction-engine"}
+2025-08-27 12:41:50 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 12:41:50 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 12:45:41 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 12:45:41 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 12:45:41 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 12:45:41 [WARN]: Redis not available, falling back to in-memory storage: {"service":"coralcrave-auction-engine"}
+2025-08-27 12:45:41 [INFO]: In-memory service initialized {"service":"coralcrave-auction-engine"}
+2025-08-27 12:45:41 [INFO]: In-memory cache service initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 12:45:41 [INFO]: API routes set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 12:45:41 [INFO]: Auction engine event listeners set up {"service":"coralcrave-auction-engine"}
+2025-08-27 12:45:41 [INFO]: Socket.IO handlers set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 12:45:41 [INFO]: 🚀 CoralCrave Auction Engine running on port 3001 {"service":"coralcrave-auction-engine"}
+2025-08-27 12:45:41 [INFO]: 📡 WebSocket server ready for real-time bidding {"service":"coralcrave-auction-engine"}
+2025-08-27 12:45:41 [INFO]: 🔥 Environment: development {"service":"coralcrave-auction-engine"}
+2025-08-27 12:45:41 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 12:45:41 [ERROR]: Failed to get all auction states: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 12:45:41 [INFO]: Recovered 0 auction states from Redis {"service":"coralcrave-auction-engine"}
+2025-08-27 12:45:41 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 12:45:41 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError [ECONNREFUSED]: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 12:57:02 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 12:57:02 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 13:08:31 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 13:08:31 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 13:08:31 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 13:08:31 [WARN]: Redis not available, falling back to in-memory storage: {"service":"coralcrave-auction-engine"}
+2025-08-27 13:08:31 [INFO]: In-memory service initialized {"service":"coralcrave-auction-engine"}
+2025-08-27 13:08:31 [INFO]: In-memory cache service initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 13:08:31 [INFO]: API routes set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 13:08:31 [INFO]: Auction engine event listeners set up {"service":"coralcrave-auction-engine"}
+2025-08-27 13:08:31 [INFO]: Socket.IO handlers set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 13:08:31 [INFO]: 🚀 CoralCrave Auction Engine running on port 3001 {"service":"coralcrave-auction-engine"}
+2025-08-27 13:08:31 [INFO]: 📡 WebSocket server ready for real-time bidding {"service":"coralcrave-auction-engine"}
+2025-08-27 13:08:31 [INFO]: 🔥 Environment: development {"service":"coralcrave-auction-engine"}
+2025-08-27 13:08:31 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 13:08:31 [ERROR]: Failed to get all auction states: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 13:08:31 [INFO]: Recovered 0 auction states from Redis {"service":"coralcrave-auction-engine"}
+2025-08-27 13:08:31 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 13:08:31 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 13:12:04 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:04 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 13:12:04 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:04 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 13:12:04 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 13:12:04 [WARN]: Redis not available, falling back to in-memory storage: {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:04 [INFO]: In-memory service initialized {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:04 [INFO]: In-memory cache service initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:04 [INFO]: API routes set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:04 [INFO]: Auction engine event listeners set up {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:04 [INFO]: Socket.IO handlers set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:04 [INFO]: 🚀 CoralCrave Auction Engine running on port 3001 {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:04 [INFO]: 📡 WebSocket server ready for real-time bidding {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:04 [INFO]: 🔥 Environment: development {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:04 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 13:12:04 [ERROR]: Failed to get all auction states: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 13:12:04 [INFO]: Recovered 0 auction states from Redis {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:04 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 13:12:04 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 13:12:08 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:08 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 13:12:08 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 13:12:08 [WARN]: Redis not available, falling back to in-memory storage: {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:08 [INFO]: In-memory service initialized {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:08 [INFO]: In-memory cache service initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:08 [INFO]: API routes set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:08 [INFO]: Auction engine event listeners set up {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:08 [INFO]: Socket.IO handlers set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:08 [INFO]: 🚀 CoralCrave Auction Engine running on port 3001 {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:08 [INFO]: 📡 WebSocket server ready for real-time bidding {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:08 [INFO]: 🔥 Environment: development {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:08 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 13:12:08 [ERROR]: Failed to get all auction states: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 13:12:08 [INFO]: Recovered 0 auction states from Redis {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:08 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 13:12:08 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 13:12:08 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-27 13:12:08 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-27 13:13:18 [INFO]: Generated Agora token for channel: test-channel, uid: 12345, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-27 13:23:15 [INFO]: Client connected: JWRrmbjDbvX9ayTKAAAC {"service":"coralcrave-auction-engine"}
+2025-08-30 14:38:55 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 14:38:55 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 14:38:55 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 14:38:55 [WARN]: Redis not available, falling back to in-memory storage: {"service":"coralcrave-auction-engine"}
+2025-08-30 14:38:55 [INFO]: In-memory service initialized {"service":"coralcrave-auction-engine"}
+2025-08-30 14:38:55 [INFO]: In-memory cache service initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 14:38:55 [INFO]: API routes set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 14:38:55 [INFO]: Auction engine event listeners set up {"service":"coralcrave-auction-engine"}
+2025-08-30 14:38:55 [INFO]: Socket.IO handlers set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 14:38:55 [INFO]: 🚀 CoralCrave Auction Engine running on port 3001 {"service":"coralcrave-auction-engine"}
+2025-08-30 14:38:55 [INFO]: 📡 WebSocket server ready for real-time bidding {"service":"coralcrave-auction-engine"}
+2025-08-30 14:38:55 [INFO]: 🔥 Environment: development {"service":"coralcrave-auction-engine"}
+2025-08-30 14:38:55 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 14:38:55 [ERROR]: Failed to get all auction states: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 14:38:55 [INFO]: Recovered 0 auction states from Redis {"service":"coralcrave-auction-engine"}
+2025-08-30 14:38:55 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 14:38:55 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 14:40:25 [INFO]: Client connected: yDUJAelZUu4g3TOBAAAU {"service":"coralcrave-auction-engine"}
+2025-08-30 14:43:18 [INFO]: Client connected: qP3dOSFlNo25CK38AABI {"service":"coralcrave-auction-engine"}
+2025-08-30 14:44:48 [INFO]: Client connected: TnZKfw-2VYbrG5p1AABf {"service":"coralcrave-auction-engine"}
+2025-08-30 14:44:48 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756578219888, uid: 582971, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 14:44:48 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756578219888, uid: 530717, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 14:47:13 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756579633431, uid: 492809, role: publisher {"service":"coralcrave-auction-engine"}
+2025-08-30 14:47:19 [INFO]: Client connected: UrQMLcuhvHSRjzQzAAB1 {"service":"coralcrave-auction-engine"}
+2025-08-30 14:47:19 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756579633431, uid: 133734, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 14:47:19 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756579633431, uid: 155600, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 14:49:21 [INFO]: Client connected: _0ehlkzq_7SZPypKAAB4 {"service":"coralcrave-auction-engine"}
+2025-08-30 14:52:56 [INFO]: Client connected: idIxddbTTOS-NHM_AAB7 {"service":"coralcrave-auction-engine"}
+2025-08-30 14:53:42 [INFO]: Generated Agora token for channel: test, uid: 123, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 14:54:23 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756579633431, uid: 223342, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 14:54:23 [INFO]: Client connected: lSQ_YHRz_9cm55FuAAB- {"service":"coralcrave-auction-engine"}
+2025-08-30 14:54:23 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756579633431, uid: 815136, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 14:56:11 [INFO]: Client connected: QeADBtOceRpl8JjTAACB {"service":"coralcrave-auction-engine"}
+2025-08-30 14:56:11 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756578219888, uid: 843740, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 14:56:11 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756578219888, uid: 118863, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 16:40:44 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756586444344, uid: 74976, role: publisher {"service":"coralcrave-auction-engine"}
+2025-08-30 16:40:50 [INFO]: Client connected: P9m1A_DoLxpRZPGVAACE {"service":"coralcrave-auction-engine"}
+2025-08-30 16:40:50 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756586444344, uid: 483934, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 16:40:50 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756586444344, uid: 64106, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 16:48:01 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756586444344, uid: 979230, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 16:48:01 [INFO]: Client connected: PSxUGbNkiR4N32HEAACH {"service":"coralcrave-auction-engine"}
+2025-08-30 16:48:01 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756586444344, uid: 131748, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 16:49:41 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756586444344, uid: 352807, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 16:49:41 [INFO]: Client connected: mxd6B6pNK56RtahGAACK {"service":"coralcrave-auction-engine"}
+2025-08-30 16:49:41 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756586444344, uid: 686586, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 16:50:03 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756586444344, uid: 832999, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 16:50:03 [INFO]: Client connected: 5l9pWIbF_J7v4aTmAACN {"service":"coralcrave-auction-engine"}
+2025-08-30 16:50:03 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756586444344, uid: 291258, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 16:50:24 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756586444344, uid: 569464, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 16:50:28 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756586444344, uid: 688160, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 16:50:31 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756586444344, uid: 466030, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 16:51:17 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756586444344, uid: 872954, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 16:51:17 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756586444344, uid: 737994, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 16:52:46 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756587166176, uid: 755616, role: publisher {"service":"coralcrave-auction-engine"}
+2025-08-30 16:52:55 [INFO]: Client connected: QDySEIE7NWMYwqa-AACQ {"service":"coralcrave-auction-engine"}
+2025-08-30 16:52:55 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756587166176, uid: 698891, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 16:52:55 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756587166176, uid: 332235, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 17:19:21 [INFO]: Client connected: jU7_pJBZ2H-TQwKCAACT {"service":"coralcrave-auction-engine"}
+2025-08-30 17:28:00 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 17:28:00 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 17:31:38 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756589498350, uid: 131093, role: publisher {"service":"coralcrave-auction-engine"}
+2025-08-30 17:31:48 [INFO]: Client connected: S5-qLSd3i7lFlyT9AACW {"service":"coralcrave-auction-engine"}
+2025-08-30 17:31:48 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756589498350, uid: 741671, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 17:31:48 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756589498350, uid: 55246, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 17:42:38 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756589498350, uid: 839019, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 17:42:38 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756589498350, uid: 403253, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 17:42:38 [INFO]: Client connected: DlwCrkikFTEofG9-AACZ {"service":"coralcrave-auction-engine"}
+2025-08-30 17:42:45 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756589498350, uid: 199240, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 17:42:45 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756589498350, uid: 931776, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 17:42:45 [INFO]: Client connected: vJMSnSMXj3BpKNW3AACc {"service":"coralcrave-auction-engine"}
+2025-08-30 17:42:47 [INFO]: Client connected: wWqfipBROkKp61GTAACf {"service":"coralcrave-auction-engine"}
+2025-08-30 17:45:51 [INFO]: Client connected: FM9qDsonSsrDR5k4AACi {"service":"coralcrave-auction-engine"}
+2025-08-30 17:48:48 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756590527687, uid: 393121, role: publisher {"service":"coralcrave-auction-engine"}
+2025-08-30 17:48:56 [INFO]: Client connected: FbakO8ejqMnUrP6nAACl {"service":"coralcrave-auction-engine"}
+2025-08-30 17:48:56 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756590527687, uid: 65029, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 17:48:56 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756590527687, uid: 726093, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:15 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:15 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:01:15 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:01:15 [WARN]: Redis not available, falling back to in-memory storage: {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:15 [INFO]: In-memory service initialized {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:15 [INFO]: In-memory cache service initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:15 [INFO]: API routes set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:15 [INFO]: Auction engine event listeners set up {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:15 [INFO]: Socket.IO handlers set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:15 [INFO]: 🚀 CoralCrave Auction Engine running on port 3001 {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:15 [INFO]: 📡 WebSocket server ready for real-time bidding {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:15 [INFO]: 🔥 Environment: development {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:15 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:01:15 [ERROR]: Failed to get all auction states: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:01:15 [INFO]: Recovered 0 auction states from Redis {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:15 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:01:15 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:01:16 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:16 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:01:19 [INFO]: Client connected: IyI4TD4nX4E4ahgaAAAB {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:33 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:33 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:01:33 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:01:33 [WARN]: Redis not available, falling back to in-memory storage: {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:33 [INFO]: In-memory service initialized {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:33 [INFO]: In-memory cache service initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:33 [INFO]: API routes set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:33 [INFO]: Auction engine event listeners set up {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:34 [INFO]: Socket.IO handlers set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:34 [INFO]: 🚀 CoralCrave Auction Engine running on port 3001 {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:34 [INFO]: 📡 WebSocket server ready for real-time bidding {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:34 [INFO]: 🔥 Environment: development {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:34 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:01:34 [ERROR]: Failed to get all auction states: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:01:34 [INFO]: Recovered 0 auction states from Redis {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:34 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:01:34 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:01:34 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:34 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:01:35 [INFO]: Client connected: IkD2BbT9nyJuvtBrAAAB {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:50 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:50 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:01:50 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:01:50 [WARN]: Redis not available, falling back to in-memory storage: {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:50 [INFO]: In-memory service initialized {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:50 [INFO]: In-memory cache service initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:50 [INFO]: API routes set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:50 [INFO]: Auction engine event listeners set up {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:50 [INFO]: Socket.IO handlers set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:50 [INFO]: 🚀 CoralCrave Auction Engine running on port 3001 {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:50 [INFO]: 📡 WebSocket server ready for real-time bidding {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:50 [INFO]: 🔥 Environment: development {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:50 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:01:50 [ERROR]: Failed to get all auction states: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:01:50 [INFO]: Recovered 0 auction states from Redis {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:50 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:01:50 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:01:51 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 18:01:51 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:01:53 [INFO]: Client connected: q_0KZgu5SmxlDH5MAAAB {"service":"coralcrave-auction-engine"}
+2025-08-30 18:02:11 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 18:02:11 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:02:11 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 18:02:11 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:02:11 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:02:11 [WARN]: Redis not available, falling back to in-memory storage: {"service":"coralcrave-auction-engine"}
+2025-08-30 18:02:11 [INFO]: In-memory service initialized {"service":"coralcrave-auction-engine"}
+2025-08-30 18:02:11 [INFO]: In-memory cache service initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 18:02:11 [INFO]: API routes set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 18:02:11 [INFO]: Auction engine event listeners set up {"service":"coralcrave-auction-engine"}
+2025-08-30 18:02:11 [INFO]: Socket.IO handlers set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 18:02:11 [INFO]: 🚀 CoralCrave Auction Engine running on port 3001 {"service":"coralcrave-auction-engine"}
+2025-08-30 18:02:12 [INFO]: 📡 WebSocket server ready for real-time bidding {"service":"coralcrave-auction-engine"}
+2025-08-30 18:02:12 [INFO]: 🔥 Environment: development {"service":"coralcrave-auction-engine"}
+2025-08-30 18:02:12 [INFO]: Client connected: 4R6BsJqvRCOu4KAyAAAB {"service":"coralcrave-auction-engine"}
+2025-08-30 18:02:12 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:02:12 [ERROR]: Failed to get all auction states: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:02:12 [INFO]: Recovered 0 auction states from Redis {"service":"coralcrave-auction-engine"}
+2025-08-30 18:02:12 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:02:12 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 18:02:25 [INFO]: Client connected: g4ijIKdRStqoFjhmAAAE {"service":"coralcrave-auction-engine"}
+2025-08-30 18:02:25 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756590527687, uid: 857726, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 18:02:25 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756590527687, uid: 902955, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 18:04:54 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756591493119, uid: 595318, role: publisher {"service":"coralcrave-auction-engine"}
+2025-08-30 18:05:02 [INFO]: Client connected: 2TpvS3Cab1fBqMccAAAH {"service":"coralcrave-auction-engine"}
+2025-08-30 18:05:02 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756591493119, uid: 731473, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 18:05:02 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1756591493119, uid: 320936, role: audience {"service":"coralcrave-auction-engine"}
+2025-08-30 19:47:14 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 19:47:14 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 19:51:05 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 19:51:05 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 19:51:05 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 19:51:05 [WARN]: Redis not available, falling back to in-memory storage: {"service":"coralcrave-auction-engine"}
+2025-08-30 19:51:05 [INFO]: In-memory service initialized {"service":"coralcrave-auction-engine"}
+2025-08-30 19:51:05 [INFO]: In-memory cache service initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 19:51:05 [INFO]: API routes set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 19:51:05 [INFO]: Auction engine event listeners set up {"service":"coralcrave-auction-engine"}
+2025-08-30 19:51:05 [INFO]: Socket.IO handlers set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 19:51:05 [INFO]: 🚀 CoralCrave Auction Engine running on port 3001 {"service":"coralcrave-auction-engine"}
+2025-08-30 19:51:05 [INFO]: 📡 WebSocket server ready for real-time bidding {"service":"coralcrave-auction-engine"}
+2025-08-30 19:51:05 [INFO]: 🔥 Environment: development {"service":"coralcrave-auction-engine"}
+2025-08-30 19:51:05 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 19:51:05 [ERROR]: Failed to get all auction states: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 19:51:05 [INFO]: Recovered 0 auction states from Redis {"service":"coralcrave-auction-engine"}
+2025-08-30 19:51:05 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 19:51:05 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 19:55:27 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 19:55:27 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 19:55:27 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 19:55:27 [WARN]: Redis not available, falling back to in-memory storage: {"service":"coralcrave-auction-engine"}
+2025-08-30 19:55:27 [INFO]: In-memory service initialized {"service":"coralcrave-auction-engine"}
+2025-08-30 19:55:27 [INFO]: In-memory cache service initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 19:55:27 [INFO]: API routes set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 19:55:27 [INFO]: Auction engine event listeners set up {"service":"coralcrave-auction-engine"}
+2025-08-30 19:55:27 [INFO]: Socket.IO handlers set up successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 19:55:27 [INFO]: 🚀 CoralCrave Auction Engine running on port 3001 {"service":"coralcrave-auction-engine"}
+2025-08-30 19:55:27 [INFO]: 📡 WebSocket server ready for real-time bidding {"service":"coralcrave-auction-engine"}
+2025-08-30 19:55:27 [INFO]: 🔥 Environment: development {"service":"coralcrave-auction-engine"}
+2025-08-30 19:55:27 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 19:55:27 [ERROR]: Failed to get all auction states: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 19:55:27 [INFO]: Recovered 0 auction states from Redis {"service":"coralcrave-auction-engine"}
+2025-08-30 19:55:27 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 19:55:27 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 19:55:27 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 19:55:27 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 19:55:27 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 19:55:27 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-08-30 19:55:28 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-08-30 19:55:28 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)

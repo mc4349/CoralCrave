@@ -30,3 +30,204 @@ src/socket/handlers.ts(330,1): error TS1005: ')' expected.
     at Object.nodeDevHook [as .ts] (D:\CoralCrave\server\node_modules\ts-node-dev\lib\hook.js:63:13)
     at Module.load (node:internal/modules/cjs/loader:1289:32)
     at Function._load (node:internal/modules/cjs/loader:1108:12)
+2025-08-27 12:41:50 [ERROR]: uncaughtException: listen EADDRINUSE: address already in use :::3001
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\dist\index.js:65:16)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5) {"error":{"code":"EADDRINUSE","errno":-4091,"syscall":"listen","address":"::","port":3001},"exception":true,"date":"Wed Aug 27 2025 12:41:50 GMT-0400 (Eastern Daylight Time)","process":{"pid":14708,"uid":null,"gid":null,"cwd":"D:\\CoralCrave\\server","execPath":"C:\\Program Files\\nodejs\\node.exe","version":"v22.14.0","argv":["C:\\Program Files\\nodejs\\node.exe","D:\\CoralCrave\\server\\dist\\index.js"],"memoryUsage":{"rss":112726016,"heapTotal":72650752,"heapUsed":35068072,"external":2620363,"arrayBuffers":73266}},"os":{"loadavg":[0,0,0],"uptime":1433429.078},"trace":[{"column":16,"file":"node:net","function":"Server.setupListenHandle [as _listen2]","line":1937,"method":"setupListenHandle [as _listen2]","native":false},{"column":12,"file":"node:net","function":"listenInCluster","line":1994,"method":null,"native":false},{"column":7,"file":"node:net","function":"Server.listen","line":2099,"method":"listen","native":false},{"column":16,"file":"D:\\CoralCrave\\server\\dist\\index.js","function":"startServer","line":65,"method":null,"native":false},{"column":5,"file":"node:internal/process/task_queues","function":"process.processTicksAndRejections","line":105,"method":"processTicksAndRejections","native":false}],"service":"coralcrave-auction-engine"}
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\dist\index.js:65:16)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-08-27 12:50:05 [ERROR]: uncaughtException: Cannot find module 'agora-access-token'
+Require stack:
+- D:\CoralCrave\server\src\routes\index.ts
+- D:\CoralCrave\server\src\index.ts
+Error: Cannot find module 'agora-access-token'
+Require stack:
+- D:\CoralCrave\server\src\routes\index.ts
+- D:\CoralCrave\server\src\index.ts
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Function._load (node:internal/modules/cjs/loader:1055:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.require (node:internal/modules/cjs/loader:1311:12)
+    at require (node:internal/modules/helpers:136:16)
+    at Object.<anonymous> (D:\CoralCrave\server\src\routes\index.ts:6:1)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1554:14)
+    at Module._compile (D:\CoralCrave\server\node_modules\source-map-support\source-map-support.js:521:25)
+    at Module.m._compile (C:\Users\scole\AppData\Local\Temp\ts-node-dev-hook-38604118213835714.js:69:33) {"error":{"code":"MODULE_NOT_FOUND","requireStack":["D:\\CoralCrave\\server\\src\\routes\\index.ts","D:\\CoralCrave\\server\\src\\index.ts"]},"exception":true,"date":"Wed Aug 27 2025 12:50:05 GMT-0400 (Eastern Daylight Time)","process":{"pid":28248,"uid":null,"gid":null,"cwd":"D:\\CoralCrave\\server","execPath":"C:\\Program Files\\nodejs\\node.exe","version":"v22.14.0","argv":["C:\\Program Files\\nodejs\\node.exe","src/index.ts"],"memoryUsage":{"rss":96403456,"heapTotal":58753024,"heapUsed":38206712,"external":2403591,"arrayBuffers":132897}},"os":{"loadavg":[0,0,0],"uptime":1433923.703},"trace":[{"column":15,"file":"node:internal/modules/cjs/loader","function":"Function._resolveFilename","line":1225,"method":"_resolveFilename","native":false},{"column":27,"file":"node:internal/modules/cjs/loader","function":"Function._load","line":1055,"method":"_load","native":false},{"column":14,"file":"node:diagnostics_channel","function":"TracingChannel.traceSync","line":322,"method":"traceSync","native":false},{"column":24,"file":"node:internal/modules/cjs/loader","function":"wrapModuleLoad","line":220,"method":null,"native":false},{"column":12,"file":"node:internal/modules/cjs/loader","function":"Module.require","line":1311,"method":"require","native":false},{"column":16,"file":"node:internal/modules/helpers","function":"require","line":136,"method":null,"native":false},{"column":1,"file":"D:\\CoralCrave\\server\\src\\routes\\index.ts","function":null,"line":6,"method":null,"native":false},{"column":14,"file":"node:internal/modules/cjs/loader","function":null,"line":1554,"method":null,"native":false},{"column":25,"file":"D:\\CoralCrave\\server\\node_modules\\source-map-support\\source-map-support.js","function":"Module._compile","line":521,"method":"_compile","native":false},{"column":33,"file":"C:\\Users\\scole\\AppData\\Local\\Temp\\ts-node-dev-hook-38604118213835714.js","function":"Module.m._compile","line":69,"method":"_compile","native":false}],"service":"coralcrave-auction-engine"}
+Error: Cannot find module 'agora-access-token'
+Require stack:
+- D:\CoralCrave\server\src\routes\index.ts
+- D:\CoralCrave\server\src\index.ts
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1225:15)
+    at Function._load (node:internal/modules/cjs/loader:1055:27)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:220:24)
+    at Module.require (node:internal/modules/cjs/loader:1311:12)
+    at require (node:internal/modules/helpers:136:16)
+    at Object.<anonymous> (D:\CoralCrave\server\src\routes\index.ts:6:1)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1554:14)
+    at Module._compile (D:\CoralCrave\server\node_modules\source-map-support\source-map-support.js:521:25)
+    at Module.m._compile (C:\Users\scole\AppData\Local\Temp\ts-node-dev-hook-38604118213835714.js:69:33)
+2025-08-27 12:57:02 [ERROR]: uncaughtException: listen EADDRINUSE: address already in use :::3001
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5) {"error":{"code":"EADDRINUSE","errno":-4091,"syscall":"listen","address":"::","port":3001},"exception":true,"date":"Wed Aug 27 2025 12:57:02 GMT-0400 (Eastern Daylight Time)","process":{"pid":29224,"uid":null,"gid":null,"cwd":"D:\\CoralCrave\\server","execPath":"C:\\Program Files\\nodejs\\node.exe","version":"v22.14.0","argv":["C:\\Program Files\\nodejs\\node.exe","src/index.ts"],"memoryUsage":{"rss":126083072,"heapTotal":83136512,"heapUsed":59832304,"external":2716636,"arrayBuffers":84010}},"os":{"loadavg":[0,0,0],"uptime":1434340.671},"trace":[{"column":16,"file":"node:net","function":"Server.setupListenHandle [as _listen2]","line":1937,"method":"setupListenHandle [as _listen2]","native":false},{"column":12,"file":"node:net","function":"listenInCluster","line":1994,"method":null,"native":false},{"column":7,"file":"node:net","function":"Server.listen","line":2099,"method":"listen","native":false},{"column":12,"file":"D:\\CoralCrave\\server\\src\\index.ts","function":"startServer","line":79,"method":null,"native":false},{"column":5,"file":"node:internal/process/task_queues","function":"processTicksAndRejections","line":105,"method":null,"native":false}],"service":"coralcrave-auction-engine"}
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-08-27 13:12:04 [ERROR]: uncaughtException: listen EADDRINUSE: address already in use :::3001
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5) {"error":{"code":"EADDRINUSE","errno":-4091,"syscall":"listen","address":"::","port":3001},"exception":true,"date":"Wed Aug 27 2025 13:12:04 GMT-0400 (Eastern Daylight Time)","process":{"pid":19752,"uid":null,"gid":null,"cwd":"D:\\CoralCrave\\server","execPath":"C:\\Program Files\\nodejs\\node.exe","version":"v22.14.0","argv":["C:\\Program Files\\nodejs\\node.exe","src/index.ts"],"memoryUsage":{"rss":127000576,"heapTotal":83922944,"heapUsed":52354712,"external":2700800,"arrayBuffers":68172}},"os":{"loadavg":[0,0,0],"uptime":1435242.687},"trace":[{"column":16,"file":"node:net","function":"Server.setupListenHandle [as _listen2]","line":1937,"method":"setupListenHandle [as _listen2]","native":false},{"column":12,"file":"node:net","function":"listenInCluster","line":1994,"method":null,"native":false},{"column":7,"file":"node:net","function":"Server.listen","line":2099,"method":"listen","native":false},{"column":12,"file":"D:\\CoralCrave\\server\\src\\index.ts","function":"startServer","line":79,"method":null,"native":false},{"column":5,"file":"node:internal/process/task_queues","function":"processTicksAndRejections","line":105,"method":null,"native":false}],"service":"coralcrave-auction-engine"}
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-08-27 13:12:08 [ERROR]: uncaughtException: listen EADDRINUSE: address already in use :::3001
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5) {"error":{"code":"EADDRINUSE","errno":-4091,"syscall":"listen","address":"::","port":3001},"exception":true,"date":"Wed Aug 27 2025 13:12:08 GMT-0400 (Eastern Daylight Time)","process":{"pid":24444,"uid":null,"gid":null,"cwd":"D:\\CoralCrave\\server","execPath":"C:\\Program Files\\nodejs\\node.exe","version":"v22.14.0","argv":["C:\\Program Files\\nodejs\\node.exe","src/index.ts"],"memoryUsage":{"rss":128872448,"heapTotal":86020096,"heapUsed":55336584,"external":2700800,"arrayBuffers":68172}},"os":{"loadavg":[0,0,0],"uptime":1435246.718},"trace":[{"column":16,"file":"node:net","function":"Server.setupListenHandle [as _listen2]","line":1937,"method":"setupListenHandle [as _listen2]","native":false},{"column":12,"file":"node:net","function":"listenInCluster","line":1994,"method":null,"native":false},{"column":7,"file":"node:net","function":"Server.listen","line":2099,"method":"listen","native":false},{"column":12,"file":"D:\\CoralCrave\\server\\src\\index.ts","function":"startServer","line":79,"method":null,"native":false},{"column":5,"file":"node:internal/process/task_queues","function":"processTicksAndRejections","line":105,"method":null,"native":false}],"service":"coralcrave-auction-engine"}
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-08-30 17:28:00 [ERROR]: uncaughtException: listen EADDRINUSE: address already in use :::3001
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5) {"error":{"code":"EADDRINUSE","errno":-4091,"syscall":"listen","address":"::","port":3001},"exception":true,"date":"Sat Aug 30 2025 17:28:00 GMT-0400 (Eastern Daylight Time)","process":{"pid":19888,"uid":null,"gid":null,"cwd":"D:\\CoralCrave\\server","execPath":"C:\\Program Files\\nodejs\\node.exe","version":"v22.14.0","argv":["C:\\Program Files\\nodejs\\node.exe","src/index.ts"],"memoryUsage":{"rss":131448832,"heapTotal":83927040,"heapUsed":60110064,"external":2716638,"arrayBuffers":84010}},"os":{"loadavg":[0,0,0],"uptime":174067.437},"trace":[{"column":16,"file":"node:net","function":"Server.setupListenHandle [as _listen2]","line":1937,"method":"setupListenHandle [as _listen2]","native":false},{"column":12,"file":"node:net","function":"listenInCluster","line":1994,"method":null,"native":false},{"column":7,"file":"node:net","function":"Server.listen","line":2099,"method":"listen","native":false},{"column":12,"file":"D:\\CoralCrave\\server\\src\\index.ts","function":"startServer","line":79,"method":null,"native":false},{"column":5,"file":"node:internal/process/task_queues","function":"processTicksAndRejections","line":105,"method":null,"native":false}],"service":"coralcrave-auction-engine"}
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-08-30 18:01:16 [ERROR]: uncaughtException: listen EADDRINUSE: address already in use :::3001
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5) {"error":{"code":"EADDRINUSE","errno":-4091,"syscall":"listen","address":"::","port":3001},"exception":true,"date":"Sat Aug 30 2025 18:01:16 GMT-0400 (Eastern Daylight Time)","process":{"pid":14168,"uid":null,"gid":null,"cwd":"D:\\CoralCrave\\server","execPath":"C:\\Program Files\\nodejs\\node.exe","version":"v22.14.0","argv":["C:\\Program Files\\nodejs\\node.exe","src/index.ts"],"memoryUsage":{"rss":130232320,"heapTotal":83398656,"heapUsed":52116264,"external":2700800,"arrayBuffers":68172}},"os":{"loadavg":[0,0,0],"uptime":176063.484},"trace":[{"column":16,"file":"node:net","function":"Server.setupListenHandle [as _listen2]","line":1937,"method":"setupListenHandle [as _listen2]","native":false},{"column":12,"file":"node:net","function":"listenInCluster","line":1994,"method":null,"native":false},{"column":7,"file":"node:net","function":"Server.listen","line":2099,"method":"listen","native":false},{"column":12,"file":"D:\\CoralCrave\\server\\src\\index.ts","function":"startServer","line":79,"method":null,"native":false},{"column":5,"file":"node:internal/process/task_queues","function":"processTicksAndRejections","line":105,"method":null,"native":false}],"service":"coralcrave-auction-engine"}
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-08-30 18:01:34 [ERROR]: uncaughtException: listen EADDRINUSE: address already in use :::3001
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5) {"error":{"code":"EADDRINUSE","errno":-4091,"syscall":"listen","address":"::","port":3001},"exception":true,"date":"Sat Aug 30 2025 18:01:34 GMT-0400 (Eastern Daylight Time)","process":{"pid":20708,"uid":null,"gid":null,"cwd":"D:\\CoralCrave\\server","execPath":"C:\\Program Files\\nodejs\\node.exe","version":"v22.14.0","argv":["C:\\Program Files\\nodejs\\node.exe","src/index.ts"],"memoryUsage":{"rss":130543616,"heapTotal":83398656,"heapUsed":52807232,"external":2700801,"arrayBuffers":68173}},"os":{"loadavg":[0,0,0],"uptime":176081.187},"trace":[{"column":16,"file":"node:net","function":"Server.setupListenHandle [as _listen2]","line":1937,"method":"setupListenHandle [as _listen2]","native":false},{"column":12,"file":"node:net","function":"listenInCluster","line":1994,"method":null,"native":false},{"column":7,"file":"node:net","function":"Server.listen","line":2099,"method":"listen","native":false},{"column":12,"file":"D:\\CoralCrave\\server\\src\\index.ts","function":"startServer","line":79,"method":null,"native":false},{"column":5,"file":"node:internal/process/task_queues","function":"processTicksAndRejections","line":105,"method":null,"native":false}],"service":"coralcrave-auction-engine"}
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-08-30 18:01:51 [ERROR]: uncaughtException: listen EADDRINUSE: address already in use :::3001
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5) {"error":{"code":"EADDRINUSE","errno":-4091,"syscall":"listen","address":"::","port":3001},"exception":true,"date":"Sat Aug 30 2025 18:01:51 GMT-0400 (Eastern Daylight Time)","process":{"pid":21444,"uid":null,"gid":null,"cwd":"D:\\CoralCrave\\server","execPath":"C:\\Program Files\\nodejs\\node.exe","version":"v22.14.0","argv":["C:\\Program Files\\nodejs\\node.exe","src/index.ts"],"memoryUsage":{"rss":130547712,"heapTotal":83398656,"heapUsed":53014632,"external":2700803,"arrayBuffers":68173}},"os":{"loadavg":[0,0,0],"uptime":176098.078},"trace":[{"column":16,"file":"node:net","function":"Server.setupListenHandle [as _listen2]","line":1937,"method":"setupListenHandle [as _listen2]","native":false},{"column":12,"file":"node:net","function":"listenInCluster","line":1994,"method":null,"native":false},{"column":7,"file":"node:net","function":"Server.listen","line":2099,"method":"listen","native":false},{"column":12,"file":"D:\\CoralCrave\\server\\src\\index.ts","function":"startServer","line":79,"method":null,"native":false},{"column":5,"file":"node:internal/process/task_queues","function":"processTicksAndRejections","line":105,"method":null,"native":false}],"service":"coralcrave-auction-engine"}
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-08-30 18:02:12 [ERROR]: uncaughtException: listen EADDRINUSE: address already in use :::3001
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5) {"error":{"code":"EADDRINUSE","errno":-4091,"syscall":"listen","address":"::","port":3001},"exception":true,"date":"Sat Aug 30 2025 18:02:12 GMT-0400 (Eastern Daylight Time)","process":{"pid":1760,"uid":null,"gid":null,"cwd":"D:\\CoralCrave\\server","execPath":"C:\\Program Files\\nodejs\\node.exe","version":"v22.14.0","argv":["C:\\Program Files\\nodejs\\node.exe","src/index.ts"],"memoryUsage":{"rss":130048000,"heapTotal":83398656,"heapUsed":52337672,"external":2700801,"arrayBuffers":68173}},"os":{"loadavg":[0,0,0],"uptime":176118.859},"trace":[{"column":16,"file":"node:net","function":"Server.setupListenHandle [as _listen2]","line":1937,"method":"setupListenHandle [as _listen2]","native":false},{"column":12,"file":"node:net","function":"listenInCluster","line":1994,"method":null,"native":false},{"column":7,"file":"node:net","function":"Server.listen","line":2099,"method":"listen","native":false},{"column":12,"file":"D:\\CoralCrave\\server\\src\\index.ts","function":"startServer","line":79,"method":null,"native":false},{"column":5,"file":"node:internal/process/task_queues","function":"processTicksAndRejections","line":105,"method":null,"native":false}],"service":"coralcrave-auction-engine"}
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-08-30 19:47:14 [ERROR]: uncaughtException: listen EADDRINUSE: address already in use :::3001
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5) {"error":{"code":"EADDRINUSE","errno":-4091,"syscall":"listen","address":"::","port":3001},"exception":true,"date":"Sat Aug 30 2025 19:47:14 GMT-0400 (Eastern Daylight Time)","process":{"pid":23228,"uid":null,"gid":null,"cwd":"D:\\CoralCrave\\server","execPath":"C:\\Program Files\\nodejs\\node.exe","version":"v22.14.0","argv":["C:\\Program Files\\nodejs\\node.exe","src/index.ts"],"memoryUsage":{"rss":130715648,"heapTotal":83664896,"heapUsed":60042536,"external":2716640,"arrayBuffers":84010}},"os":{"loadavg":[0,0,0],"uptime":182421.312},"trace":[{"column":16,"file":"node:net","function":"Server.setupListenHandle [as _listen2]","line":1937,"method":"setupListenHandle [as _listen2]","native":false},{"column":12,"file":"node:net","function":"listenInCluster","line":1994,"method":null,"native":false},{"column":7,"file":"node:net","function":"Server.listen","line":2099,"method":"listen","native":false},{"column":12,"file":"D:\\CoralCrave\\server\\src\\index.ts","function":"startServer","line":79,"method":null,"native":false},{"column":5,"file":"node:internal/process/task_queues","function":"processTicksAndRejections","line":105,"method":null,"native":false}],"service":"coralcrave-auction-engine"}
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-08-30 19:55:27 [ERROR]: uncaughtException: listen EADDRINUSE: address already in use :::3001
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5) {"error":{"code":"EADDRINUSE","errno":-4091,"syscall":"listen","address":"::","port":3001},"exception":true,"date":"Sat Aug 30 2025 19:55:27 GMT-0400 (Eastern Daylight Time)","process":{"pid":12232,"uid":null,"gid":null,"cwd":"D:\\CoralCrave\\server","execPath":"C:\\Program Files\\nodejs\\node.exe","version":"v22.14.0","argv":["C:\\Program Files\\nodejs\\node.exe","src/index.ts"],"memoryUsage":{"rss":130965504,"heapTotal":83398656,"heapUsed":52775976,"external":2700803,"arrayBuffers":68173}},"os":{"loadavg":[0,0,0],"uptime":182914.078},"trace":[{"column":16,"file":"node:net","function":"Server.setupListenHandle [as _listen2]","line":1937,"method":"setupListenHandle [as _listen2]","native":false},{"column":12,"file":"node:net","function":"listenInCluster","line":1994,"method":null,"native":false},{"column":7,"file":"node:net","function":"Server.listen","line":2099,"method":"listen","native":false},{"column":12,"file":"D:\\CoralCrave\\server\\src\\index.ts","function":"startServer","line":79,"method":null,"native":false},{"column":5,"file":"node:internal/process/task_queues","function":"processTicksAndRejections","line":105,"method":null,"native":false}],"service":"coralcrave-auction-engine"}
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-08-30 19:55:27 [ERROR]: uncaughtException: listen EADDRINUSE: address already in use :::3001
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5) {"error":{"code":"EADDRINUSE","errno":-4091,"syscall":"listen","address":"::","port":3001},"exception":true,"date":"Sat Aug 30 2025 19:55:27 GMT-0400 (Eastern Daylight Time)","process":{"pid":22408,"uid":null,"gid":null,"cwd":"D:\\CoralCrave\\server","execPath":"C:\\Program Files\\nodejs\\node.exe","version":"v22.14.0","argv":["C:\\Program Files\\nodejs\\node.exe","src/index.ts"],"memoryUsage":{"rss":130240512,"heapTotal":83136512,"heapUsed":52731120,"external":2700803,"arrayBuffers":68173}},"os":{"loadavg":[0,0,0],"uptime":182914.125},"trace":[{"column":16,"file":"node:net","function":"Server.setupListenHandle [as _listen2]","line":1937,"method":"setupListenHandle [as _listen2]","native":false},{"column":12,"file":"node:net","function":"listenInCluster","line":1994,"method":null,"native":false},{"column":7,"file":"node:net","function":"Server.listen","line":2099,"method":"listen","native":false},{"column":12,"file":"D:\\CoralCrave\\server\\src\\index.ts","function":"startServer","line":79,"method":null,"native":false},{"column":5,"file":"node:internal/process/task_queues","function":"processTicksAndRejections","line":105,"method":null,"native":false}],"service":"coralcrave-auction-engine"}
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-08-30 19:55:28 [ERROR]: uncaughtException: listen EADDRINUSE: address already in use :::3001
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5) {"error":{"code":"EADDRINUSE","errno":-4091,"syscall":"listen","address":"::","port":3001},"exception":true,"date":"Sat Aug 30 2025 19:55:28 GMT-0400 (Eastern Daylight Time)","process":{"pid":14636,"uid":null,"gid":null,"cwd":"D:\\CoralCrave\\server","execPath":"C:\\Program Files\\nodejs\\node.exe","version":"v22.14.0","argv":["C:\\Program Files\\nodejs\\node.exe","src/index.ts"],"memoryUsage":{"rss":132562944,"heapTotal":85499904,"heapUsed":60938136,"external":2716641,"arrayBuffers":84011}},"os":{"loadavg":[0,0,0],"uptime":182914.968},"trace":[{"column":16,"file":"node:net","function":"Server.setupListenHandle [as _listen2]","line":1937,"method":"setupListenHandle [as _listen2]","native":false},{"column":12,"file":"node:net","function":"listenInCluster","line":1994,"method":null,"native":false},{"column":7,"file":"node:net","function":"Server.listen","line":2099,"method":"listen","native":false},{"column":12,"file":"D:\\CoralCrave\\server\\src\\index.ts","function":"startServer","line":79,"method":null,"native":false},{"column":5,"file":"node:internal/process/task_queues","function":"processTicksAndRejections","line":105,"method":null,"native":false}],"service":"coralcrave-auction-engine"}
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1937:16)
+    at listenInCluster (node:net:1994:12)
+    at Server.listen (node:net:2099:7)
+    at startServer (D:\CoralCrave\server\src\index.ts:79:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)

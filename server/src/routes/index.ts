@@ -7,7 +7,7 @@ import { RtcTokenBuilder, RtcRole } from 'agora-access-token'
 
 export function setupRoutes(app: Express): void {
   // Agora token generation endpoint
-  app.get('/agora/token', asyncHandler(async (req: Request, res: Response) => {
+  app.get('/api/agora/token', asyncHandler(async (req: Request, res: Response) => {
     const { channelName, uid, role } = req.query
     
     // Type assertions for query parameters
