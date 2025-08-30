@@ -1,6 +1,7 @@
 // Auction Engine Service - Client-side interface for real-time bidding
-import { doc, collection, onSnapshot, addDoc, updateDoc, serverTimestamp, query, orderBy, limit } from 'firebase/firestore'
+import { doc, collection, onSnapshot, query, orderBy, limit } from 'firebase/firestore'
 import { db } from '../lib/firebase'
+import { io, Socket } from 'socket.io-client'
 
 export interface Bid {
   id: string
@@ -54,9 +55,73 @@ export class AuctionEngine {
   private onStateUpdate?: (item: AuctionItem) => void
   private onBidUpdate?: (bid: Bid) => void
   private onTimerUpdate?: (itemId: string, timeLeftMs: number) => void
+  private socket: Socket | null = null
 
   constructor(liveId: string) {
     this.liveId = liveId
+    this.initializeSocket()
+  }
+
+  private initializeSocket() {
+    // Connect to the server's socket - temporarily use local server for testing CORS fixes
+    const isProduction = window.location.hostname !== 'localhost'
+    const serverUrl = isProduction 
+      ? (import.meta.env.VITE_PROD_SERVER_URL || 'http://localhost:3001') // Temporarily use local server
+      : (import.meta.env.VITE_SERVER_URL || 'http://localhost:3001')
+    
+    console.log('Connecting to auction server:', serverUrl)
+    this.socket = io(serverUrl)
+
+    // Set up socket event listeners
+    this.socket.on('connect', () => {
+      console.log('Connected to auction server')
+      // Join the livestream room
+      this.socket?.emit('joinLive', { liveId: this.liveId })
+    })
+
+    this.socket.on('disconnect', () => {
+      console.log('Disconnected from auction server')
+    })
+
+    this.socket.on('error', (error: { message: string }) => {
+      console.error('Socket error:', error.message)
+    })
+
+    // Listen for auction state updates
+    this.socket.on('auctionState', (auctionState: any) => {
+      // Convert server auction state to client auction item format
+      const item: AuctionItem = {
+        id: auctionState.itemId,
+        liveId: auctionState.liveId,
+        title: '', // Will be filled from Firebase
+        description: '',
+        images: [],
+        startingPrice: 0,
+        currentPrice: auctionState.currentPrice,
+        status: auctionState.status,
+        mode: auctionState.mode,
+        category: '',
+        leadingBidderId: auctionState.leadingBidderId,
+        timeLeftMs: auctionState.timeLeftMs,
+        incrementSchemeId: ''
+      }
+      this.onStateUpdate?.(item)
+    })
+
+    // Listen for bid updates
+    this.socket.on('bidPlaced', (data: { itemId: string; bid: Bid; newPrice: number; leaderId: string }) => {
+      this.onBidUpdate?.(data.bid)
+    })
+
+    // Listen for timer updates
+    this.socket.on('timerUpdate', (data: { itemId: string; timeLeftMs: number }) => {
+      this.onTimerUpdate?.(data.itemId, data.timeLeftMs)
+    })
+
+    // Listen for auction closed events
+    this.socket.on('auctionClosed', (data: { itemId: string; winnerId?: string; finalPrice: number }) => {
+      console.log('Auction closed:', data)
+    })
   }
 
   // Subscribe to auction state updates
@@ -102,13 +167,17 @@ export class AuctionEngine {
   // Place a bid
   async placeBid(itemId: string, amount: number, userId: string, username: string): Promise<void> {
     try {
-      const bidsRef = collection(db, 'livestreams', this.liveId, 'items', itemId, 'bids')
-      await addDoc(bidsRef, {
-        userId,
-        username,
+      if (!this.socket) {
+        throw new Error('Socket not connected')
+      }
+
+      // Send bid through socket to server
+      this.socket.emit('placeBid', {
+        liveId: this.liveId,
+        itemId,
         amount,
-        timestamp: serverTimestamp(),
-        source: 'user'
+        userId,
+        username
       })
     } catch (error) {
       console.error('Failed to place bid:', error)
@@ -119,10 +188,16 @@ export class AuctionEngine {
   // Set maximum bid for proxy bidding
   async setMaxBid(itemId: string, maxAmount: number, userId: string): Promise<void> {
     try {
-      const proxyBidRef = doc(db, 'livestreams', this.liveId, 'items', itemId, 'proxyBids', userId)
-      await updateDoc(proxyBidRef, {
+      if (!this.socket) {
+        throw new Error('Socket not connected')
+      }
+
+      // Send max bid through socket to server
+      this.socket.emit('setMaxBid', {
+        liveId: this.liveId,
+        itemId,
         maxAmount,
-        updatedAt: serverTimestamp()
+        userId
       })
     } catch (error) {
       console.error('Failed to set max bid:', error)
@@ -159,42 +234,39 @@ export class AuctionEngine {
     return { valid: true, minimumBid }
   }
 
-  // Start timer for auction item (would typically be called by server)
-  async startAuction(itemId: string, durationMs: number = 30000): Promise<void> {
-    try {
-      const itemRef = doc(db, 'livestreams', this.liveId, 'items', itemId)
-      const endAt = new Date(Date.now() + durationMs)
-      
-      await updateDoc(itemRef, {
-        status: 'running',
-        endAt: endAt
-      })
-    } catch (error) {
-      console.error('Failed to start auction:', error)
-      throw error
-    }
-  }
-
-  // End auction (would typically be called by server)
-  async endAuction(itemId: string, winnerId?: string): Promise<void> {
-    try {
-      const itemRef = doc(db, 'livestreams', this.liveId, 'items', itemId)
-      
-      await updateDoc(itemRef, {
-        status: winnerId ? 'sold' : 'unsold',
-        winnerId,
-        endAt: null
-      })
-    } catch (error) {
-      console.error('Failed to end auction:', error)
-      throw error
-    }
-  }
 
   // Clean up subscriptions
   unsubscribe() {
     this.unsubscribers.forEach(unsubscribe => unsubscribe())
     this.unsubscribers = []
+    
+    // Disconnect socket
+    if (this.socket) {
+      this.socket.emit('leaveLive', { liveId: this.liveId })
+      this.socket.disconnect()
+      this.socket = null
+    }
+  }
+
+  // Request current auction state
+  requestAuctionState(itemId: string) {
+    if (this.socket) {
+      this.socket.emit('requestState', { liveId: this.liveId, itemId })
+    }
+  }
+
+  // Start auction (host only)
+  startAuction(itemId: string, userId: string): void {
+    if (this.socket) {
+      this.socket.emit('startAuction', { liveId: this.liveId, itemId, userId })
+    }
+  }
+
+  // Stop auction (host only)
+  stopAuction(itemId: string, userId: string): void {
+    if (this.socket) {
+      this.socket.emit('stopAuction', { liveId: this.liveId, itemId, userId })
+    }
   }
 }
 

@@ -10,8 +10,26 @@ const Activity = () => {
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
 
+  // Require authentication for Activity page
+  if (!currentUser) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-slate-100 mb-4">Please Sign In</h2>
+          <p className="text-slate-400 mb-6">You need to be signed in to view your activity.</p>
+          <Link to="/auth/signin" className="btn-primary">
+            Sign In
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
   useEffect(() => {
-    if (!currentUser) return
+    if (!currentUser) {
+      setLoading(false)
+      return
+    }
 
     const loadOrders = async () => {
       try {

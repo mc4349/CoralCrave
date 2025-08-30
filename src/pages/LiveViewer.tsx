@@ -12,7 +12,6 @@ const LiveViewer = () => {
   const navigate = useNavigate()
   const { currentUser } = useAuth()
   const { 
-    isViewing, 
     remoteVideoTracks, 
     joinStream, 
     leaveStream,
@@ -26,23 +25,169 @@ const LiveViewer = () => {
   const videoRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (id && currentUser) {
-      // Join the stream as a viewer
+    if (id) {
+      // Join the stream as a viewer (no authentication required)
       joinStream(id)
     }
 
     return () => {
       leaveStream()
     }
-  }, [id, currentUser, joinStream, leaveStream])
+  }, [id, joinStream, leaveStream])
 
+  // ENHANCED: Video rendering with better track detection and error handling
   useEffect(() => {
-    // Play remote video track when available
-    const remoteVideoTrack = Array.from(remoteVideoTracks.values())[0]
-    if (remoteVideoTrack && videoRef.current) {
-      remoteVideoTrack.play(videoRef.current)
+    const renderVideo = async () => {
+      console.log('🎬 Video rendering effect triggered')
+      console.log('📊 Remote video tracks count:', remoteVideoTracks.size)
+      console.log('📋 Available track UIDs:', Array.from(remoteVideoTracks.keys()))
+      
+      if (!videoRef.current) {
+        console.warn('⚠️ Video container ref not available')
+        return
+      }
+
+      // Get the first available remote video track
+      const remoteVideoTrack = Array.from(remoteVideoTracks.values())[0]
+      
+      if (remoteVideoTrack) {
+        console.log('🎥 Found remote video track, attempting to render...')
+        console.log('📹 Track details:', {
+          trackId: remoteVideoTrack.getTrackId ? remoteVideoTrack.getTrackId() : 'N/A',
+          isPlaying: remoteVideoTrack.isPlaying || false
+        })
+        
+        try {
+          // Clear container first
+          const existingVideo = videoRef.current.querySelector('video')
+          if (existingVideo) {
+            console.log('🧹 Removing existing video element')
+            existingVideo.remove()
+          }
+
+          console.log('📺 Attempting to play video track...')
+          
+          // Play the video track
+          await remoteVideoTrack.play(videoRef.current)
+          console.log('✅ Video track play() completed successfully')
+          
+          // Wait for video element to be created
+          await new Promise(resolve => setTimeout(resolve, 300))
+          
+          // Find and style the video element
+          let videoElement = videoRef.current.querySelector('video')
+          let retryCount = 0
+          const maxRetries = 10
+          
+          // Wait for video element with retries
+          while (!videoElement && retryCount < maxRetries) {
+            console.log(`🔍 Video element not found, retry ${retryCount + 1}/${maxRetries}`)
+            await new Promise(resolve => setTimeout(resolve, 100))
+            videoElement = videoRef.current.querySelector('video')
+            retryCount++
+          }
+          
+          if (videoElement) {
+            console.log('📺 Video element found, applying styles...')
+            
+            // Apply comprehensive styling
+            videoElement.style.width = '100%'
+            videoElement.style.height = '100%'
+            videoElement.style.objectFit = 'cover'
+            videoElement.style.backgroundColor = '#000'
+            videoElement.style.borderRadius = '8px'
+            videoElement.style.display = 'block'
+            videoElement.style.visibility = 'visible'
+            videoElement.style.opacity = '1'
+            
+            // Force video attributes
+            videoElement.setAttribute('playsinline', 'true')
+            videoElement.setAttribute('autoplay', 'true')
+            videoElement.muted = false
+            
+            // Ensure video is playing
+            if (videoElement.paused) {
+              console.log('▶️ Video was paused, attempting to play...')
+              try {
+                await videoElement.play()
+                console.log('✅ Video element playing successfully')
+              } catch (playError) {
+                console.error('❌ Failed to play video element:', playError)
+              }
+            }
+            
+            // Add event listeners for debugging
+            videoElement.addEventListener('loadedmetadata', () => {
+              console.log('📺 Video metadata loaded:', {
+                videoWidth: videoElement.videoWidth,
+                videoHeight: videoElement.videoHeight,
+                duration: videoElement.duration
+              })
+            })
+            
+            videoElement.addEventListener('playing', () => {
+              console.log('📺 Video playing started!')
+            })
+            
+            videoElement.addEventListener('error', (e) => {
+              console.error('📺 Video error:', e)
+            })
+            
+            console.log('✅ Video element configured successfully')
+            
+          } else {
+            console.error('❌ Video element not found after retries')
+            
+            // Show error message
+            if (videoRef.current) {
+              videoRef.current.innerHTML = `
+                <div style="color: white; text-align: center; padding: 20px; background: rgba(255,0,0,0.1); border-radius: 8px;">
+                  <div style="font-size: 18px; margin-bottom: 10px;">⚠️ Video Rendering Issue</div>
+                  <div style="font-size: 14px; opacity: 0.8;">Unable to display video. Please refresh the page.</div>
+                </div>
+              `
+            }
+          }
+          
+        } catch (playError: any) {
+          console.error('❌ Critical error playing remote video track:', playError)
+          
+          // Show user-friendly error message
+          if (videoRef.current) {
+            videoRef.current.innerHTML = `
+              <div style="color: white; text-align: center; padding: 20px; background: rgba(255,0,0,0.1); border-radius: 8px;">
+                <div style="font-size: 18px; margin-bottom: 10px;">⚠️ Video Connection Issue</div>
+                <div style="font-size: 14px; opacity: 0.8;">Unable to display video stream. Please refresh the page.</div>
+                <div style="font-size: 12px; margin-top: 10px; opacity: 0.6;">Error: ${playError.message}</div>
+              </div>
+            `
+          }
+        }
+      } else {
+        console.log('📭 No remote video tracks available')
+        
+        if (videoRef.current && remoteVideoTracks.size === 0) {
+          // Show appropriate message based on stream status
+          const message = currentStream?.status === 'live' 
+            ? 'Connecting to video stream...' 
+            : 'Video stream not available'
+            
+          videoRef.current.innerHTML = `
+            <div style="color: white; text-align: center; padding: 40px;">
+              <div style="font-size: 18px; margin-bottom: 10px;">${message}</div>
+              ${currentStream?.status === 'live' ? '<div style="font-size: 14px; opacity: 0.7;">Please wait while we establish the connection</div>' : ''}
+            </div>
+          `
+          console.log('🧹 Updated video container with status message')
+        }
+      }
     }
-  }, [remoteVideoTracks])
+
+    // Execute the rendering function
+    renderVideo().catch(error => {
+      console.error('💥 Video rendering function failed:', error)
+    })
+  }, [remoteVideoTracks, currentStream?.status])
 
   useEffect(() => {
     // Check follow status when stream loads
@@ -89,8 +234,15 @@ const LiveViewer = () => {
   }
 
   const handleSellerClick = () => {
+    console.log('🔍 Seller click - currentStream:', currentStream)
+    console.log('🔍 Host ID:', currentStream?.hostId)
+    
     if (currentStream?.hostId) {
+      console.log('🚀 Navigating to profile:', `/profile/${currentStream.hostId}`)
       navigate(`/profile/${currentStream.hostId}`)
+    } else {
+      console.warn('⚠️ No host ID available for navigation')
+      alert('Profile not available at this time')
     }
   }
 
@@ -114,13 +266,6 @@ const LiveViewer = () => {
             className="absolute inset-0 w-full h-full"
             style={{ background: '#000' }}
           />
-          
-          {/* Overlay when no video */}
-          {remoteVideoTracks.size === 0 && (
-            <div className="absolute inset-0 flex items-center justify-center text-white text-xl">
-              {isViewing ? 'Waiting for stream...' : `Live Stream #${id}`}
-            </div>
-          )}
           
           {/* Stream info overlay */}
           <div className="absolute top-4 left-4">

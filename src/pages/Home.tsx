@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { collection, query, where, onSnapshot } from 'firebase/firestore'
+import { db } from '../lib/firebase'
 
 const oceanFacts = [
   "🌊 The ocean covers more than 70% of Earth's surface and contains 99% of the planet's living space.",
@@ -14,8 +16,25 @@ const oceanFacts = [
   "🌊 Ocean currents act like a global conveyor belt, distributing heat around the planet."
 ]
 
+interface LiveStream {
+  id: string
+  hostId: string
+  hostUsername: string
+  title: string
+  status: 'offline' | 'live' | 'ended'
+  viewerCount: number
+  startedAt?: Date
+  categories: string[]
+  agora: {
+    channel: string
+    broadcasterUid: string
+  }
+}
+
 const Home = () => {
   const [currentFactIndex, setCurrentFactIndex] = useState(0)
+  const [liveStreams, setLiveStreams] = useState<LiveStream[]>([])
+  const [loadingStreams, setLoadingStreams] = useState(true)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -23,6 +42,33 @@ const Home = () => {
     }, 5000) // Change fact every 5 seconds
 
     return () => clearInterval(interval)
+  }, [])
+
+  // Listen for live streams - ONLY from Firestore (no offline fallback)
+  useEffect(() => {
+    console.log('🔍 Home: Fetching live streams from Firestore only...')
+    
+    const q = query(
+      collection(db, 'livestreams'),
+      where('status', '==', 'live')
+    )
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const streams: LiveStream[] = []
+      snapshot.forEach((doc) => {
+        streams.push({ id: doc.id, ...doc.data() } as LiveStream)
+      })
+      console.log('✅ Home: Found', streams.length, 'live streams in Firestore')
+      setLiveStreams(streams)
+      setLoadingStreams(false)
+    }, (error) => {
+      console.error('❌ Home: Error fetching live streams from Firestore:', error)
+      console.error('❌ This means no streams will be visible to viewers!')
+      setLiveStreams([]) // Clear streams on error - don't show offline streams
+      setLoadingStreams(false)
+    })
+
+    return () => unsubscribe()
   }, [])
 
   return (
@@ -84,6 +130,94 @@ const Home = () => {
               </Link>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Live Now Section */}
+      <div className="relative py-20 bg-slate-800/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-white mb-4">
+              🔴 Live Now
+            </h2>
+            <p className="text-xl text-blue-200">
+              Join active auctions happening right now
+            </p>
+          </div>
+
+          {loadingStreams ? (
+            <div className="flex justify-center items-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400"></div>
+              <span className="ml-4 text-blue-200">Loading live streams...</span>
+            </div>
+          ) : liveStreams.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {liveStreams.slice(0, 6).map((stream) => (
+                <Link
+                  key={stream.id}
+                  to={`/live/${stream.id}`}
+                  className="group bg-slate-700/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-blue-500/20 hover:border-cyan-400/40 transition-all duration-300 hover:transform hover:scale-105"
+                >
+                  {/* Stream Preview Placeholder */}
+                  <div className="relative h-48 bg-gradient-to-br from-blue-600/30 to-cyan-600/30 flex items-center justify-center">
+                    <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center">
+                      <div className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></div>
+                      LIVE
+                    </div>
+                    <div className="absolute top-4 right-4 bg-black/50 text-white px-2 py-1 rounded text-sm">
+                      👥 {stream.viewerCount}
+                    </div>
+                    <div className="text-6xl opacity-50">🎥</div>
+                  </div>
+                  
+                  {/* Stream Info */}
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-300 transition-colors">
+                      {stream.title}
+                    </h3>
+                    <p className="text-blue-200 mb-3">
+                      by {stream.hostUsername}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {stream.categories.map((category) => (
+                        <span
+                          key={category}
+                          className="px-3 py-1 bg-blue-500/20 text-blue-200 rounded-full text-sm capitalize"
+                        >
+                          {category}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <div className="text-6xl mb-4 opacity-50">🌊</div>
+              <h3 className="text-2xl font-bold text-white mb-4">No Live Streams Right Now</h3>
+              <p className="text-blue-200 mb-8 max-w-2xl mx-auto">
+                Be the first to go live! Start streaming your marine treasures and connect with buyers in real-time.
+              </p>
+              <Link 
+                to="/go-live" 
+                className="bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-teal-500/25 inline-block"
+              >
+                🎥 Start Your First Stream
+              </Link>
+            </div>
+          )}
+
+          {liveStreams.length > 6 && (
+            <div className="text-center mt-12">
+              <Link 
+                to="/explore" 
+                className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-cyan-500/25 inline-block"
+              >
+                View All Live Streams ({liveStreams.length})
+              </Link>
+            </div>
+          )}
         </div>
       </div>
 

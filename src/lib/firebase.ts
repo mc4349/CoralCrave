@@ -1,8 +1,9 @@
 import { initializeApp } from 'firebase/app'
 import { getAuth, GoogleAuthProvider } from 'firebase/auth'
-import { getFirestore } from 'firebase/firestore'
+import { initializeFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 
+// Enhanced Firebase configuration with 400 error fixes
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -12,34 +13,42 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 }
 
-// Initialize Firebase
+console.log('🔥 Initializing Firebase for CoralCrave...')
+console.log('📊 Project ID:', firebaseConfig.projectId)
+console.log('🌐 Environment:', import.meta.env.MODE)
+
+// Initialize Firebase app
 const app = initializeApp(firebaseConfig)
+console.log('✅ Firebase app initialized')
 
-// Initialize Firebase services
+// Initialize Firebase Auth
 export const auth = getAuth(app)
-export const db = getFirestore(app)
-export const storage = getStorage(app)
+console.log('✅ Firebase Auth ready')
 
-// Connect to emulators in development - TEMPORARILY DISABLED FOR TESTING
-// if (import.meta.env.DEV) {
-//   try {
-//     // Connect to Auth emulator
-//     connectAuthEmulator(auth, 'http://localhost:9099')
-//   } catch (error) {
-//     // Emulator already connected or not available
-//     console.log('Auth emulator connection skipped:', error)
-//   }
-  
-//   try {
-//     // Connect to Firestore emulator
-//     connectFirestoreEmulator(db, 'localhost', 8080)
-//   } catch (error) {
-//     // Emulator already connected or not available
-//     console.log('Firestore emulator connection skipped:', error)
-//   }
-// }
+// Initialize Firestore with comprehensive settings to fix 400 errors
+export const db = initializeFirestore(app, {
+  experimentalForceLongPolling: true, // Force long polling to avoid WebChannel 400 errors
+  ignoreUndefinedProperties: true,
+  cacheSizeBytes: 1048576, // 1MB cache
+})
+console.log('✅ Firestore initialized with enhanced 400 error fixes')
+
+// Initialize Storage
+export const storage = getStorage(app)
+console.log('✅ Firebase Storage ready')
+
+console.log('🎉 Firebase initialization complete!')
 
 // Initialize Google Auth Provider
 export const googleProvider = new GoogleAuthProvider()
+
+// Configure Google Auth Provider for better popup handling
+googleProvider.setCustomParameters({
+  prompt: 'select_account'
+})
+
+// Add additional scopes for better user info
+googleProvider.addScope('email')
+googleProvider.addScope('profile')
 
 export default app

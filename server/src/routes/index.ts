@@ -3,8 +3,64 @@ import { asyncHandler } from '../middleware/errorHandler'
 import { getFirebaseService } from '../config/firebase'
 import { getRedisService } from '../config/redis'
 import { logger } from '../utils/logger'
+import { RtcTokenBuilder, RtcRole } from 'agora-access-token'
 
 export function setupRoutes(app: Express): void {
+  // Agora token generation endpoint
+  app.get('/agora/token', asyncHandler(async (req: Request, res: Response) => {
+    const { channelName, uid, role } = req.query
+    
+    if (!channelName || !uid) {
+      return res.status(400).json({
+        success: false,
+        error: { message: 'channelName and uid are required' }
+      })
+    }
+    
+    const appId = process.env.AGORA_APP_ID
+    const appCertificate = process.env.AGORA_APP_CERTIFICATE
+    
+    if (!appId || !appCertificate) {
+      logger.error('Agora credentials not configured')
+      return res.status(500).json({
+        success: false,
+        error: { message: 'Agora credentials not configured' }
+      })
+    }
+    
+    const userRole = role === 'host' ? RtcRole.PUBLISHER : RtcRole.SUBSCRIBER
+    const expirationTimeInSeconds = 3600 // 1 hour
+    const currentTimestamp = Math.floor(Date.now() / 1000)
+    const privilegeExpiredTs = currentTimestamp + expirationTimeInSeconds
+    
+    try {
+      const token = RtcTokenBuilder.buildTokenWithUid(
+        appId,
+        appCertificate,
+        channelName,
+        parseInt(uid),
+        userRole,
+        privilegeExpiredTs
+      )
+      
+      logger.info(`Generated Agora token for channel: ${channelName}, uid: ${uid}, role: ${role}`)
+      
+      res.json({
+        success: true,
+        token,
+        uid: parseInt(uid),
+        channelName,
+        expiresAt: privilegeExpiredTs
+      })
+    } catch (error) {
+      logger.error('Error generating Agora token:', error)
+      res.status(500).json({
+        success: false,
+        error: { message: 'Failed to generate token' }
+      })
+    }
+  }))
+
   // API status endpoint
   app.get('/api/status', asyncHandler(async (req: Request, res: Response) => {
     const firebaseService = getFirebaseService()
@@ -51,7 +107,7 @@ export function setupRoutes(app: Express): void {
       })
     }
     
-    res.json({
+    return res.json({
       success: true,
       data: livestream
     })

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { RateLimiterRedis } from 'rate-limiter-flexible'
+import { RateLimiterRedis, RateLimiterMemory } from 'rate-limiter-flexible'
 import { getRedisService } from '../config/redis'
 import { logger } from '../utils/logger'
 
@@ -23,11 +23,11 @@ export function initializeRateLimiter(): void {
   } catch (error) {
     logger.error('Failed to initialize rate limiter:', error)
     // Create a fallback in-memory rate limiter
-    rateLimiter = new RateLimiterRedis({
+    rateLimiter = new RateLimiterMemory({
       points: 100,
       duration: 60,
       blockDuration: 60
-    })
+    }) as any // Type assertion for compatibility
   }
 }
 

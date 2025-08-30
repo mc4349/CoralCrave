@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { collection, query, where, orderBy, limit, getDocs } from 'firebase/firestore'
+import { collection, query, where, limit, getDocs } from 'firebase/firestore'
 import { db } from '../lib/firebase'
 
 interface LiveStream {
@@ -22,10 +22,12 @@ const Explore = () => {
   useEffect(() => {
     const fetchLiveStreams = async () => {
       try {
+        console.log('🔍 Explore: Fetching live streams from Firestore only...')
+        
+        // Direct Firestore query - no offline fallback
         const liveQuery = query(
           collection(db, 'livestreams'),
           where('status', '==', 'live'),
-          orderBy('startedAt', 'desc'),
           limit(20)
         )
         
@@ -35,9 +37,12 @@ const Explore = () => {
           ...doc.data()
         })) as LiveStream[]
         
+        console.log('✅ Explore: Found', streams.length, 'live streams in Firestore')
         setLiveStreams(streams)
       } catch (error) {
-        console.error('Error fetching live streams:', error)
+        console.error('❌ Explore: Error fetching live streams from Firestore:', error)
+        console.error('❌ This means no streams will be visible to viewers!')
+        setLiveStreams([]) // Clear streams on error - don't show offline streams
       } finally {
         setLoading(false)
       }

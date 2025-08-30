@@ -65,6 +65,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   async function signup(email: string, password: string, username: string) {
     const { user } = await createUserWithEmailAndPassword(auth, email, password)
@@ -177,17 +178,43 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setCurrentUser(user)
-      if (user) {
-        await loadUserProfile(user)
-      } else {
-        setUserProfile(null)
-      }
-      setLoading(false)
-    })
+    let unsubscribe: (() => void) | undefined
 
-    return unsubscribe
+    try {
+      unsubscribe = onAuthStateChanged(auth, async (user) => {
+        try {
+          setCurrentUser(user)
+          if (user) {
+            await loadUserProfile(user)
+          } else {
+            setUserProfile(null)
+          }
+          setError(null)
+        } catch (err) {
+          console.error('Error loading user profile:', err)
+          setError('Failed to load user profile')
+        } finally {
+          setLoading(false)
+        }
+      })
+    } catch (err) {
+      console.error('Error initializing auth:', err)
+      setError('Failed to initialize authentication')
+      setLoading(false)
+    }
+
+    // Fallback timeout to ensure loading doesn't hang forever
+    const timeout = setTimeout(() => {
+      if (loading) {
+        console.warn('Auth loading timeout - forcing render')
+        setLoading(false)
+      }
+    }, 3000) // 3 second timeout
+
+    return () => {
+      if (unsubscribe) unsubscribe()
+      clearTimeout(timeout)
+    }
   }, [])
 
   const value: AuthContextType = {
@@ -204,7 +231,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {loading ? (
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400 mx-auto mb-4"></div>
+            <p className="text-slate-300">Loading CoralCrave...</p>
+            {error && (
+              <p className="text-red-400 text-sm mt-2">
+                {error} - App will continue loading...
+              </p>
+            )}
+          </div>
+        </div>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   )
 }

@@ -75,24 +75,39 @@ export interface ChatMessage {
 }
 
 class LivestreamService {
-  // Create a new livestream
+  // Create a new livestream - MUST save to Firestore for everyone to see
   async createLivestream(data: Omit<LivestreamData, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+    console.log('🚀 Creating livestream - MUST save to Firestore for visibility...')
+    
+    const livestreamData = {
+      ...data,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    }
+    
     try {
-      const livestreamData = {
-        ...data,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
-      }
+      // Try with a reasonable timeout (5 seconds)
+      const firestoreTimeout = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Firestore timeout - database may be down')), 5000)
+      })
       
-      const docRef = await addDoc(collection(db, 'livestreams'), livestreamData)
+      const firestoreOperation = addDoc(collection(db, 'livestreams'), livestreamData)
+      const docRef = await Promise.race([firestoreOperation, firestoreTimeout]) as any
+      
+      console.log('✅ SUCCESS: Livestream saved to Firestore - everyone can see it:', docRef.id)
       return docRef.id
-    } catch (error) {
-      console.error('Error creating livestream:', error)
-      throw error
+      
+    } catch (error: any) {
+      console.error('❌ CRITICAL ERROR: Failed to save livestream to Firestore!')
+      console.error('❌ This means viewers CANNOT see your stream!')
+      console.error('❌ Error details:', error)
+      
+      // Don't create offline streams - fail fast so user knows there's a problem
+      throw new Error(`Cannot start stream: Database is unavailable. ${error.message}`)
     }
   }
 
-  // Update livestream
+  // Update livestream - Firestore only
   async updateLivestream(liveId: string, updates: Partial<LivestreamData>): Promise<void> {
     try {
       const livestreamRef = doc(db, 'livestreams', liveId)
@@ -100,13 +115,13 @@ class LivestreamService {
         ...updates,
         updatedAt: serverTimestamp()
       })
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating livestream:', error)
       throw error
     }
   }
 
-  // Get livestream by ID
+  // Get livestream by ID - Firestore only
   async getLivestream(liveId: string): Promise<LivestreamData | null> {
     try {
       const livestreamRef = doc(db, 'livestreams', liveId)
@@ -116,13 +131,13 @@ class LivestreamService {
         return { id: livestreamSnap.id, ...livestreamSnap.data() } as LivestreamData
       }
       return null
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error getting livestream:', error)
       throw error
     }
   }
 
-  // Get live streams
+  // Get live streams - Firestore only
   async getLiveStreams(limitCount: number = 20): Promise<LivestreamData[]> {
     try {
       const q = query(
@@ -137,13 +152,13 @@ class LivestreamService {
         id: doc.id,
         ...doc.data()
       })) as LivestreamData[]
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error getting live streams:', error)
       throw error
     }
   }
 
-  // Get streams by category
+  // Get streams by category - Firestore only
   async getStreamsByCategory(category: string, limitCount: number = 20): Promise<LivestreamData[]> {
     try {
       const q = query(
@@ -159,39 +174,47 @@ class LivestreamService {
         id: doc.id,
         ...doc.data()
       })) as LivestreamData[]
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error getting streams by category:', error)
       throw error
     }
   }
 
-  // Subscribe to livestream updates
+  // Subscribe to livestream updates - Firestore only
   subscribeLivestream(liveId: string, callback: (livestream: LivestreamData | null) => void): () => void {
-    const livestreamRef = doc(db, 'livestreams', liveId)
-    
-    return onSnapshot(livestreamRef, (doc) => {
-      if (doc.exists()) {
-        callback({ id: doc.id, ...doc.data() } as LivestreamData)
-      } else {
-        callback(null)
-      }
-    })
+    try {
+      const livestreamRef = doc(db, 'livestreams', liveId)
+      
+      return onSnapshot(livestreamRef, (doc) => {
+        if (doc.exists()) {
+          callback({ id: doc.id, ...doc.data() } as LivestreamData)
+        } else {
+          callback(null)
+        }
+      }, (error) => {
+        console.error('Livestream subscription error:', error)
+        throw error
+      })
+    } catch (error: any) {
+      console.error('Error subscribing to livestream:', error)
+      throw error
+    }
   }
 
-  // Update viewer count
+  // Update viewer count - Firestore only
   async updateViewerCount(liveId: string, incrementValue: number): Promise<void> {
     try {
       const livestreamRef = doc(db, 'livestreams', liveId)
       await updateDoc(livestreamRef, {
         viewerCount: incrementValue > 0 ? increment(incrementValue) : increment(-Math.abs(incrementValue))
       })
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating viewer count:', error)
       throw error
     }
   }
 
-  // Add item to livestream
+  // Add item to livestream - Firestore only
   async addItem(liveId: string, itemData: Omit<LivestreamItem, 'id' | 'liveId' | 'createdAt' | 'updatedAt'>): Promise<string> {
     try {
       const item = {
@@ -203,13 +226,13 @@ class LivestreamService {
       
       const docRef = await addDoc(collection(db, 'livestreams', liveId, 'items'), item)
       return docRef.id
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error adding item:', error)
       throw error
     }
   }
 
-  // Update item
+  // Update item - Firestore only
   async updateItem(liveId: string, itemId: string, updates: Partial<LivestreamItem>): Promise<void> {
     try {
       const itemRef = doc(db, 'livestreams', liveId, 'items', itemId)
@@ -217,13 +240,13 @@ class LivestreamService {
         ...updates,
         updatedAt: serverTimestamp()
       })
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating item:', error)
       throw error
     }
   }
 
-  // Get items for livestream
+  // Get items for livestream - Firestore only
   async getItems(liveId: string): Promise<LivestreamItem[]> {
     try {
       const q = query(
@@ -236,29 +259,37 @@ class LivestreamService {
         id: doc.id,
         ...doc.data()
       })) as LivestreamItem[]
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error getting items:', error)
       throw error
     }
   }
 
-  // Subscribe to items
+  // Subscribe to items - Firestore only
   subscribeItems(liveId: string, callback: (items: LivestreamItem[]) => void): () => void {
-    const q = query(
-      collection(db, 'livestreams', liveId, 'items'),
-      orderBy('createdAt', 'asc')
-    )
-    
-    return onSnapshot(q, (querySnapshot) => {
-      const items = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as LivestreamItem[]
-      callback(items)
-    })
+    try {
+      const q = query(
+        collection(db, 'livestreams', liveId, 'items'),
+        orderBy('createdAt', 'asc')
+      )
+      
+      return onSnapshot(q, (querySnapshot) => {
+        const items = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        })) as LivestreamItem[]
+        callback(items)
+      }, (error) => {
+        console.error('Items subscription error:', error)
+        throw error
+      })
+    } catch (error: any) {
+      console.error('Error subscribing to items:', error)
+      throw error
+    }
   }
 
-  // Send chat message
+  // Send chat message - Firestore only
   async sendChatMessage(liveId: string, message: Omit<ChatMessage, 'id' | 'liveId' | 'timestamp'>): Promise<string> {
     try {
       const messageData = {
@@ -269,41 +300,49 @@ class LivestreamService {
       
       const docRef = await addDoc(collection(db, 'livestreams', liveId, 'messages'), messageData)
       return docRef.id
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error sending chat message:', error)
       throw error
     }
   }
 
-  // Subscribe to chat messages
+  // Subscribe to chat messages - Firestore only
   subscribeChatMessages(liveId: string, callback: (messages: ChatMessage[]) => void, limitCount: number = 50): () => void {
-    const q = query(
-      collection(db, 'livestreams', liveId, 'messages'),
-      orderBy('timestamp', 'desc'),
-      limit(limitCount)
-    )
-    
-    return onSnapshot(q, (querySnapshot) => {
-      const messages = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as ChatMessage[]
-      callback(messages.reverse()) // Reverse to show oldest first
-    })
+    try {
+      const q = query(
+        collection(db, 'livestreams', liveId, 'messages'),
+        orderBy('timestamp', 'desc'),
+        limit(limitCount)
+      )
+      
+      return onSnapshot(q, (querySnapshot) => {
+        const messages = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        })) as ChatMessage[]
+        callback(messages.reverse()) // Reverse to show oldest first
+      }, (error) => {
+        console.error('Chat subscription error:', error)
+        throw error
+      })
+    } catch (error: any) {
+      console.error('Error subscribing to chat messages:', error)
+      throw error
+    }
   }
 
-  // Delete livestream (host only)
+  // Delete livestream (host only) - Firestore only
   async deleteLivestream(liveId: string): Promise<void> {
     try {
       const livestreamRef = doc(db, 'livestreams', liveId)
       await deleteDoc(livestreamRef)
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error deleting livestream:', error)
       throw error
     }
   }
 
-  // Get user's livestreams
+  // Get user's livestreams - Firestore only
   async getUserLivestreams(userId: string, limitCount: number = 20): Promise<LivestreamData[]> {
     try {
       const q = query(
@@ -318,13 +357,13 @@ class LivestreamService {
         id: doc.id,
         ...doc.data()
       })) as LivestreamData[]
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error getting user livestreams:', error)
       throw error
     }
   }
 
-  // Start auction for item
+  // Start auction for item - Firestore only
   async startItemAuction(liveId: string, itemId: string, durationMs: number): Promise<void> {
     try {
       const endAt = new Date(Date.now() + durationMs)
@@ -332,13 +371,13 @@ class LivestreamService {
         status: 'running',
         endAt: Timestamp.fromDate(endAt)
       })
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error starting item auction:', error)
       throw error
     }
   }
 
-  // End auction for item
+  // End auction for item - Firestore only
   async endItemAuction(liveId: string, itemId: string, winnerId?: string, winnerUsername?: string): Promise<void> {
     try {
       const updates: Partial<LivestreamItem> = {
@@ -347,9 +386,8 @@ class LivestreamService {
         winnerUsername
       }
       
-      // Remove endAt by setting it to undefined
       await this.updateItem(liveId, itemId, updates)
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error ending item auction:', error)
       throw error
     }

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { collection, query, where, onSnapshot, orderBy } from 'firebase/firestore'
@@ -10,6 +10,7 @@ const Header = () => {
   const [unreadCount, setUnreadCount] = useState(0)
   const { currentUser, userProfile, logout } = useAuth()
   const navigate = useNavigate()
+  const profileMenuRef = useRef<HTMLDivElement>(null)
 
   // Listen for unread notifications
   useEffect(() => {
@@ -31,6 +32,23 @@ const Header = () => {
 
     return () => unsubscribe()
   }, [currentUser])
+
+  // Close profile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(event.target as Node)) {
+        setShowProfileMenu(false)
+      }
+    }
+
+    if (showProfileMenu) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showProfileMenu])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -120,7 +138,7 @@ const Header = () => {
                 </button>
 
                 {/* Profile Menu */}
-                <div className="relative">
+                <div className="relative" ref={profileMenuRef}>
                   <button
                     onClick={() => setShowProfileMenu(!showProfileMenu)}
                     className="flex items-center space-x-2 p-2 rounded-lg hover:bg-slate-700/50 transition-colors duration-200"
@@ -141,14 +159,26 @@ const Header = () => {
                         {userProfile?.username || currentUser.email}
                       </div>
                       {(userProfile?.role === 'seller' || userProfile?.role === 'both') && (
-                        <Link to="/seller-hub" className="block px-4 py-2 text-sm text-slate-300 hover:bg-slate-700/50 hover:text-cyan-300 transition-colors duration-200">
+                        <Link 
+                          to="/seller-hub" 
+                          className="block px-4 py-2 text-sm text-slate-300 hover:bg-slate-700/50 hover:text-cyan-300 transition-colors duration-200"
+                          onClick={() => setShowProfileMenu(false)}
+                        >
                           Seller Analytics
                         </Link>
                       )}
-                      <Link to="/account" className="block px-4 py-2 text-sm text-slate-300 hover:bg-slate-700/50 hover:text-cyan-300 transition-colors duration-200">
+                      <Link 
+                        to="/account" 
+                        className="block px-4 py-2 text-sm text-slate-300 hover:bg-slate-700/50 hover:text-cyan-300 transition-colors duration-200"
+                        onClick={() => setShowProfileMenu(false)}
+                      >
                         Profile
                       </Link>
-                      <Link to="/activity" className="block px-4 py-2 text-sm text-slate-300 hover:bg-slate-700/50 hover:text-cyan-300 transition-colors duration-200">
+                      <Link 
+                        to="/activity" 
+                        className="block px-4 py-2 text-sm text-slate-300 hover:bg-slate-700/50 hover:text-cyan-300 transition-colors duration-200"
+                        onClick={() => setShowProfileMenu(false)}
+                      >
                         Activity
                       </Link>
                       <hr className="my-1 border-slate-700/50" />
