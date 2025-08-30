@@ -100,7 +100,7 @@ export function StreamingProvider({ children }: { children: React.ReactNode }) {
   const remoteAudioTracksRef = useRef<Map<string, IRemoteAudioTrack>>(new Map())
   
   // Force re-render function for video tracks
-  const [trackUpdateCounter, setTrackUpdateCounter] = useState(0)
+  const [, setTrackUpdateCounter] = useState(0)
   const triggerRerender = useCallback(() => {
     setTrackUpdateCounter(prev => prev + 1)
   }, [])

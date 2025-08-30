@@ -10,7 +10,12 @@ export function setupRoutes(app: Express): void {
   app.get('/agora/token', asyncHandler(async (req: Request, res: Response) => {
     const { channelName, uid, role } = req.query
     
-    if (!channelName || !uid) {
+    // Type assertions for query parameters
+    const channelNameStr = channelName as string
+    const uidStr = uid as string
+    const roleStr = role as string
+    
+    if (!channelNameStr || !uidStr) {
       return res.status(400).json({
         success: false,
         error: { message: 'channelName and uid are required' }
@@ -28,7 +33,7 @@ export function setupRoutes(app: Express): void {
       })
     }
     
-    const userRole = role === 'host' ? RtcRole.PUBLISHER : RtcRole.SUBSCRIBER
+    const userRole = roleStr === 'host' ? RtcRole.PUBLISHER : RtcRole.SUBSCRIBER
     const expirationTimeInSeconds = 3600 // 1 hour
     const currentTimestamp = Math.floor(Date.now() / 1000)
     const privilegeExpiredTs = currentTimestamp + expirationTimeInSeconds
@@ -37,19 +42,19 @@ export function setupRoutes(app: Express): void {
       const token = RtcTokenBuilder.buildTokenWithUid(
         appId,
         appCertificate,
-        channelName,
-        parseInt(uid),
+        channelNameStr,
+        parseInt(uidStr),
         userRole,
         privilegeExpiredTs
       )
       
-      logger.info(`Generated Agora token for channel: ${channelName}, uid: ${uid}, role: ${role}`)
+      logger.info(`Generated Agora token for channel: ${channelNameStr}, uid: ${uidStr}, role: ${roleStr}`)
       
       res.json({
         success: true,
         token,
-        uid: parseInt(uid),
-        channelName,
+        uid: parseInt(uidStr),
+        channelName: channelNameStr,
         expiresAt: privilegeExpiredTs
       })
     } catch (error) {
