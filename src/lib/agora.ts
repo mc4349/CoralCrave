@@ -160,7 +160,7 @@ export const getAgoraToken = async (channelName: string, uid: string, role: 'pub
   try {
     console.log('🔑 Requesting Agora token...', { channelName, uid, role })
     
-    const response = await fetch(`${agoraConfig.tokenServerUrl}/agora/token?channelName=${channelName}&uid=${uid}&role=${role}`, {
+    const response = await fetch(`${agoraConfig.tokenServerUrl}/api/agora/token?channelName=${channelName}&uid=${uid}&role=${role}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
