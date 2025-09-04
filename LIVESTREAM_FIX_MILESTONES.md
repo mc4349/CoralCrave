@@ -108,41 +108,82 @@ npm run dev
 **Goal**: Fix token server and role mapping issues
 
 ### Milestone 2.1: Token Server Validation
-**Status**: ⏳ Pending
+**Status**: ✅ **Completed**
 **Priority**: Critical
 
 **Sub-tasks:**
-- [ ] Test token endpoint directly: `GET /api/agora/token`
-- [ ] Verify Agora credentials in server environment
-- [ ] Check token generation with different roles
-- [ ] Validate token expiration and format
+- [x] Test token endpoint directly: `GET /api/agora/token`
+- [x] Verify Agora credentials in server environment
+- [x] Check token generation with different roles
+- [x] Validate token expiration and format
 
-**Test Commands:**
+**Test Commands executed:**
 ```bash
-curl "http://localhost:3001/api/agora/token?channelName=test&uid=123&role=publisher"
+# Test publisher role
+Invoke-WebRequest -Uri "http://localhost:3001/api/agora/token?channelName=test&uid=123&role=publisher" -Method GET
+
+# Test subscriber role
+Invoke-WebRequest -Uri "http://localhost:3001/api/agora/token?channelName=test&uid=123&role=subscriber" -Method GET
 ```
 
-**Expected Outcome:**
-- Token endpoint returns valid Agora tokens
-- No authentication or credential errors
+**Actual Results:**
+- ✅ Token endpoint returns valid Agora tokens for both roles
+- ✅ Publisher role: Returns token successfully
+- ✅ Subscriber role: Returns token successfully
+- ✅ Token format is valid with proper expiration timestamps
+- ✅ Server logs confirm successful token generation
+- ✅ No authentication or credential errors
+
+**Test Responses:**
+```json
+// Publisher token response
+{
+  "success": true,
+  "token": "0069b625900d5b642f0a833c3bc304ecabbIAANM7u//pszwxz+j2ElbWucZO09AEbAg+RlNuLrFj5YfAx+f9jSY0iIEADj7XnTej+6aAEAAQAK/Lho",
+  "uid": 123,
+  "channelName": "test",
+  "expiresAt": 1756953610
+}
+
+// Subscriber token response
+{
+  "success": true,
+  "token": "0069b625900d5b642f0a833c3bc304ecabbIAD2A+gNvGOfKJMu2Y4In1rNB9IEb5SPSl43XBOAbCX+zwx+f9jSY0iIEADj7XnTf0C6aAEAAQAP/bho",
+  "uid": 123,
+  "channelName": "test",
+  "expiresAt": 1756953871
+}
+```
+
+**Completion Date**: September 3, 2025
 
 ### Milestone 2.2: Role Mapping Fix
-**Status**: ⏳ Pending
+**Status**: ✅ **Completed**
 **Priority**: High
 
-**Issue**: Code uses 'host' role but server expects 'publisher'
+**Issue**: Code uses 'audience' role but server expects 'subscriber'
 **Files to modify:**
-- `src/contexts/StreamingContext.tsx` (line ~150)
 - `src/lib/agora.ts` (token request logic)
 
 **Sub-tasks:**
-- [ ] Update role parameter from 'host' to 'publisher' in startStream
-- [ ] Update role parameter from 'audience' to 'subscriber' in joinStream
-- [ ] Ensure consistent role mapping throughout codebase
+- [x] Update role parameter from 'audience' to 'subscriber' in getAgoraToken
+- [x] Add role mapping logic for server compatibility
+- [x] Ensure consistent role mapping throughout codebase
 
-**Expected Outcome:**
-- Token requests use correct Agora role terminology
-- No role-related token generation errors
+**Actual Results:**
+- ✅ Added role mapping in `getAgoraToken` function
+- ✅ Maps 'audience' → 'subscriber' for server compatibility
+- ✅ Maps 'publisher' → 'publisher' (no change needed)
+- ✅ Added logging for role mapping verification
+
+**Code Changes:**
+```typescript
+// CRITICAL FIX: Map 'audience' to 'subscriber' for server compatibility
+const serverRole = role === 'audience' ? 'subscriber' : role
+console.log('🔄 Role mapping:', role, '->', serverRole)
+```
+
+**Completion Date**: September 3, 2025
 
 ### Milestone 2.3: Token Error Handling
 **Status**: ⏳ Pending
