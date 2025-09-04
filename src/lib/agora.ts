@@ -159,8 +159,12 @@ export const createLocalTracks = async () => {
 export const getAgoraToken = async (channelName: string, uid: string, role: 'publisher' | 'audience' = 'publisher') => {
   try {
     console.log('🔑 Requesting Agora token...', { channelName, uid, role })
-    
-    const response = await fetch(`${agoraConfig.tokenServerUrl}/api/agora/token?channelName=${channelName}&uid=${uid}&role=${role}`, {
+
+    // CRITICAL FIX: Map 'audience' to 'subscriber' for server compatibility
+    const serverRole = role === 'audience' ? 'subscriber' : role
+    console.log('🔄 Role mapping:', role, '->', serverRole)
+
+    const response = await fetch(`${agoraConfig.tokenServerUrl}/api/agora/token?channelName=${channelName}&uid=${uid}&role=${serverRole}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -168,11 +172,11 @@ export const getAgoraToken = async (channelName: string, uid: string, role: 'pub
       // Add timeout to prevent hanging
       signal: AbortSignal.timeout(5000)
     })
-    
+
     if (!response.ok) {
       throw new Error(`Token server responded with ${response.status}: ${response.statusText}`)
     }
-    
+
     const data = await response.json()
     console.log('✅ Agora token received successfully from server')
     console.log('🔑 Token expires at:', new Date(data.expiresAt * 1000).toLocaleString())
@@ -180,7 +184,7 @@ export const getAgoraToken = async (channelName: string, uid: string, role: 'pub
   } catch (error: any) {
     console.error('❌ Token server error:', error.message)
     console.log('🔧 Cannot proceed without token - App Certificate is enabled')
-    
+
     // With App Certificate enabled, we MUST have a token
     throw new Error(`Token required but unavailable: ${error.message}`)
   }
