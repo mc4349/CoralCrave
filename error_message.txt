@@ -1,0 +1,9 @@
+localhost:3001/socket.io/?EIO=4&transport=polling&t=pqgc90yv:1   Failed to load resource: net::ERR_CONNECTION_REFUSED
+index-DKI0eVue.js:3481 🔗 Starting to join stream: AYyORGSAkjrM7t8VvxL8
+index-DKI0eVue.js:3481 🔗 Starting to join stream: AYyORGSAkjrM7t8VvxL8
+index-DKI0eVue.js:3481 🔗 Starting to join stream: AYyORGSAkjrM7t8VvxL8
+index-DKI0eVue.js:3481 🔗 Starting to join stream: AYyORGSAkjrM7t8VvxL8
+index-DKI0eVue.js:3481 🔗 Starting to join stream: AYyORGSAkjrM7t8VvxL8
+index-DKI0eVue.js:3481 🔗 Starting to join stream: AYyORGSAkjrM7t8VvxL8
+index-DKI0eVue.js:3481 🔗 Starting to join stream: AYyORGSAkjrM7t8VvxL8
+index-DKI0eVue.js:3481 🔗 Starting to join stream: AYyORGSAkjrM7t8VvxL8

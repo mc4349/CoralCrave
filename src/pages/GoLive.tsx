@@ -1,14 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { useStreaming } from '../contexts/StreamingContext'
 import LiveChat from '../components/LiveChat'
+import { validateStreamTitle, sanitizeInput } from '../lib/validation'
 
-interface QueueItem {
-  id: string
-  title: string
-  startingPrice: number
-  duration: number
-  status: 'queued' | 'active' | 'sold' | 'unsold'
-}
+
 
 export default function GoLive() {
   const { 
@@ -29,10 +24,7 @@ export default function GoLive() {
   
   const [title, setTitle] = useState('')
   const [selectedCategories, setSelectedCategories] = useState<string[]>(['coral'])
-  const [queueItems, setQueueItems] = useState<QueueItem[]>([])
-  const [activeItem, setActiveItem] = useState<QueueItem | null>(null)
-  const [showAddItem, setShowAddItem] = useState(false)
-  const [newItem, setNewItem] = useState({ title: '', startingPrice: 0, duration: 20 })
+
   
   const videoRef = useRef<HTMLDivElement>(null)
 
@@ -108,57 +100,15 @@ export default function GoLive() {
     )
   }
 
-  const handleAddItem = () => {
-    if (!newItem.title.trim() || newItem.startingPrice <= 0) {
-      alert('Please fill in all required fields')
-      return
-    }
 
-    const item: QueueItem = {
-      id: Date.now().toString(),
-      title: newItem.title,
-      startingPrice: newItem.startingPrice,
-      duration: newItem.duration,
-      status: 'queued'
-    }
 
-    setQueueItems([...queueItems, item])
-    setNewItem({ title: '', startingPrice: 0, duration: 20 })
-    setShowAddItem(false)
-  }
 
-  const handleRemoveItem = (itemId: string) => {
-    setQueueItems(queueItems.filter(item => item.id !== itemId))
-  }
-
-  const handleStartAuction = (itemId: string) => {
-    if (activeItem) {
-      setQueueItems(prev => prev.map(item => 
-        item.id === activeItem.id ? { ...item, status: 'unsold' } : item
-      ))
-    }
-
-    const item = queueItems.find(item => item.id === itemId)
-    if (item) {
-      setActiveItem(item)
-      setQueueItems(prev => prev.map(item => 
-        item.id === itemId ? { ...item, status: 'active' } : item
-      ))
-    }
-  }
-
-  const handleEndAuction = () => {
-    if (activeItem) {
-      setQueueItems(prev => prev.map(item => 
-        item.id === activeItem.id ? { ...item, status: 'unsold' } : item
-      ))
-      setActiveItem(null)
-    }
-  }
 
   const handleStartStream = async () => {
-    if (!title.trim()) {
-      alert('Please enter a stream title')
+    // Validate stream title
+    const titleValidation = validateStreamTitle(title)
+    if (!titleValidation.isValid) {
+      alert(titleValidation.message)
       return
     }
 
@@ -168,7 +118,9 @@ export default function GoLive() {
     }
 
     try {
-      await startStream(title, selectedCategories)
+      // Sanitize input before sending
+      const sanitizedTitle = sanitizeInput(title.trim())
+      await startStream(sanitizedTitle, selectedCategories)
     } catch (error: any) {
       console.error('Failed to start stream:', error)
       alert(error.message || 'Failed to start stream. Please try again.')
@@ -229,19 +181,7 @@ export default function GoLive() {
                 </div>
               </div>
 
-              {activeItem && (
-                <div className="absolute top-4 left-4 bg-slate-900/90 text-white p-4 rounded-lg">
-                  <h3 className="font-semibold text-cyan-300">Current Auction</h3>
-                  <h4 className="font-medium">{activeItem.title}</h4>
-                  <p className="text-cyan-400">${activeItem.startingPrice.toFixed(2)} starting</p>
-                  <button
-                    onClick={handleEndAuction}
-                    className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg text-sm mt-2"
-                  >
-                    End Auction
-                  </button>
-                </div>
-              )}
+
             </div>
 
             <div className="w-80 bg-slate-800 border-l border-slate-700">

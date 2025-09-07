@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { collection, query, where, onSnapshot } from 'firebase/firestore'
 import { db } from '../lib/firebase'
+import { StreamCardSkeleton } from '../components/LoadingSkeleton'
 
 const oceanFacts = [
   "🌊 The ocean covers more than 70% of Earth's surface and contains 99% of the planet's living space.",
@@ -83,26 +84,26 @@ const Home = () => {
           <div className="absolute bottom-40 right-1/3 w-28 h-28 bg-blue-300 rounded-full animate-bounce"></div>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-20">
           {/* Main Hero Content */}
-          <div className="text-center py-16">
-            <div className="mb-8">
-              <h1 className="text-6xl font-bold text-white mb-6 leading-tight">
+          <div className="text-center py-4 sm:py-8 lg:py-16">
+            <div className="mb-4 sm:mb-6 lg:mb-8">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-3 sm:mb-4 lg:mb-6 leading-tight px-2">
                 Dive into <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">CoralCrave</span>
               </h1>
-              <p className="text-2xl text-blue-100 mb-8 max-w-3xl mx-auto leading-relaxed">
-                Where the ocean's treasures come alive through live auctions. 
+              <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-blue-100 mb-4 sm:mb-6 lg:mb-8 max-w-3xl mx-auto leading-relaxed px-2">
+                Where the ocean's treasures come alive through live auctions.
                 Discover rare corals, exotic fish, and marine wonders in real-time.
               </p>
             </div>
 
-            {/* Ocean Fact Rotation */}
-            <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 mb-12 max-w-4xl mx-auto border border-blue-500/20">
-              <h3 className="text-lg font-semibold text-cyan-300 mb-4">🌊 Ocean Fact of the Moment</h3>
-              <p className="text-xl text-blue-100 leading-relaxed transition-all duration-500 ease-in-out">
+            {/* Ocean Fact Rotation - Mobile optimized */}
+            <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-4 sm:p-6 lg:p-8 mb-8 lg:mb-12 max-w-4xl mx-auto border border-blue-500/20">
+              <h3 className="text-base sm:text-lg font-semibold text-cyan-300 mb-3 sm:mb-4">🌊 Ocean Fact of the Moment</h3>
+              <p className="text-sm sm:text-base lg:text-xl text-blue-100 leading-relaxed transition-all duration-500 ease-in-out px-2">
                 {oceanFacts[currentFactIndex]}
               </p>
-              <div className="flex justify-center mt-4 space-x-2">
+              <div className="flex justify-center mt-3 sm:mt-4 space-x-2">
                 {oceanFacts.map((_, index) => (
                   <div
                     key={index}
@@ -114,17 +115,17 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Call to Action Buttons */}
-            <div className="flex flex-col sm:flex-row justify-center gap-6">
-              <Link 
-                to="/explore" 
-                className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-cyan-500/25"
+            {/* Call to Action Buttons - Mobile optimized */}
+            <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 px-4">
+              <Link
+                to="/explore"
+                className="w-full sm:w-auto bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-cyan-500/25 min-h-[44px] flex items-center justify-center"
               >
                 🔍 Explore Marine Auctions
               </Link>
-              <Link 
-                to="/go-live" 
-                className="bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-teal-500/25"
+              <Link
+                to="/go-live"
+                className="w-full sm:w-auto bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-teal-500/25 min-h-[44px] flex items-center justify-center"
               >
                 🎥 Start Live Selling
               </Link>
@@ -146,9 +147,10 @@ const Home = () => {
           </div>
 
           {loadingStreams ? (
-            <div className="flex justify-center items-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400"></div>
-              <span className="ml-4 text-blue-200">Loading live streams...</span>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Array.from({ length: 6 }).map((_, index) => (
+                <StreamCardSkeleton key={index} />
+              ))}
             </div>
           ) : liveStreams.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
