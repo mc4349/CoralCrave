@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, afterEach, afterAll } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
+
 import ErrorBoundary from '../components/ErrorBoundary'
 
 // Mock console.error to avoid test output pollution
@@ -54,7 +55,9 @@ describe('ErrorBoundary', () => {
     )
 
     expect(screen.getByText('Custom error message')).toBeInTheDocument()
-    expect(screen.queryByText('Oops! Something went wrong')).not.toBeInTheDocument()
+    expect(
+      screen.queryByText('Oops! Something went wrong')
+    ).not.toBeInTheDocument()
   })
 
   it('should call console.error when an error occurs', () => {
@@ -95,7 +98,9 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>
     )
 
-    expect(screen.queryByText('Error Details (Development)')).not.toBeInTheDocument()
+    expect(
+      screen.queryByText('Error Details (Development)')
+    ).not.toBeInTheDocument()
 
     // Restore original environment
     process.env.NODE_ENV = originalEnv
@@ -105,7 +110,7 @@ describe('ErrorBoundary', () => {
     const reloadMock = vi.fn()
     Object.defineProperty(window, 'location', {
       value: { reload: reloadMock },
-      writable: true
+      writable: true,
     })
 
     render(
@@ -124,7 +129,7 @@ describe('ErrorBoundary', () => {
     const hrefMock = vi.fn()
     Object.defineProperty(window.location, 'href', {
       set: hrefMock,
-      configurable: true
+      configurable: true,
     })
 
     render(

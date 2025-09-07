@@ -1236,3 +1236,75 @@ AggregateError:
     at afterConnectMultiple (node:net:1712:7)
 2025-09-03 21:40:10 [INFO]: Generated Agora token for channel: test, uid: 123, role: publisher {"service":"coralcrave-auction-engine"}
 2025-09-03 21:44:31 [INFO]: Generated Agora token for channel: test, uid: 123, role: subscriber {"service":"coralcrave-auction-engine"}
+2025-09-07 11:18:42 [INFO]: Firebase initialized successfully {"service":"coralcrave-auction-engine"}
+2025-09-07 11:18:42 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-09-07 11:18:42 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-09-07 11:18:42 [WARN]: Redis not available, falling back to in-memory storage: {"service":"coralcrave-auction-engine"}
+2025-09-07 11:18:42 [INFO]: In-memory service initialized {"service":"coralcrave-auction-engine"}
+2025-09-07 11:18:42 [INFO]: In-memory cache service initialized successfully {"service":"coralcrave-auction-engine"}
+2025-09-07 11:18:42 [INFO]: API routes set up successfully {"service":"coralcrave-auction-engine"}
+2025-09-07 11:18:42 [INFO]: Auction engine event listeners set up {"service":"coralcrave-auction-engine"}
+2025-09-07 11:18:42 [INFO]: Socket.IO handlers set up successfully {"service":"coralcrave-auction-engine"}
+2025-09-07 11:18:42 [INFO]: 🚀 CoralCrave Auction Engine running on port 3001 {"service":"coralcrave-auction-engine"}
+2025-09-07 11:18:42 [INFO]: 📡 WebSocket server ready for real-time bidding {"service":"coralcrave-auction-engine"}
+2025-09-07 11:18:42 [INFO]: 🔥 Environment: development {"service":"coralcrave-auction-engine"}
+2025-09-07 11:18:42 [ERROR]: Redis Client Error: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-09-07 11:18:42 [ERROR]: Failed to get all auction states: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-09-07 11:18:42 [INFO]: Recovered 0 auction states from Redis {"service":"coralcrave-auction-engine"}
+2025-09-07 11:18:42 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-09-07 11:18:42 [ERROR]: Failed to connect to Redis: {"service":"coralcrave-auction-engine","code":"ECONNREFUSED"}
+AggregateError: 
+    at internalConnectMultiple (node:net:1139:18)
+    at afterConnectMultiple (node:net:1712:7)
+2025-09-07 11:34:27 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1757259266189, uid: 528568, role: publisher {"service":"coralcrave-auction-engine"}
+2025-09-07 11:34:30 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1757259269013, uid: 500555, role: publisher {"service":"coralcrave-auction-engine"}
+2025-09-07 11:35:52 [INFO]: Client connected: aXRCCP4gEFvQes3FAAAC {"service":"coralcrave-auction-engine"}
+2025-09-07 11:35:52 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1757259269013, uid: 342115, role: subscriber {"service":"coralcrave-auction-engine"}
+2025-09-07 11:35:52 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1757259269013, uid: 335735, role: subscriber {"service":"coralcrave-auction-engine"}
+2025-09-07 11:44:00 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1757259269013, uid: 761617, role: subscriber {"service":"coralcrave-auction-engine"}
+2025-09-07 11:44:00 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1757259269013, uid: 192024, role: subscriber {"service":"coralcrave-auction-engine"}
+2025-09-07 11:44:00 [INFO]: Client connected: qQT-XCwB3L9aGvB6AAAF {"service":"coralcrave-auction-engine"}
+2025-09-07 11:44:17 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1757259269013, uid: 876637, role: subscriber {"service":"coralcrave-auction-engine"}
+2025-09-07 11:44:17 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1757259269013, uid: 508953, role: subscriber {"service":"coralcrave-auction-engine"}
+2025-09-07 11:44:17 [INFO]: Client connected: vyifScGZOGBNyiqzAAAI {"service":"coralcrave-auction-engine"}
+2025-09-07 11:44:30 [INFO]: Client connected: DA8fLFDxzBugWYPPAAAL {"service":"coralcrave-auction-engine"}
+2025-09-07 11:44:50 [INFO]: Client connected: CD9OJ5k44_LcKZzEAAAO {"service":"coralcrave-auction-engine"}
+2025-09-07 11:45:03 [INFO]: Client connected: jWJGLCW9ufqVY-ELAAAR {"service":"coralcrave-auction-engine"}
+2025-09-07 11:45:16 [INFO]: Client connected: fQh3DfSqv1E0nWMXAAAU {"service":"coralcrave-auction-engine"}
+2025-09-07 11:45:28 [INFO]: Client connected: 6E64ir1Q0HRwGhiyAAAX {"service":"coralcrave-auction-engine"}
+2025-09-07 11:46:08 [INFO]: Client connected: TRKboCVGXdgdaSCPAAAa {"service":"coralcrave-auction-engine"}
+2025-09-07 11:46:21 [INFO]: Client connected: fOFO9ktI2_ArU8uIAAAd {"service":"coralcrave-auction-engine"}
+2025-09-07 11:46:35 [INFO]: Client connected: Dk_4AUnieRY_SXXEAAAg {"service":"coralcrave-auction-engine"}
+2025-09-07 11:46:51 [INFO]: Client connected: p-YbdxazIzvpDGumAAAj {"service":"coralcrave-auction-engine"}
+2025-09-07 11:50:49 [INFO]: Client connected: faaXQlyZn7kjpr3WAAAm {"service":"coralcrave-auction-engine"}
+2025-09-07 11:51:04 [INFO]: Client connected: 58rMiWTAeNn5wwEuAAAp {"service":"coralcrave-auction-engine"}
+2025-09-07 11:51:17 [INFO]: Client connected: 5oHMjchRXzrDyjAGAAAs {"service":"coralcrave-auction-engine"}
+2025-09-07 11:52:02 [INFO]: Client connected: eXhygwEb9uLmSlsjAAAv {"service":"coralcrave-auction-engine"}
+2025-09-07 11:52:15 [INFO]: Client connected: k6Cn4wNlky2z1NgAAAAy {"service":"coralcrave-auction-engine"}
+2025-09-07 12:02:59 [INFO]: Client connected: FtctLO6xyfK6Kl7kAAA1 {"service":"coralcrave-auction-engine"}
+2025-09-07 12:03:53 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1757261032422, uid: 556876, role: publisher {"service":"coralcrave-auction-engine"}
+2025-09-07 12:04:13 [INFO]: Client connected: DnLMXY65z2R4wQxOAAA4 {"service":"coralcrave-auction-engine"}
+2025-09-07 12:04:13 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1757261032422, uid: 582734, role: subscriber {"service":"coralcrave-auction-engine"}
+2025-09-07 12:04:13 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1757261032422, uid: 670385, role: subscriber {"service":"coralcrave-auction-engine"}
+2025-09-07 12:21:55 [INFO]: Client connected: ATjv2xJ7tvCaChhRAAA7 {"service":"coralcrave-auction-engine"}
+2025-09-07 12:21:55 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1757261032422, uid: 851753, role: subscriber {"service":"coralcrave-auction-engine"}
+2025-09-07 12:21:55 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1757261032422, uid: 114510, role: subscriber {"service":"coralcrave-auction-engine"}
+2025-09-07 12:24:22 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1757262261352, uid: 77522, role: publisher {"service":"coralcrave-auction-engine"}
+2025-09-07 12:24:36 [INFO]: Client connected: Ee1ADcYjfUmrofP1AAA- {"service":"coralcrave-auction-engine"}
+2025-09-07 12:24:37 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1757262261352, uid: 629587, role: subscriber {"service":"coralcrave-auction-engine"}
+2025-09-07 12:24:37 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1757262261352, uid: 436442, role: subscriber {"service":"coralcrave-auction-engine"}

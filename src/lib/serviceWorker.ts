@@ -3,7 +3,7 @@ export const registerServiceWorker = async () => {
   if ('serviceWorker' in navigator) {
     try {
       const registration = await navigator.serviceWorker.register('/sw.js', {
-        scope: '/'
+        scope: '/',
       })
 
       console.log('Service Worker registered successfully:', registration.scope)
@@ -13,7 +13,10 @@ export const registerServiceWorker = async () => {
         const newWorker = registration.installing
         if (newWorker) {
           newWorker.addEventListener('statechange', () => {
-            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+            if (
+              newWorker.state === 'installed' &&
+              navigator.serviceWorker.controller
+            ) {
               // New content is available, notify user
               showUpdateNotification()
             }
@@ -22,10 +25,9 @@ export const registerServiceWorker = async () => {
       })
 
       // Listen for messages from service worker
-      navigator.serviceWorker.addEventListener('message', (event) => {
+      navigator.serviceWorker.addEventListener('message', event => {
         console.log('Message from service worker:', event.data)
       })
-
     } catch (error) {
       console.error('Service Worker registration failed:', error)
     }
@@ -37,7 +39,8 @@ export const registerServiceWorker = async () => {
 const showUpdateNotification = () => {
   // Create a simple update notification
   const notification = document.createElement('div')
-  notification.className = 'fixed top-4 right-4 bg-cyan-500 text-white px-4 py-3 rounded-lg shadow-lg z-50 max-w-sm'
+  notification.className =
+    'fixed top-4 right-4 bg-cyan-500 text-white px-4 py-3 rounded-lg shadow-lg z-50 max-w-sm'
   notification.innerHTML = `
     <div class="flex items-center justify-between">
       <div>
@@ -79,8 +82,10 @@ export const unregisterServiceWorker = async () => {
 
 // Check if app is running in standalone mode (PWA)
 export const isPWA = () => {
-  return window.matchMedia('(display-mode: standalone)').matches ||
-         (window.navigator as any).standalone === true
+  return (
+    window.matchMedia('(display-mode: standalone)').matches ||
+    (window.navigator as any).standalone === true
+  )
 }
 
 // Request notification permission

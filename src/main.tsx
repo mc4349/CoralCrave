@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+
 import App from './App.tsx'
 import ErrorBoundary from './components/ErrorBoundary.tsx'
 import { registerServiceWorker } from './lib/serviceWorker.ts'
@@ -10,7 +11,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <ErrorBoundary>
       <App />
     </ErrorBoundary>
-  </React.StrictMode>,
+  </React.StrictMode>
 )
 
 // Register service worker for PWA functionality

@@ -7,12 +7,13 @@ export default defineConfig({
   plugins: [
     react(),
     // Bundle analyzer - run with ANALYZE=true npm run build
-    process.env.ANALYZE && visualizer({
-      filename: 'dist/bundle-analysis.html',
-      open: true,
-      gzipSize: true,
-      brotliSize: true,
-    }),
+    process.env.ANALYZE &&
+      visualizer({
+        filename: 'dist/bundle-analysis.html',
+        open: true,
+        gzipSize: true,
+        brotliSize: true,
+      }),
   ].filter(Boolean),
   build: {
     rollupOptions: {
@@ -30,6 +31,12 @@ export default defineConfig({
   },
   // Optimize dependencies
   optimizeDeps: {
-    include: ['react', 'react-dom', 'firebase/app', 'firebase/auth', 'firebase/firestore'],
+    include: [
+      'react',
+      'react-dom',
+      'firebase/app',
+      'firebase/auth',
+      'firebase/firestore',
+    ],
   },
 })

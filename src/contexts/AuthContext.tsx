@@ -11,6 +11,7 @@ import {
   signInWithPopup,
 } from 'firebase/auth'
 import { doc, setDoc, getDoc } from 'firebase/firestore'
+
 import { auth, db, googleProvider } from '../lib/firebase'
 
 interface UserProfile {
@@ -69,13 +70,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function signup(email: string, password: string, username: string) {
     const { user } = await createUserWithEmailAndPassword(auth, email, password)
-    
+
     // Update the user's display name
     await updateProfile(user, { displayName: username })
-    
+
     // Send email verification
     await sendEmailVerification(user)
-    
+
     // Create user profile in Firestore
     const userProfile: UserProfile = {
       uid: user.uid,
@@ -89,14 +90,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       lastActiveAt: new Date(),
       referralCode: generateReferralCode(),
       kyc: {
-        status: 'unverified'
+        status: 'unverified',
       },
       credit: {
         available: 0,
-        pending: 0
-      }
+        pending: 0,
+      },
     }
-    
+
     await setDoc(doc(db, 'users', user.uid), userProfile)
     setUserProfile(userProfile)
   }
@@ -108,10 +109,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   async function loginWithGoogle(): Promise<{ needsUsername: boolean }> {
     const result = await signInWithPopup(auth, googleProvider)
     const user = result.user
-    
+
     // Check if user profile already exists
     const userDoc = await getDoc(doc(db, 'users', user.uid))
-    
+
     if (userDoc.exists()) {
       // User already has a profile
       return { needsUsername: false }
@@ -130,14 +131,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         lastActiveAt: new Date(),
         referralCode: generateReferralCode(),
         kyc: {
-          status: 'unverified'
+          status: 'unverified',
         },
         credit: {
           available: 0,
-          pending: 0
-        }
+          pending: 0,
+        },
       }
-      
+
       await setDoc(doc(db, 'users', user.uid), tempProfile)
       return { needsUsername: true }
     }
@@ -154,9 +155,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function updateUserProfile(updates: Partial<UserProfile>) {
     if (!currentUser || !userProfile) return
-    
-    const updatedProfile = { ...userProfile, ...updates, lastActiveAt: new Date() }
-    await setDoc(doc(db, 'users', currentUser.uid), updatedProfile, { merge: true })
+
+    const updatedProfile = {
+      ...userProfile,
+      ...updates,
+      lastActiveAt: new Date(),
+    }
+    await setDoc(doc(db, 'users', currentUser.uid), updatedProfile, {
+      merge: true,
+    })
     setUserProfile(updatedProfile)
   }
 
@@ -167,13 +174,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Convert Firestore timestamps to Date objects
       const profile = {
         ...data,
-        createdAt: data.createdAt instanceof Date ? data.createdAt : new Date(data.createdAt),
-        lastActiveAt: data.lastActiveAt instanceof Date ? data.lastActiveAt : new Date(data.lastActiveAt),
+        createdAt:
+          data.createdAt instanceof Date
+            ? data.createdAt
+            : new Date(data.createdAt),
+        lastActiveAt:
+          data.lastActiveAt instanceof Date
+            ? data.lastActiveAt
+            : new Date(data.lastActiveAt),
       }
       setUserProfile(profile)
-      
+
       // Update last active time
-      await setDoc(doc(db, 'users', user.uid), { lastActiveAt: new Date() }, { merge: true })
+      await setDoc(
+        doc(db, 'users', user.uid),
+        { lastActiveAt: new Date() },
+        { merge: true }
+      )
     }
   }
 
@@ -181,7 +198,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     let unsubscribe: (() => void) | undefined
 
     try {
-      unsubscribe = onAuthStateChanged(auth, async (user) => {
+      unsubscribe = onAuthStateChanged(auth, async user => {
         try {
           setCurrentUser(user)
           if (user) {
@@ -232,12 +249,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   return (
     <AuthContext.Provider value={value}>
       {loading ? (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400 mx-auto mb-4"></div>
-            <p className="text-slate-300">Loading CoralCrave...</p>
+        <div className='min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 flex items-center justify-center'>
+          <div className='text-center'>
+            <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400 mx-auto mb-4'></div>
+            <p className='text-slate-300'>Loading CoralCrave...</p>
             {error && (
-              <p className="text-red-400 text-sm mt-2">
+              <p className='text-red-400 text-sm mt-2'>
                 {error} - App will continue loading...
               </p>
             )}

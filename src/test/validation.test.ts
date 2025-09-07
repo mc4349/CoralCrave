@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+
 import {
   validateEmail,
   validatePassword,
@@ -7,7 +8,7 @@ import {
   validateField,
   sanitizeInput,
   validateForm,
-  isFormValid
+  isFormValid,
 } from '../lib/validation'
 
 describe('Validation Utilities', () => {
@@ -26,7 +27,9 @@ describe('Validation Utilities', () => {
 
     it('should return appropriate error messages', () => {
       expect(validateEmail('').message).toBe('Email is required')
-      expect(validateEmail('invalid').message).toBe('Please enter a valid email address')
+      expect(validateEmail('invalid').message).toBe(
+        'Please enter a valid email address'
+      )
     })
   })
 
@@ -46,7 +49,9 @@ describe('Validation Utilities', () => {
 
     it('should return appropriate error messages', () => {
       expect(validatePassword('').message).toBe('Password is required')
-      expect(validatePassword('weak').message).toContain('at least 8 characters')
+      expect(validatePassword('weak').message).toContain(
+        'at least 8 characters'
+      )
     })
   })
 
@@ -97,14 +102,18 @@ describe('Validation Utilities', () => {
     })
 
     it('should validate patterns', () => {
-      expect(validateField('abc123', { pattern: /^[a-z]+$/ }).isValid).toBe(false)
+      expect(validateField('abc123', { pattern: /^[a-z]+$/ }).isValid).toBe(
+        false
+      )
       expect(validateField('abc', { pattern: /^[a-z]+$/ }).isValid).toBe(true)
     })
   })
 
   describe('sanitizeInput', () => {
     it('should sanitize HTML characters', () => {
-      expect(sanitizeInput('<script>alert("xss")</script>')).toBe('<script>alert("xss")</script>')
+      expect(sanitizeInput('<script>alert("xss")</script>')).toBe(
+        '<script>alert("xss")</script>'
+      )
       expect(sanitizeInput('"hello"')).toBe('"hello"')
       expect(sanitizeInput("'hello'")).toBe('&#x27;hello&#x27;')
     })
@@ -115,7 +124,7 @@ describe('Validation Utilities', () => {
       const data = { email: 'test@example.com', password: 'StrongPass123' }
       const rules = {
         email: { required: true },
-        password: { required: true, minLength: 8 }
+        password: { required: true, minLength: 8 },
       }
 
       const results = validateForm(data, rules)
@@ -127,7 +136,7 @@ describe('Validation Utilities', () => {
       const data = { email: 'invalid-email', password: 'weak' }
       const rules = {
         email: { required: true },
-        password: { required: true, minLength: 8 }
+        password: { required: true, minLength: 8 },
       }
 
       const results = validateForm(data, rules)
@@ -140,11 +149,11 @@ describe('Validation Utilities', () => {
     it('should check if all validations pass', () => {
       const validResults = {
         email: { isValid: true },
-        password: { isValid: true }
+        password: { isValid: true },
       }
       const invalidResults = {
         email: { isValid: false },
-        password: { isValid: true }
+        password: { isValid: true },
       }
 
       expect(isFormValid(validResults)).toBe(true)

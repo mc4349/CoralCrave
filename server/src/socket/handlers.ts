@@ -1,4 +1,5 @@
 import { Server, Socket } from 'socket.io'
+
 import { AuctionEngine } from '../services/AuctionEngine'
 import { RedisService } from '../services/RedisService'
 import { FirebaseService } from '../services/FirebaseService'
@@ -36,18 +37,18 @@ export function setupSocketHandlers(io: Server): void {
     socket.on('joinLive', async (data: { liveId: string; userId?: string }) => {
       try {
         const { liveId, userId } = data
-        
+
         // Join the livestream room
         await socket.join(`live:${liveId}`)
-        
+
         // Update viewer count if user is authenticated
         if (userId) {
           const viewerCount = await redisService.addViewer(liveId, userId)
-          
+
           // Broadcast updated viewer count
           io.to(`live:${liveId}`).emit('viewerCountUpdate', {
             liveId,
-            count: viewerCount
+            count: viewerCount,
           })
 
           // Update viewer count in Firebase
@@ -73,178 +74,224 @@ export function setupSocketHandlers(io: Server): void {
     })
 
     // Handle leaving a livestream
-    socket.on('leaveLive', async (data: { liveId: string; userId?: string }) => {
-      try {
-        const { liveId, userId } = data
-        
-        // Leave the livestream room
-        await socket.leave(`live:${liveId}`)
-        
-        // Update viewer count if user is authenticated
-        if (userId) {
-          const viewerCount = await redisService.removeViewer(liveId, userId)
-          
-          // Broadcast updated viewer count
-          io.to(`live:${liveId}`).emit('viewerCountUpdate', {
-            liveId,
-            count: viewerCount
-          })
+    socket.on(
+      'leaveLive',
+      async (data: { liveId: string; userId?: string }) => {
+        try {
+          const { liveId, userId } = data
 
-          // Update viewer count in Firebase
-          await firebaseService.updateViewerCount(liveId, viewerCount)
+          // Leave the livestream room
+          await socket.leave(`live:${liveId}`)
+
+          // Update viewer count if user is authenticated
+          if (userId) {
+            const viewerCount = await redisService.removeViewer(liveId, userId)
+
+            // Broadcast updated viewer count
+            io.to(`live:${liveId}`).emit('viewerCountUpdate', {
+              liveId,
+              count: viewerCount,
+            })
+
+            // Update viewer count in Firebase
+            await firebaseService.updateViewerCount(liveId, viewerCount)
+          }
+
+          logger.debug(`User ${userId || 'anonymous'} left live ${liveId}`)
+        } catch (error) {
+          logger.error('Error handling leaveLive:', error)
         }
-
-        logger.debug(`User ${userId || 'anonymous'} left live ${liveId}`)
-      } catch (error) {
-        logger.error('Error handling leaveLive:', error)
       }
-    })
+    )
 
     // Handle placing a bid
-    socket.on('placeBid', async (data: {
-      liveId: string
-      itemId: string
-      amount: number
-      userId: string
-      username: string
-    }) => {
-      try {
-        const { liveId, itemId, amount, userId, username } = data
+    socket.on(
+      'placeBid',
+      async (data: {
+        liveId: string
+        itemId: string
+        amount: number
+        userId: string
+        username: string
+      }) => {
+        try {
+          const { liveId, itemId, amount, userId, username } = data
 
-        // Validate input
-        if (!liveId || !itemId || !userId || !username || amount <= 0) {
-          socket.emit('error', { message: 'Invalid bid data' })
-          return
-        }
+          // Validate input
+          if (!liveId || !itemId || !userId || !username || amount <= 0) {
+            socket.emit('error', { message: 'Invalid bid data' })
+            return
+          }
 
-        // Rate limiting check
-        const rateLimitKey = `bid_rate:${userId}`
-        const rateLimit = await redisService.checkRateLimit(rateLimitKey, 10, 60000) // 10 bids per minute
-        
-        if (!rateLimit.allowed) {
-          socket.emit('error', { message: 'Too many bids. Please slow down.' })
-          return
-        }
+          // Rate limiting check
+          const rateLimitKey = `bid_rate:${userId}`
+          const rateLimit = await redisService.checkRateLimit(
+            rateLimitKey,
+            10,
+            60000
+          ) // 10 bids per minute
 
-        // Place the bid
-        const result = await auctionEngine.placeBid(itemId, userId, username, amount, liveId)
-        
-        if (result.success) {
-          // Bid was successful - events will be emitted by auction engine
-          logger.info(`Bid placed: ${username} bid $${amount} on item ${itemId}`)
-        } else {
-          // Send error back to the bidder
-          socket.emit('error', { message: result.message || 'Failed to place bid' })
+          if (!rateLimit.allowed) {
+            socket.emit('error', {
+              message: 'Too many bids. Please slow down.',
+            })
+            return
+          }
+
+          // Place the bid
+          const result = await auctionEngine.placeBid(
+            itemId,
+            userId,
+            username,
+            amount,
+            liveId
+          )
+
+          if (result.success) {
+            // Bid was successful - events will be emitted by auction engine
+            logger.info(
+              `Bid placed: ${username} bid $${amount} on item ${itemId}`
+            )
+          } else {
+            // Send error back to the bidder
+            socket.emit('error', {
+              message: result.message || 'Failed to place bid',
+            })
+          }
+        } catch (error) {
+          logger.error('Error handling placeBid:', error)
+          socket.emit('error', { message: 'Internal server error' })
         }
-      } catch (error) {
-        logger.error('Error handling placeBid:', error)
-        socket.emit('error', { message: 'Internal server error' })
       }
-    })
+    )
 
     // Handle setting maximum bid (proxy bidding)
-    socket.on('setMaxBid', async (data: {
-      liveId: string
-      itemId: string
-      maxAmount: number
-      userId: string
-    }) => {
-      try {
-        const { liveId, itemId, maxAmount, userId } = data
+    socket.on(
+      'setMaxBid',
+      async (data: {
+        liveId: string
+        itemId: string
+        maxAmount: number
+        userId: string
+      }) => {
+        try {
+          const { liveId, itemId, maxAmount, userId } = data
 
-        // Validate input
-        if (!liveId || !itemId || !userId || maxAmount <= 0) {
-          socket.emit('error', { message: 'Invalid max bid data' })
-          return
-        }
+          // Validate input
+          if (!liveId || !itemId || !userId || maxAmount <= 0) {
+            socket.emit('error', { message: 'Invalid max bid data' })
+            return
+          }
 
-        // Set the maximum bid
-        const result = await auctionEngine.setMaxBid(itemId, userId, maxAmount)
-        
-        if (result.success) {
-          socket.emit('maxBidSet', { itemId, maxAmount })
-          logger.info(`Max bid set: User ${userId} set max bid of $${maxAmount} on item ${itemId}`)
-        } else {
-          socket.emit('error', { message: result.message || 'Failed to set max bid' })
+          // Set the maximum bid
+          const result = await auctionEngine.setMaxBid(
+            itemId,
+            userId,
+            maxAmount
+          )
+
+          if (result.success) {
+            socket.emit('maxBidSet', { itemId, maxAmount })
+            logger.info(
+              `Max bid set: User ${userId} set max bid of $${maxAmount} on item ${itemId}`
+            )
+          } else {
+            socket.emit('error', {
+              message: result.message || 'Failed to set max bid',
+            })
+          }
+        } catch (error) {
+          logger.error('Error handling setMaxBid:', error)
+          socket.emit('error', { message: 'Internal server error' })
         }
-      } catch (error) {
-        logger.error('Error handling setMaxBid:', error)
-        socket.emit('error', { message: 'Internal server error' })
       }
-    })
+    )
 
     // Handle requesting auction state
-    socket.on('requestState', async (data: { liveId: string; itemId: string }) => {
-      try {
-        const { itemId } = data
-        
-        const auctionState = auctionEngine.getAuctionState(itemId)
-        if (auctionState) {
-          socket.emit('auctionState', auctionState)
-        } else {
-          socket.emit('error', { message: 'Auction not found' })
+    socket.on(
+      'requestState',
+      async (data: { liveId: string; itemId: string }) => {
+        try {
+          const { itemId } = data
+
+          const auctionState = auctionEngine.getAuctionState(itemId)
+          if (auctionState) {
+            socket.emit('auctionState', auctionState)
+          } else {
+            socket.emit('error', { message: 'Auction not found' })
+          }
+        } catch (error) {
+          logger.error('Error handling requestState:', error)
+          socket.emit('error', { message: 'Failed to get auction state' })
         }
-      } catch (error) {
-        logger.error('Error handling requestState:', error)
-        socket.emit('error', { message: 'Failed to get auction state' })
       }
-    })
+    )
 
     // Handle starting an auction (host only)
-    socket.on('startAuction', async (data: { liveId: string; itemId: string; userId: string }) => {
-      try {
-        const { liveId, itemId, userId } = data
+    socket.on(
+      'startAuction',
+      async (data: { liveId: string; itemId: string; userId: string }) => {
+        try {
+          const { liveId, itemId, userId } = data
 
-        // Verify user is the host of the livestream
-        const livestream = await firebaseService.getLivestream(liveId)
-        if (!livestream || livestream.hostId !== userId) {
-          socket.emit('error', { message: 'Unauthorized: Only the host can start auctions' })
-          return
+          // Verify user is the host of the livestream
+          const livestream = await firebaseService.getLivestream(liveId)
+          if (!livestream || livestream.hostId !== userId) {
+            socket.emit('error', {
+              message: 'Unauthorized: Only the host can start auctions',
+            })
+            return
+          }
+
+          // Get item details
+          const item = await firebaseService.getItem(liveId, itemId)
+          if (!item) {
+            socket.emit('error', { message: 'Item not found' })
+            return
+          }
+
+          if (item.status !== 'queued') {
+            socket.emit('error', { message: 'Item is not queued for auction' })
+            return
+          }
+
+          // Start the auction
+          await auctionEngine.startAuction(item)
+
+          logger.info(`Auction started for item ${itemId} by host ${userId}`)
+        } catch (error) {
+          logger.error('Error handling startAuction:', error)
+          socket.emit('error', { message: 'Failed to start auction' })
         }
-
-        // Get item details
-        const item = await firebaseService.getItem(liveId, itemId)
-        if (!item) {
-          socket.emit('error', { message: 'Item not found' })
-          return
-        }
-
-        if (item.status !== 'queued') {
-          socket.emit('error', { message: 'Item is not queued for auction' })
-          return
-        }
-
-        // Start the auction
-        await auctionEngine.startAuction(item)
-        
-        logger.info(`Auction started for item ${itemId} by host ${userId}`)
-      } catch (error) {
-        logger.error('Error handling startAuction:', error)
-        socket.emit('error', { message: 'Failed to start auction' })
       }
-    })
+    )
 
     // Handle stopping an auction (host only)
-    socket.on('stopAuction', async (data: { liveId: string; itemId: string; userId: string }) => {
-      try {
-        const { liveId, itemId, userId } = data
+    socket.on(
+      'stopAuction',
+      async (data: { liveId: string; itemId: string; userId: string }) => {
+        try {
+          const { liveId, itemId, userId } = data
 
-        // Verify user is the host of the livestream
-        const livestream = await firebaseService.getLivestream(liveId)
-        if (!livestream || livestream.hostId !== userId) {
-          socket.emit('error', { message: 'Unauthorized: Only the host can stop auctions' })
-          return
+          // Verify user is the host of the livestream
+          const livestream = await firebaseService.getLivestream(liveId)
+          if (!livestream || livestream.hostId !== userId) {
+            socket.emit('error', {
+              message: 'Unauthorized: Only the host can stop auctions',
+            })
+            return
+          }
+
+          // Stop the auction
+          await auctionEngine.stopAuction(itemId)
+
+          logger.info(`Auction stopped for item ${itemId} by host ${userId}`)
+        } catch (error) {
+          logger.error('Error handling stopAuction:', error)
+          socket.emit('error', { message: 'Failed to stop auction' })
         }
-
-        // Stop the auction
-        await auctionEngine.stopAuction(itemId)
-        
-        logger.info(`Auction stopped for item ${itemId} by host ${userId}`)
-      } catch (error) {
-        logger.error('Error handling stopAuction:', error)
-        socket.emit('error', { message: 'Failed to stop auction' })
       }
-    })
+    )
 
     // Handle disconnect
     socket.on('disconnect', (reason: any) => {
@@ -266,64 +313,68 @@ export function setupSocketHandlers(io: Server): void {
 
 function setupAuctionEngineListeners(io: Server): void {
   // Listen for auction events and broadcast to clients
-  auctionEngine.on('auctionStarted', (auctionState) => {
+  auctionEngine.on('auctionStarted', auctionState => {
     io.to(`live:${auctionState.liveId}`).emit('auctionState', auctionState)
     logger.debug(`Broadcasted auction start for item ${auctionState.itemId}`)
   })
 
-  auctionEngine.on('bidPlaced', (data) => {
+  auctionEngine.on('bidPlaced', data => {
     const { itemId, bid, newPrice, leaderId } = data
     const auctionState = auctionEngine.getAuctionState(itemId)
-    
+
     if (auctionState) {
       // Broadcast bid placed event
       io.to(`live:${auctionState.liveId}`).emit('bidPlaced', {
         itemId,
         bid,
         newPrice,
-        leaderId
+        leaderId,
       })
 
       // Broadcast updated auction state
       io.to(`live:${auctionState.liveId}`).emit('auctionState', auctionState)
-      
+
       logger.debug(`Broadcasted bid for item ${itemId}: $${newPrice}`)
     }
   })
 
-  auctionEngine.on('timerUpdate', (data) => {
+  auctionEngine.on('timerUpdate', data => {
     const { itemId, timeLeftMs } = data
     const auctionState = auctionEngine.getAuctionState(itemId)
-    
+
     if (auctionState) {
       io.to(`live:${auctionState.liveId}`).emit('timerUpdate', {
         itemId,
-        timeLeftMs
+        timeLeftMs,
       })
     }
   })
 
-  auctionEngine.on('auctionClosed', async (data) => {
+  auctionEngine.on('auctionClosed', async data => {
     const { itemId, winnerId, finalPrice } = data
     const auctionState = auctionEngine.getAuctionState(itemId)
-    
+
     if (auctionState) {
       // Broadcast auction closed event
       io.to(`live:${auctionState.liveId}`).emit('auctionClosed', {
         itemId,
         winnerId,
-        finalPrice
+        finalPrice,
       })
 
       // Update user stats if there was a winner
       if (winnerId && finalPrice > 0) {
-        const livestream = await firebaseService.getLivestream(auctionState.liveId)
+        const livestream = await firebaseService.getLivestream(
+          auctionState.liveId
+        )
         if (livestream) {
           await firebaseService.updateUserStats(livestream.hostId, finalPrice)
         }
       }
-      
-      logger.info(`Broadcasted auction close for item ${itemId}. Winner: ${winnerId || 'none'}, Price: $${finalPrice}`)
+
+      logger.info(
+        `Broadcasted auction close for item ${itemId}. Winner: ${winnerId || 'none'}, Price: $${finalPrice}`
+      )
     }
   })
 

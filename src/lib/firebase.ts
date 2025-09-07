@@ -44,7 +44,7 @@ export const googleProvider = new GoogleAuthProvider()
 
 // Configure Google Auth Provider for better popup handling
 googleProvider.setCustomParameters({
-  prompt: 'select_account'
+  prompt: 'select_account',
 })
 
 // Add additional scopes for better user info

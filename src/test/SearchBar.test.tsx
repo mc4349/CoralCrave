@@ -1,10 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+
 import SearchBar from '../components/SearchBar'
 
 // Mock Firebase
 vi.mock('../lib/firebase', () => ({
-  db: {}
+  db: {},
 }))
 
 vi.mock('firebase/firestore', () => ({
@@ -12,20 +13,22 @@ vi.mock('firebase/firestore', () => ({
   query: vi.fn(),
   where: vi.fn(),
   limit: vi.fn(),
-  getDocs: vi.fn(() => Promise.resolve({
-    docs: [
-      {
-        id: 'stream1',
-        data: () => ({
-          title: 'Test Stream',
-          hostUsername: 'testuser',
-          categories: ['coral'],
-          status: 'live',
-          viewerCount: 10
-        })
-      }
-    ]
-  }))
+  getDocs: vi.fn(() =>
+    Promise.resolve({
+      docs: [
+        {
+          id: 'stream1',
+          data: () => ({
+            title: 'Test Stream',
+            hostUsername: 'testuser',
+            categories: ['coral'],
+            status: 'live',
+            viewerCount: 10,
+          }),
+        },
+      ],
+    })
+  ),
 }))
 
 describe('SearchBar', () => {
@@ -46,7 +49,7 @@ describe('SearchBar', () => {
   })
 
   it('should accept custom placeholder', () => {
-    render(<SearchBar placeholder="Custom search..." />)
+    render(<SearchBar placeholder='Custom search...' />)
     expect(screen.getByPlaceholderText('Custom search...')).toBeInTheDocument()
   })
 
@@ -96,8 +99,9 @@ describe('SearchBar', () => {
   })
 
   it('should accept custom className', () => {
-    render(<SearchBar className="custom-class" />)
-    const container = screen.getByPlaceholderText('Search streams and users...').parentElement?.parentElement
+    render(<SearchBar className='custom-class' />)
+    const container = screen.getByPlaceholderText('Search streams and users...')
+      .parentElement?.parentElement
     expect(container).toHaveClass('custom-class')
   })
 

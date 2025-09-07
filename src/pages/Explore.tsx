@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { collection, query, where, limit, getDocs } from 'firebase/firestore'
+
 import { db } from '../lib/firebase'
 import { StreamCardSkeleton } from '../components/LoadingSkeleton'
 
@@ -22,31 +23,40 @@ const Explore = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000])
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-  const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'most-viewed' | 'least-viewed'>('newest')
+  const [sortBy, setSortBy] = useState<
+    'newest' | 'oldest' | 'most-viewed' | 'least-viewed'
+  >('newest')
   const [showFilters, setShowFilters] = useState(false)
 
   useEffect(() => {
     const fetchLiveStreams = async () => {
       try {
         console.log('🔍 Explore: Fetching live streams from Firestore only...')
-        
+
         // Direct Firestore query - no offline fallback
         const liveQuery = query(
           collection(db, 'livestreams'),
           where('status', '==', 'live'),
           limit(20)
         )
-        
+
         const snapshot = await getDocs(liveQuery)
         const streams = snapshot.docs.map(doc => ({
           id: doc.id,
-          ...doc.data()
+          ...doc.data(),
         })) as LiveStream[]
-        
-        console.log('✅ Explore: Found', streams.length, 'live streams in Firestore')
+
+        console.log(
+          '✅ Explore: Found',
+          streams.length,
+          'live streams in Firestore'
+        )
         setLiveStreams(streams)
       } catch (error) {
-        console.error('❌ Explore: Error fetching live streams from Firestore:', error)
+        console.error(
+          '❌ Explore: Error fetching live streams from Firestore:',
+          error
+        )
         console.error('❌ This means no streams will be visible to viewers!')
         setLiveStreams([]) // Clear streams on error - don't show offline streams
       } finally {
@@ -71,10 +81,11 @@ const Explore = () => {
     // Apply search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase()
-      filtered = filtered.filter(stream =>
-        stream.title?.toLowerCase().includes(query) ||
-        stream.hostUsername?.toLowerCase().includes(query) ||
-        stream.categories?.some(cat => cat.toLowerCase().includes(query))
+      filtered = filtered.filter(
+        stream =>
+          stream.title?.toLowerCase().includes(query) ||
+          stream.hostUsername?.toLowerCase().includes(query) ||
+          stream.categories?.some(cat => cat.toLowerCase().includes(query))
       )
     }
 
@@ -89,14 +100,20 @@ const Explore = () => {
     if (activeFilter && activeFilter !== 'For You') {
       switch (activeFilter) {
         case 'Coral':
-          filtered = filtered.filter(stream => stream.categories?.includes('coral'))
+          filtered = filtered.filter(stream =>
+            stream.categories?.includes('coral')
+          )
           break
         case 'Fish':
-          filtered = filtered.filter(stream => stream.categories?.includes('fish'))
+          filtered = filtered.filter(stream =>
+            stream.categories?.includes('fish')
+          )
           break
         case 'Both':
-          filtered = filtered.filter(stream =>
-            stream.categories?.includes('coral') && stream.categories?.includes('fish')
+          filtered = filtered.filter(
+            stream =>
+              stream.categories?.includes('coral') &&
+              stream.categories?.includes('fish')
           )
           break
       }
@@ -106,9 +123,13 @@ const Explore = () => {
     filtered.sort((a, b) => {
       switch (sortBy) {
         case 'newest':
-          return (b.startedAt?.toMillis?.() || 0) - (a.startedAt?.toMillis?.() || 0)
+          return (
+            (b.startedAt?.toMillis?.() || 0) - (a.startedAt?.toMillis?.() || 0)
+          )
         case 'oldest':
-          return (a.startedAt?.toMillis?.() || 0) - (b.startedAt?.toMillis?.() || 0)
+          return (
+            (a.startedAt?.toMillis?.() || 0) - (b.startedAt?.toMillis?.() || 0)
+          )
         case 'most-viewed':
           return (b.viewerCount || 0) - (a.viewerCount || 0)
         case 'least-viewed':
@@ -122,61 +143,84 @@ const Explore = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-800">
+    <div className='min-h-screen bg-gradient-to-b from-slate-900 via-blue-900 to-slate-800'>
       {/* Animated Background Elements */}
-      <div className="absolute inset-0 opacity-10 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-blue-400 rounded-full animate-pulse"></div>
-        <div className="absolute top-40 right-20 w-24 h-24 bg-teal-400 rounded-full animate-bounce"></div>
-        <div className="absolute bottom-20 left-1/4 w-20 h-20 bg-cyan-400 rounded-full animate-pulse"></div>
-        <div className="absolute bottom-40 right-1/3 w-28 h-28 bg-blue-300 rounded-full animate-bounce"></div>
+      <div className='absolute inset-0 opacity-10 overflow-hidden pointer-events-none'>
+        <div className='absolute top-20 left-10 w-32 h-32 bg-blue-400 rounded-full animate-pulse'></div>
+        <div className='absolute top-40 right-20 w-24 h-24 bg-teal-400 rounded-full animate-bounce'></div>
+        <div className='absolute bottom-20 left-1/4 w-20 h-20 bg-cyan-400 rounded-full animate-pulse'></div>
+        <div className='absolute bottom-40 right-1/3 w-28 h-28 bg-blue-300 rounded-full animate-bounce'></div>
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center mb-16">
-          <h1 className="text-6xl font-bold text-white mb-6 leading-tight">
+      <div className='relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20'>
+        <div className='text-center mb-16'>
+          <h1 className='text-6xl font-bold text-white mb-6 leading-tight'>
             {activeFilter ? (
-              <>Explore <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">{activeFilter}</span> Streams</>
+              <>
+                Explore{' '}
+                <span className='text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400'>
+                  {activeFilter}
+                </span>{' '}
+                Streams
+              </>
             ) : (
-              <>Discover <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">Live</span> Auctions</>
+              <>
+                Discover{' '}
+                <span className='text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400'>
+                  Live
+                </span>{' '}
+                Auctions
+              </>
             )}
           </h1>
-          <p className="text-2xl text-blue-100 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Join live auctions featuring rare corals, exotic fish, and marine treasures from passionate sellers worldwide.
+          <p className='text-2xl text-blue-100 mb-12 max-w-3xl mx-auto leading-relaxed'>
+            Join live auctions featuring rare corals, exotic fish, and marine
+            treasures from passionate sellers worldwide.
           </p>
         </div>
-        
+
         {/* Advanced Filters Panel */}
-        <div className="mb-8">
-          <div className="flex flex-col gap-4 mb-6">
+        <div className='mb-8'>
+          <div className='flex flex-col gap-4 mb-6'>
             {/* Search Bar - Mobile responsive */}
-            <div className="w-full max-w-md mx-auto lg:mx-0">
-              <div className="relative">
+            <div className='w-full max-w-md mx-auto lg:mx-0'>
+              <div className='relative'>
                 <input
-                  type="text"
-                  placeholder="Search streams..."
+                  type='text'
+                  placeholder='Search streams...'
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-3 pl-12 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent backdrop-blur-sm text-base"
+                  onChange={e => setSearchQuery(e.target.value)}
+                  className='w-full px-4 py-3 pl-12 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent backdrop-blur-sm text-base'
                 />
-                <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                  <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                <div className='absolute left-4 top-1/2 transform -translate-y-1/2'>
+                  <svg
+                    className='w-4 h-4 text-slate-400'
+                    fill='none'
+                    stroke='currentColor'
+                    viewBox='0 0 24 24'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth={2}
+                      d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
+                    />
                   </svg>
                 </div>
               </div>
             </div>
 
             {/* Filter Controls - Mobile responsive */}
-            <div className="flex flex-col sm:flex-row gap-4 items-center justify-center lg:justify-between">
+            <div className='flex flex-col sm:flex-row gap-4 items-center justify-center lg:justify-between'>
               <select
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
-                className="w-full sm:w-auto px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent backdrop-blur-sm text-base min-h-[44px]"
+                onChange={e => setSortBy(e.target.value as any)}
+                className='w-full sm:w-auto px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent backdrop-blur-sm text-base min-h-[44px]'
               >
-                <option value="newest">Newest First</option>
-                <option value="oldest">Oldest First</option>
-                <option value="most-viewed">Most Viewed</option>
-                <option value="least-viewed">Least Viewed</option>
+                <option value='newest'>Newest First</option>
+                <option value='oldest'>Oldest First</option>
+                <option value='most-viewed'>Most Viewed</option>
+                <option value='least-viewed'>Least Viewed</option>
               </select>
 
               <button
@@ -187,8 +231,18 @@ const Explore = () => {
                     : 'bg-slate-800/50 border-slate-600 text-slate-300 hover:bg-slate-700/50 hover:border-cyan-400/50 hover:text-cyan-300 backdrop-blur-sm'
                 }`}
               >
-                <svg className="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                <svg
+                  className='w-4 h-4 mr-2 flex-shrink-0'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z'
+                  />
                 </svg>
                 {showFilters ? 'Hide Filters' : 'Show Filters'}
               </button>
@@ -197,27 +251,36 @@ const Explore = () => {
 
           {/* Expanded Filters */}
           {showFilters && (
-            <div className="bg-slate-800/30 backdrop-blur-sm rounded-2xl p-6 border border-slate-600/50 mb-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className='bg-slate-800/30 backdrop-blur-sm rounded-2xl p-6 border border-slate-600/50 mb-6'>
+              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
                 {/* Categories */}
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-300 mb-3">Categories</h3>
-                  <div className="space-y-2">
-                    {['coral', 'fish', 'equipment', 'plants'].map((category) => (
-                      <label key={category} className="flex items-center">
+                  <h3 className='text-sm font-semibold text-slate-300 mb-3'>
+                    Categories
+                  </h3>
+                  <div className='space-y-2'>
+                    {['coral', 'fish', 'equipment', 'plants'].map(category => (
+                      <label key={category} className='flex items-center'>
                         <input
-                          type="checkbox"
+                          type='checkbox'
                           checked={selectedCategories.includes(category)}
-                          onChange={(e) => {
+                          onChange={e => {
                             if (e.target.checked) {
-                              setSelectedCategories([...selectedCategories, category])
+                              setSelectedCategories([
+                                ...selectedCategories,
+                                category,
+                              ])
                             } else {
-                              setSelectedCategories(selectedCategories.filter(c => c !== category))
+                              setSelectedCategories(
+                                selectedCategories.filter(c => c !== category)
+                              )
                             }
                           }}
-                          className="mr-2 rounded border-slate-600 text-cyan-500 focus:ring-cyan-400 focus:ring-2"
+                          className='mr-2 rounded border-slate-600 text-cyan-500 focus:ring-cyan-400 focus:ring-2'
                         />
-                        <span className="text-slate-300 capitalize">{category}</span>
+                        <span className='text-slate-300 capitalize'>
+                          {category}
+                        </span>
                       </label>
                     ))}
                   </div>
@@ -225,33 +288,39 @@ const Explore = () => {
 
                 {/* Price Range */}
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-300 mb-3">Price Range</h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-slate-400 text-sm">$</span>
+                  <h3 className='text-sm font-semibold text-slate-300 mb-3'>
+                    Price Range
+                  </h3>
+                  <div className='space-y-3'>
+                    <div className='flex items-center space-x-2'>
+                      <span className='text-slate-400 text-sm'>$</span>
                       <input
-                        type="number"
+                        type='number'
                         value={priceRange[0]}
-                        onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
-                        className="flex-1 px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400"
-                        placeholder="Min"
-                        min="0"
-                        max="10000"
+                        onChange={e =>
+                          setPriceRange([Number(e.target.value), priceRange[1]])
+                        }
+                        className='flex-1 px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400'
+                        placeholder='Min'
+                        min='0'
+                        max='10000'
                       />
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-slate-400 text-sm">$</span>
+                    <div className='flex items-center space-x-2'>
+                      <span className='text-slate-400 text-sm'>$</span>
                       <input
-                        type="number"
+                        type='number'
                         value={priceRange[1]}
-                        onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
-                        className="flex-1 px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400"
-                        placeholder="Max"
-                        min="0"
-                        max="10000"
+                        onChange={e =>
+                          setPriceRange([priceRange[0], Number(e.target.value)])
+                        }
+                        className='flex-1 px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400'
+                        placeholder='Max'
+                        min='0'
+                        max='10000'
                       />
                     </div>
-                    <div className="text-xs text-slate-500 mt-2">
+                    <div className='text-xs text-slate-500 mt-2'>
                       Current range: ${priceRange[0]} - ${priceRange[1]}
                     </div>
                   </div>
@@ -259,27 +328,33 @@ const Explore = () => {
 
                 {/* Quick Filters */}
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-300 mb-3">Quick Filters</h3>
-                  <div className="space-y-2">
-                    {['For You', 'Followed', 'Coral', 'Fish', 'Both'].map((filter) => (
-                      <button
-                        key={filter}
-                        onClick={() => handleFilterClick(filter)}
-                        className={`w-full text-left px-3 py-2 rounded-lg transition-all duration-300 text-sm ${
-                          activeFilter === filter
-                            ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/25'
-                            : 'bg-slate-700/50 text-slate-300 hover:bg-slate-600/50 hover:text-cyan-300'
-                        }`}
-                      >
-                        {filter}
-                      </button>
-                    ))}
+                  <h3 className='text-sm font-semibold text-slate-300 mb-3'>
+                    Quick Filters
+                  </h3>
+                  <div className='space-y-2'>
+                    {['For You', 'Followed', 'Coral', 'Fish', 'Both'].map(
+                      filter => (
+                        <button
+                          key={filter}
+                          onClick={() => handleFilterClick(filter)}
+                          className={`w-full text-left px-3 py-2 rounded-lg transition-all duration-300 text-sm ${
+                            activeFilter === filter
+                              ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/25'
+                              : 'bg-slate-700/50 text-slate-300 hover:bg-slate-600/50 hover:text-cyan-300'
+                          }`}
+                        >
+                          {filter}
+                        </button>
+                      )
+                    )}
                   </div>
                 </div>
 
                 {/* Clear Filters */}
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-300 mb-3">Actions</h3>
+                  <h3 className='text-sm font-semibold text-slate-300 mb-3'>
+                    Actions
+                  </h3>
                   <button
                     onClick={() => {
                       setSearchQuery('')
@@ -288,7 +363,7 @@ const Explore = () => {
                       setActiveFilter('For You')
                       setSortBy('newest')
                     }}
-                    className="w-full px-4 py-2 bg-red-600/20 border border-red-500/50 text-red-300 rounded-lg hover:bg-red-600/30 transition-colors duration-300 text-sm font-medium"
+                    className='w-full px-4 py-2 bg-red-600/20 border border-red-500/50 text-red-300 rounded-lg hover:bg-red-600/30 transition-colors duration-300 text-sm font-medium'
                   >
                     Clear All Filters
                   </button>
@@ -299,61 +374,66 @@ const Explore = () => {
         </div>
 
         {/* Live Streams */}
-        <div className="mb-12">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-slate-100">
+        <div className='mb-12'>
+          <div className='flex justify-between items-center mb-6'>
+            <h2 className='text-2xl font-bold text-slate-100'>
               {activeFilter ? `${activeFilter} Streams` : 'Live Now'}
             </h2>
-            <span className="text-slate-400 text-sm">
+            <span className='text-slate-400 text-sm'>
               {getFilteredStreams().length} live streams
             </span>
           </div>
-          
+
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
               {Array.from({ length: 6 }).map((_, index) => (
                 <StreamCardSkeleton key={index} />
               ))}
             </div>
           ) : getFilteredStreams().length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {getFilteredStreams().map((stream) => (
-                <Link 
-                  key={stream.id} 
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+              {getFilteredStreams().map(stream => (
+                <Link
+                  key={stream.id}
                   to={`/live/${stream.id}`}
-                  className="bg-slate-700/50 backdrop-blur-sm rounded-2xl p-6 border border-blue-500/20 hover:border-cyan-400/40 transition-all duration-300 hover:transform hover:scale-105 group block"
+                  className='bg-slate-700/50 backdrop-blur-sm rounded-2xl p-6 border border-blue-500/20 hover:border-cyan-400/40 transition-all duration-300 hover:transform hover:scale-105 group block'
                 >
-                  <div className="aspect-video bg-gradient-to-br from-slate-700 to-slate-800 rounded-lg mb-4 relative overflow-hidden">
+                  <div className='aspect-video bg-gradient-to-br from-slate-700 to-slate-800 rounded-lg mb-4 relative overflow-hidden'>
                     {/* Animated water effect */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent"></div>
-                    <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-cyan-500/5 to-transparent animate-pulse"></div>
-                    
-                    <div className="absolute top-3 left-3 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
+                    <div className='absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent'></div>
+                    <div className='absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-cyan-500/5 to-transparent animate-pulse'></div>
+
+                    <div className='absolute top-3 left-3 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg'>
                       LIVE
                     </div>
-                    <div className="absolute bottom-3 right-3 bg-slate-900/80 backdrop-blur-sm text-slate-100 px-3 py-1 rounded-full text-sm border border-slate-700">
+                    <div className='absolute bottom-3 right-3 bg-slate-900/80 backdrop-blur-sm text-slate-100 px-3 py-1 rounded-full text-sm border border-slate-700'>
                       {stream.viewerCount || 0} viewers
                     </div>
-                    
+
                     {/* Floating bubbles effect */}
-                    <div className="absolute bottom-4 left-4 w-2 h-2 bg-cyan-400/40 rounded-full animate-bounce"></div>
-                    <div className="absolute bottom-8 left-8 w-1 h-1 bg-blue-400/60 rounded-full animate-pulse"></div>
+                    <div className='absolute bottom-4 left-4 w-2 h-2 bg-cyan-400/40 rounded-full animate-bounce'></div>
+                    <div className='absolute bottom-8 left-8 w-1 h-1 bg-blue-400/60 rounded-full animate-pulse'></div>
                   </div>
-                  
+
                   <div>
-                    <h3 className="font-semibold text-slate-100 mb-2 group-hover:text-cyan-300 transition-colors duration-300">
+                    <h3 className='font-semibold text-slate-100 mb-2 group-hover:text-cyan-300 transition-colors duration-300'>
                       {stream.title}
                     </h3>
-                    <p className="text-slate-400 text-sm mb-3">by @{stream.hostUsername || stream.hostId}</p>
-                    <div className="flex justify-between items-center">
-                      <div className="flex space-x-1">
-                        {stream.categories?.map((category) => (
-                          <span key={category} className="text-xs px-2 py-1 bg-slate-800/50 text-slate-300 rounded-full border border-slate-600">
+                    <p className='text-slate-400 text-sm mb-3'>
+                      by @{stream.hostUsername || stream.hostId}
+                    </p>
+                    <div className='flex justify-between items-center'>
+                      <div className='flex space-x-1'>
+                        {stream.categories?.map(category => (
+                          <span
+                            key={category}
+                            className='text-xs px-2 py-1 bg-slate-800/50 text-slate-300 rounded-full border border-slate-600'
+                          >
                             {category}
                           </span>
                         ))}
                       </div>
-                      <span className="text-sm text-slate-500 bg-slate-800/50 px-2 py-1 rounded-full">
+                      <span className='text-sm text-slate-500 bg-slate-800/50 px-2 py-1 rounded-full'>
                         Live
                       </span>
                     </div>
@@ -362,17 +442,31 @@ const Explore = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-12">
-              <div className="w-16 h-16 bg-slate-700/50 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            <div className='text-center py-12'>
+              <div className='w-16 h-16 bg-slate-700/50 rounded-full flex items-center justify-center mx-auto mb-4'>
+                <svg
+                  className='w-8 h-8 text-slate-400'
+                  fill='none'
+                  stroke='currentColor'
+                  viewBox='0 0 24 24'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z'
+                  />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-slate-100 mb-2">No Live Streams</h3>
-              <p className="text-slate-400 mb-6">
-                {activeFilter ? `No ${activeFilter.toLowerCase()} streams are currently live.` : 'No streams are currently live.'}
+              <h3 className='text-xl font-semibold text-slate-100 mb-2'>
+                No Live Streams
+              </h3>
+              <p className='text-slate-400 mb-6'>
+                {activeFilter
+                  ? `No ${activeFilter.toLowerCase()} streams are currently live.`
+                  : 'No streams are currently live.'}
               </p>
-              <Link to="/go-live" className="btn-primary">
+              <Link to='/go-live' className='btn-primary'>
                 Start Your Stream
               </Link>
             </div>

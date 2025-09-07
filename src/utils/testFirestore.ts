@@ -1,13 +1,21 @@
 // Test Firestore connection with enhanced diagnostics
-import { collection, addDoc, getDocs, deleteDoc, doc, enableNetwork } from 'firebase/firestore'
-import { db, auth } from '../lib/firebase'
+import {
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+  enableNetwork,
+} from 'firebase/firestore'
 import { signInAnonymously } from 'firebase/auth'
+
+import { db, auth } from '../lib/firebase'
 
 export async function testFirestoreConnection(): Promise<boolean> {
   console.log('🔥 Starting Enhanced Firestore connection test...')
   console.log('🌐 Environment:', import.meta.env.MODE)
   console.log('📍 Project ID:', import.meta.env.VITE_FIREBASE_PROJECT_ID)
-  
+
   try {
     // Step 0: Check authentication state
     console.log('🔐 Step 0: Checking authentication state...')
@@ -24,7 +32,7 @@ export async function testFirestoreConnection(): Promise<boolean> {
     } else {
       console.log('✅ User already authenticated:', auth.currentUser.uid)
     }
-    
+
     // Step 1: Test network connectivity
     console.log('🌐 Step 1: Testing Firestore network connectivity...')
     try {
@@ -34,40 +42,46 @@ export async function testFirestoreConnection(): Promise<boolean> {
       console.error('❌ Network error:', networkError)
       throw networkError
     }
-    
+
     console.log('📝 Step 2: Testing write operation...')
-    
+
     // Try to write a test document with minimal data
     const testData = {
       test: true,
       timestamp: new Date().toISOString(),
       message: 'Enhanced connection test',
       testId: Math.random().toString(36).substr(2, 9),
-      userId: auth.currentUser?.uid || 'anonymous'
+      userId: auth.currentUser?.uid || 'anonymous',
     }
-    
+
     console.log('📤 Attempting to write test data:', testData)
     const docRef = await addDoc(collection(db, 'test'), testData)
     console.log('✅ Step 2 SUCCESS: Wrote test document with ID:', docRef.id)
-    
+
     console.log('📖 Step 3: Testing read operation...')
-    
+
     // Try to read the test collection
     const querySnapshot = await getDocs(collection(db, 'test'))
-    console.log('✅ Step 3 SUCCESS: Read test collection, found', querySnapshot.size, 'documents')
-    
+    console.log(
+      '✅ Step 3 SUCCESS: Read test collection, found',
+      querySnapshot.size,
+      'documents'
+    )
+
     // Log some document data for verification
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach(doc => {
       console.log('📄 Document:', doc.id, '=>', doc.data())
     })
-    
+
     console.log('🗑️ Step 4: Testing delete operation...')
-    
+
     // Clean up - delete the test document
     await deleteDoc(doc(db, 'test', docRef.id))
     console.log('✅ Step 4 SUCCESS: Deleted test document')
-    
-    console.log('🎉 ALL TESTS PASSED! Firestore connection is working perfectly!')
+
+    console.log(
+      '🎉 ALL TESTS PASSED! Firestore connection is working perfectly!'
+    )
     return true
   } catch (error: any) {
     console.error('❌ ENHANCED FIRESTORE TEST FAILED!')
@@ -75,7 +89,7 @@ export async function testFirestoreConnection(): Promise<boolean> {
     console.error('📝 Error message:', error.message)
     console.error('🏷️ Error code:', error.code)
     console.error('📊 Error stack:', error.stack)
-    
+
     // Enhanced error analysis
     if (error.code === 'permission-denied') {
       console.error('🔒 PERMISSION DENIED - Possible causes:')
@@ -91,7 +105,10 @@ export async function testFirestoreConnection(): Promise<boolean> {
       console.error('⚠️ FAILED PRECONDITION - Possible causes:')
       console.error('   • Firestore database not created')
       console.error('   • Wrong database mode (Native vs Datastore)')
-    } else if (error.message?.includes('400') || error.message?.includes('Bad Request')) {
+    } else if (
+      error.message?.includes('400') ||
+      error.message?.includes('Bad Request')
+    ) {
       console.error('🚫 400 BAD REQUEST - Possible causes:')
       console.error('   • Invalid API key or project configuration')
       console.error('   • Firestore API not enabled for this project')
@@ -108,7 +125,7 @@ export async function testFirestoreConnection(): Promise<boolean> {
       console.error('   • CORS policy problems')
       console.error('   • Firestore gRPC connection blocked')
     }
-    
+
     return false
   }
 }

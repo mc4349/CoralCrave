@@ -67,15 +67,35 @@ export interface SocketEvents {
   // Client to Server
   joinLive: (data: { liveId: string; userId?: string }) => void
   leaveLive: (data: { liveId: string }) => void
-  placeBid: (data: { liveId: string; itemId: string; amount: number; userId: string; username: string }) => void
-  setMaxBid: (data: { liveId: string; itemId: string; maxAmount: number; userId: string }) => void
+  placeBid: (data: {
+    liveId: string
+    itemId: string
+    amount: number
+    userId: string
+    username: string
+  }) => void
+  setMaxBid: (data: {
+    liveId: string
+    itemId: string
+    maxAmount: number
+    userId: string
+  }) => void
   requestState: (data: { liveId: string; itemId: string }) => void
 
   // Server to Client
   auctionState: (data: AuctionState) => void
-  bidPlaced: (data: { itemId: string; bid: Bid; newPrice: number; leaderId?: string }) => void
+  bidPlaced: (data: {
+    itemId: string
+    bid: Bid
+    newPrice: number
+    leaderId?: string
+  }) => void
   timerUpdate: (data: { itemId: string; timeLeftMs: number }) => void
-  auctionClosed: (data: { itemId: string; winnerId?: string; finalPrice: number }) => void
+  auctionClosed: (data: {
+    itemId: string
+    winnerId?: string
+    finalPrice: number
+  }) => void
   error: (data: { message: string; code?: string }) => void
   viewerCountUpdate: (data: { liveId: string; count: number }) => void
 }
@@ -95,12 +115,12 @@ export const DEFAULT_AUCTION_CONFIG: AuctionConfig = {
   graceMs: 400,
   minBidIncrement: 1,
   maxProxyBids: 5,
-  bidHistoryLimit: 50
+  bidHistoryLimit: 50,
 }
 
 export const DEFAULT_INCREMENT_RULES: IncrementRule[] = [
   { lt: 20, inc: 1 },
   { lt: 100, inc: 2 },
   { lt: 500, inc: 5 },
-  { lt: Infinity, inc: 10 }
+  { lt: Infinity, inc: 10 },
 ]

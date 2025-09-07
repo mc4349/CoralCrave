@@ -1,4 +1,5 @@
 import { createClient, RedisClientType } from 'redis'
+
 import { AuctionState } from '../types/auction'
 import { logger } from '../utils/logger'
 
@@ -10,8 +11,8 @@ export class RedisService {
     this.client = createClient({
       url: process.env.REDIS_URL || 'redis://localhost:6379',
       socket: {
-        reconnectStrategy: false // Disable auto-reconnect for fallback to work
-      }
+        reconnectStrategy: false, // Disable auto-reconnect for fallback to work
+      },
     })
 
     this.client.on('error', (err: any) => {
@@ -54,9 +55,9 @@ export class RedisService {
       const key = `auction:${itemId}`
       const serializedState = JSON.stringify({
         ...state,
-        proxyBids: Array.from(state.proxyBids.entries()) // Convert Map to array for serialization
+        proxyBids: Array.from(state.proxyBids.entries()), // Convert Map to array for serialization
       })
-      
+
       await this.client.setEx(key, 3600, serializedState) // 1 hour TTL
       logger.debug(`Saved auction state for item ${itemId}`)
     } catch (error) {
@@ -69,19 +70,19 @@ export class RedisService {
     try {
       const key = `auction:${itemId}`
       const serializedState = await this.client.get(key)
-      
+
       if (!serializedState) {
         return null
       }
 
       const parsedState = JSON.parse(serializedState)
-      
+
       // Convert proxy bids array back to Map
       const proxyBids = new Map(parsedState.proxyBids || [])
-      
+
       return {
         ...parsedState,
-        proxyBids
+        proxyBids,
       }
     } catch (error) {
       logger.error(`Failed to get auction state for item ${itemId}:`, error)
@@ -112,10 +113,13 @@ export class RedisService {
             const proxyBids = new Map(parsedState.proxyBids || [])
             states.push({
               ...parsedState,
-              proxyBids
+              proxyBids,
             })
           } catch (parseError) {
-            logger.error(`Failed to parse auction state for key ${key}:`, parseError)
+            logger.error(
+              `Failed to parse auction state for key ${key}:`,
+              parseError
+            )
           }
         }
       }
@@ -133,7 +137,7 @@ export class RedisService {
       const key = `viewers:${liveId}`
       await this.client.sAdd(key, userId)
       await this.client.expire(key, 7200) // 2 hours TTL
-      
+
       const count = await this.client.sCard(key)
       return count
     } catch (error) {
@@ -146,11 +150,14 @@ export class RedisService {
     try {
       const key = `viewers:${liveId}`
       await this.client.sRem(key, userId)
-      
+
       const count = await this.client.sCard(key)
       return count
     } catch (error) {
-      logger.error(`Failed to remove viewer ${userId} from live ${liveId}:`, error)
+      logger.error(
+        `Failed to remove viewer ${userId} from live ${liveId}:`,
+        error
+      )
       return 0
     }
   }
@@ -176,25 +183,32 @@ export class RedisService {
   }
 
   // Rate limiting
-  async checkRateLimit(key: string, limit: number, windowMs: number): Promise<{ allowed: boolean; remaining: number }> {
+  async checkRateLimit(
+    key: string,
+    limit: number,
+    windowMs: number
+  ): Promise<{ allowed: boolean; remaining: number }> {
     try {
       const now = Date.now()
       const windowStart = now - windowMs
-      
+
       // Remove old entries
       await this.client.zRemRangeByScore(key, 0, windowStart)
-      
+
       // Count current requests
       const current = await this.client.zCard(key)
-      
+
       if (current >= limit) {
         return { allowed: false, remaining: 0 }
       }
-      
+
       // Add current request
-      await this.client.zAdd(key, { score: now, value: `${now}-${Math.random()}` })
+      await this.client.zAdd(key, {
+        score: now,
+        value: `${now}-${Math.random()}`,
+      })
       await this.client.expire(key, Math.ceil(windowMs / 1000))
-      
+
       return { allowed: true, remaining: limit - current - 1 }
     } catch (error) {
       logger.error(`Failed to check rate limit for key ${key}:`, error)
@@ -266,7 +280,8 @@ export class RedisService {
       const viewerKeys = await this.client.keys('viewers:*')
       for (const key of viewerKeys) {
         const ttl = await this.client.ttl(key)
-        if (ttl === -1) { // No expiration set
+        if (ttl === -1) {
+          // No expiration set
           await this.client.expire(key, 7200) // Set 2 hour expiration
         }
       }

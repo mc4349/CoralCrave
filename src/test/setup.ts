@@ -18,8 +18,8 @@ const firebaseConfig = {
 
 // Initialize Firebase with test config
 const app = initializeApp(firebaseConfig)
-const auth = getAuth(app)
-const db = getFirestore(app)
+getAuth(app)
+getFirestore(app)
 
 // Mock Agora SDK
 vi.mock('agora-rtc-sdk-ng', () => ({

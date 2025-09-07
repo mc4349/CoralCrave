@@ -1,17 +1,18 @@
-import { 
-  doc, 
-  getDoc, 
-  updateDoc, 
-  collection, 
-  query, 
-  where, 
-  getDocs, 
-  orderBy, 
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  orderBy,
   limit,
   serverTimestamp,
   Timestamp,
-  addDoc
+  addDoc,
 } from 'firebase/firestore'
+
 import { db } from '../lib/firebase'
 
 export interface UserProfile {
@@ -96,7 +97,7 @@ class UserService {
         type,
         data,
         read: false,
-        createdAt: serverTimestamp()
+        createdAt: serverTimestamp(),
       })
     } catch (error) {
       console.error('Error creating notification:', error)
@@ -109,7 +110,7 @@ class UserService {
     try {
       const userRef = doc(db, 'users', uid)
       const userSnap = await getDoc(userRef)
-      
+
       if (userSnap.exists()) {
         return userSnap.data() as UserProfile
       }
@@ -121,12 +122,15 @@ class UserService {
   }
 
   // Update user profile
-  async updateUserProfile(uid: string, updates: Partial<UserProfile>): Promise<void> {
+  async updateUserProfile(
+    uid: string,
+    updates: Partial<UserProfile>
+  ): Promise<void> {
     try {
       const userRef = doc(db, 'users', uid)
       await updateDoc(userRef, {
         ...updates,
-        lastActiveAt: serverTimestamp()
+        lastActiveAt: serverTimestamp(),
       })
     } catch (error) {
       console.error('Error updating user profile:', error)
@@ -135,7 +139,10 @@ class UserService {
   }
 
   // Search users by username
-  async searchUsers(searchTerm: string, limitCount: number = 20): Promise<UserProfile[]> {
+  async searchUsers(
+    searchTerm: string,
+    limitCount: number = 20
+  ): Promise<UserProfile[]> {
     try {
       const q = query(
         collection(db, 'users'),
@@ -143,7 +150,7 @@ class UserService {
         where('username', '<=', searchTerm + '\uf8ff'),
         limit(limitCount)
       )
-      
+
       const querySnapshot = await getDocs(q)
       return querySnapshot.docs.map(doc => doc.data() as UserProfile)
     } catch (error) {
@@ -157,55 +164,59 @@ class UserService {
     try {
       const followerRef = doc(db, 'users', followerId)
       const followeeRef = doc(db, 'users', followeeId)
-      
+
       // Get current data
       const [followerSnap, followeeSnap] = await Promise.all([
         getDoc(followerRef),
-        getDoc(followeeRef)
+        getDoc(followeeRef),
       ])
-      
+
       if (!followerSnap.exists() || !followeeSnap.exists()) {
         throw new Error('User not found')
       }
-      
+
       const followerData = followerSnap.data() as UserProfile
       const followeeData = followeeSnap.data() as UserProfile
-      
+
       // Check if already following
       if (followerData.follows?.includes(followeeId)) {
         return // Already following
       }
-      
+
       // Update follows array
       const updatedFollows = [...(followerData.follows || []), followeeId]
       const updatedFollowers = [...(followeeData.followers || []), followerId]
-      
+
       // Check if this is a mutual follow (follow back)
       const isFollowBack = followeeData.follows?.includes(followerId) || false
-      
+
       // Update both users
       await Promise.all([
         updateDoc(followerRef, {
           follows: updatedFollows,
           followingCount: updatedFollows.length,
-          lastActiveAt: serverTimestamp()
+          lastActiveAt: serverTimestamp(),
         }),
         updateDoc(followeeRef, {
           followers: updatedFollowers,
           followersCount: updatedFollowers.length,
-          lastActiveAt: serverTimestamp()
-        })
+          lastActiveAt: serverTimestamp(),
+        }),
       ])
-      
+
       // Create notification for the followee
-      await this.createNotification(followeeId, isFollowBack ? 'follow_back' : 'follow', {
-        fromUserId: followerId,
-        fromUsername: followerData.username,
-        fromPhotoURL: followerData.photoURL,
-        message: isFollowBack 
-          ? `${followerData.username} followed you back!` 
-          : `${followerData.username} started following you!`
-      })
+      await this.createNotification(
+        followeeId,
+        isFollowBack ? 'follow_back' : 'follow',
+        {
+          fromUserId: followerId,
+          fromUsername: followerData.username,
+          fromPhotoURL: followerData.photoURL,
+          message: isFollowBack
+            ? `${followerData.username} followed you back!`
+            : `${followerData.username} started following you!`,
+        }
+      )
     } catch (error) {
       console.error('Error following user:', error)
       throw error
@@ -216,36 +227,40 @@ class UserService {
     try {
       const followerRef = doc(db, 'users', followerId)
       const followeeRef = doc(db, 'users', followeeId)
-      
+
       // Get current data
       const [followerSnap, followeeSnap] = await Promise.all([
         getDoc(followerRef),
-        getDoc(followeeRef)
+        getDoc(followeeRef),
       ])
-      
+
       if (!followerSnap.exists() || !followeeSnap.exists()) {
         throw new Error('User not found')
       }
-      
+
       const followerData = followerSnap.data() as UserProfile
       const followeeData = followeeSnap.data() as UserProfile
-      
+
       // Update follows array
-      const updatedFollows = (followerData.follows || []).filter(id => id !== followeeId)
-      const updatedFollowers = (followeeData.followers || []).filter(id => id !== followerId)
-      
+      const updatedFollows = (followerData.follows || []).filter(
+        id => id !== followeeId
+      )
+      const updatedFollowers = (followeeData.followers || []).filter(
+        id => id !== followerId
+      )
+
       // Update both users
       await Promise.all([
         updateDoc(followerRef, {
           follows: updatedFollows,
           followingCount: updatedFollows.length,
-          lastActiveAt: serverTimestamp()
+          lastActiveAt: serverTimestamp(),
         }),
         updateDoc(followeeRef, {
           followers: updatedFollowers,
           followersCount: updatedFollowers.length,
-          lastActiveAt: serverTimestamp()
-        })
+          lastActiveAt: serverTimestamp(),
+        }),
       ])
     } catch (error) {
       console.error('Error unfollowing user:', error)
@@ -255,7 +270,7 @@ class UserService {
 
   // Get user analytics
   async getUserAnalytics(
-    userId: string, 
+    userId: string,
     period: 'hourly' | 'daily' | 'weekly' | 'monthly' = 'daily',
     limitCount: number = 30
   ): Promise<UserAnalytics[]> {
@@ -266,7 +281,7 @@ class UserService {
         orderBy('date', 'desc'),
         limit(limitCount)
       )
-      
+
       const querySnapshot = await getDocs(q)
       return querySnapshot.docs.map(doc => doc.data() as UserAnalytics)
     } catch (error) {
@@ -284,7 +299,7 @@ class UserService {
         orderBy('stats.totalRevenue', 'desc'),
         limit(limitCount)
       )
-      
+
       const querySnapshot = await getDocs(q)
       return querySnapshot.docs.map(doc => doc.data() as UserProfile)
     } catch (error) {
@@ -294,33 +309,39 @@ class UserService {
   }
 
   // Update user stats (called after order completion)
-  async updateUserStats(userId: string, orderAmount: number, isNewSale: boolean = true): Promise<void> {
+  async updateUserStats(
+    userId: string,
+    orderAmount: number,
+    isNewSale: boolean = true
+  ): Promise<void> {
     try {
       const userRef = doc(db, 'users', userId)
       const userSnap = await getDoc(userRef)
-      
+
       if (!userSnap.exists()) {
         throw new Error('User not found')
       }
-      
+
       const userData = userSnap.data() as UserProfile
       const currentStats = userData.stats || {
         totalPurchases: 0,
         totalSales: 0,
         totalRevenue: 0,
         averageRating: 0,
-        reviewCount: 0
+        reviewCount: 0,
       }
-      
+
       const updates: Partial<UserProfile> = {
         stats: {
           ...currentStats,
-          totalSales: isNewSale ? currentStats.totalSales + 1 : currentStats.totalSales,
-          totalRevenue: currentStats.totalRevenue + orderAmount
+          totalSales: isNewSale
+            ? currentStats.totalSales + 1
+            : currentStats.totalSales,
+          totalRevenue: currentStats.totalRevenue + orderAmount,
         },
-        lastActiveAt: serverTimestamp() as Timestamp
+        lastActiveAt: serverTimestamp() as Timestamp,
       }
-      
+
       await updateDoc(userRef, updates)
     } catch (error) {
       console.error('Error updating user stats:', error)
@@ -333,35 +354,34 @@ class UserService {
     try {
       const userRef = doc(db, 'users', userId)
       const userSnap = await getDoc(userRef)
-      
+
       if (!userSnap.exists()) {
         throw new Error('User not found')
       }
-      
+
       const userData = userSnap.data() as UserProfile
       const currentStats = userData.stats || {
         totalPurchases: 0,
         totalSales: 0,
         totalRevenue: 0,
         averageRating: 0,
-        reviewCount: 0
+        reviewCount: 0,
       }
-      
+
       const newReviewCount = currentStats.reviewCount + 1
-      const newAverageRating = (
-        (currentStats.averageRating * currentStats.reviewCount + newRating) / 
+      const newAverageRating =
+        (currentStats.averageRating * currentStats.reviewCount + newRating) /
         newReviewCount
-      )
-      
+
       const updates: Partial<UserProfile> = {
         stats: {
           ...currentStats,
           averageRating: Math.round(newAverageRating * 100) / 100, // Round to 2 decimal places
-          reviewCount: newReviewCount
+          reviewCount: newReviewCount,
         },
-        lastActiveAt: serverTimestamp() as Timestamp
+        lastActiveAt: serverTimestamp() as Timestamp,
       }
-      
+
       await updateDoc(userRef, updates)
     } catch (error) {
       console.error('Error updating user rating:', error)
@@ -384,7 +404,7 @@ class UserService {
         where('username', '==', username),
         limit(1)
       )
-      
+
       const querySnapshot = await getDocs(q)
       return querySnapshot.empty
     } catch (error) {
@@ -394,14 +414,16 @@ class UserService {
   }
 
   // Get user by referral code
-  async getUserByReferralCode(referralCode: string): Promise<UserProfile | null> {
+  async getUserByReferralCode(
+    referralCode: string
+  ): Promise<UserProfile | null> {
     try {
       const q = query(
         collection(db, 'users'),
         where('referralCode', '==', referralCode),
         limit(1)
       )
-      
+
       const querySnapshot = await getDocs(q)
       if (!querySnapshot.empty) {
         return querySnapshot.docs[0].data() as UserProfile

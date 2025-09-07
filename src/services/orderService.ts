@@ -1,18 +1,19 @@
-import { 
-  collection, 
-  doc, 
-  addDoc, 
-  updateDoc, 
-  getDoc, 
-  getDocs, 
-  query, 
-  where, 
-  orderBy, 
-  limit, 
-  onSnapshot, 
+import {
+  collection,
+  doc,
+  addDoc,
+  updateDoc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  limit,
+  onSnapshot,
   serverTimestamp,
-  Timestamp
+  Timestamp,
 } from 'firebase/firestore'
+
 import { db } from '../lib/firebase'
 
 export interface Order {
@@ -33,7 +34,14 @@ export interface Order {
   totalAmount: number
   paymentIntentId?: string
   stripeChargeId?: string
-  status: 'pending' | 'requires_capture' | 'captured' | 'shipped' | 'delivered' | 'cancelled' | 'refunded'
+  status:
+    | 'pending'
+    | 'requires_capture'
+    | 'captured'
+    | 'shipped'
+    | 'delivered'
+    | 'cancelled'
+    | 'refunded'
   shippingAddress: {
     name: string
     line1: string
@@ -99,14 +107,16 @@ export interface Referral {
 
 class OrderService {
   // Create a new order
-  async createOrder(orderData: Omit<Order, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+  async createOrder(
+    orderData: Omit<Order, 'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<string> {
     try {
       const order = {
         ...orderData,
         createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
       }
-      
+
       const docRef = await addDoc(collection(db, 'orders'), order)
       return docRef.id
     } catch (error) {
@@ -121,7 +131,7 @@ class OrderService {
       const orderRef = doc(db, 'orders', orderId)
       await updateDoc(orderRef, {
         ...updates,
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
       })
     } catch (error) {
       console.error('Error updating order:', error)
@@ -134,7 +144,7 @@ class OrderService {
     try {
       const orderRef = doc(db, 'orders', orderId)
       const orderSnap = await getDoc(orderRef)
-      
+
       if (orderSnap.exists()) {
         return { id: orderSnap.id, ...orderSnap.data() } as Order
       }
@@ -146,7 +156,10 @@ class OrderService {
   }
 
   // Get user's orders (as buyer)
-  async getUserOrders(userId: string, limitCount: number = 20): Promise<Order[]> {
+  async getUserOrders(
+    userId: string,
+    limitCount: number = 20
+  ): Promise<Order[]> {
     try {
       const q = query(
         collection(db, 'orders'),
@@ -154,11 +167,11 @@ class OrderService {
         orderBy('createdAt', 'desc'),
         limit(limitCount)
       )
-      
+
       const querySnapshot = await getDocs(q)
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       })) as Order[]
     } catch (error) {
       console.error('Error getting user orders:', error)
@@ -167,7 +180,10 @@ class OrderService {
   }
 
   // Get seller's orders
-  async getSellerOrders(sellerId: string, limitCount: number = 20): Promise<Order[]> {
+  async getSellerOrders(
+    sellerId: string,
+    limitCount: number = 20
+  ): Promise<Order[]> {
     try {
       const q = query(
         collection(db, 'orders'),
@@ -175,11 +191,11 @@ class OrderService {
         orderBy('createdAt', 'desc'),
         limit(limitCount)
       )
-      
+
       const querySnapshot = await getDocs(q)
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       })) as Order[]
     } catch (error) {
       console.error('Error getting seller orders:', error)
@@ -188,10 +204,13 @@ class OrderService {
   }
 
   // Subscribe to order updates
-  subscribeOrder(orderId: string, callback: (order: Order | null) => void): () => void {
+  subscribeOrder(
+    orderId: string,
+    callback: (order: Order | null) => void
+  ): () => void {
     const orderRef = doc(db, 'orders', orderId)
-    
-    return onSnapshot(orderRef, (doc) => {
+
+    return onSnapshot(orderRef, doc => {
       if (doc.exists()) {
         callback({ id: doc.id, ...doc.data() } as Order)
       } else {
@@ -201,17 +220,20 @@ class OrderService {
   }
 
   // Mark order as shipped
-  async markOrderShipped(orderId: string, trackingNumber?: string): Promise<void> {
+  async markOrderShipped(
+    orderId: string,
+    trackingNumber?: string
+  ): Promise<void> {
     try {
       const updates: Partial<Order> = {
         status: 'shipped',
-        shippedAt: serverTimestamp() as Timestamp
+        shippedAt: serverTimestamp() as Timestamp,
       }
-      
+
       if (trackingNumber) {
         updates.trackingNumber = trackingNumber
       }
-      
+
       await this.updateOrder(orderId, updates)
     } catch (error) {
       console.error('Error marking order as shipped:', error)
@@ -224,7 +246,7 @@ class OrderService {
     try {
       await this.updateOrder(orderId, {
         status: 'delivered',
-        deliveredAt: serverTimestamp() as Timestamp
+        deliveredAt: serverTimestamp() as Timestamp,
       })
     } catch (error) {
       console.error('Error marking order as delivered:', error)
@@ -233,14 +255,16 @@ class OrderService {
   }
 
   // Create a review
-  async createReview(reviewData: Omit<Review, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+  async createReview(
+    reviewData: Omit<Review, 'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<string> {
     try {
       const review = {
         ...reviewData,
         createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
       }
-      
+
       const docRef = await addDoc(collection(db, 'reviews'), review)
       return docRef.id
     } catch (error) {
@@ -250,7 +274,10 @@ class OrderService {
   }
 
   // Get reviews for a seller
-  async getSellerReviews(sellerId: string, limitCount: number = 20): Promise<Review[]> {
+  async getSellerReviews(
+    sellerId: string,
+    limitCount: number = 20
+  ): Promise<Review[]> {
     try {
       const q = query(
         collection(db, 'reviews'),
@@ -258,11 +285,11 @@ class OrderService {
         orderBy('createdAt', 'desc'),
         limit(limitCount)
       )
-      
+
       const querySnapshot = await getDocs(q)
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       })) as Review[]
     } catch (error) {
       console.error('Error getting seller reviews:', error)
@@ -271,7 +298,10 @@ class OrderService {
   }
 
   // Get reviews by user
-  async getUserReviews(userId: string, limitCount: number = 20): Promise<Review[]> {
+  async getUserReviews(
+    userId: string,
+    limitCount: number = 20
+  ): Promise<Review[]> {
     try {
       const q = query(
         collection(db, 'reviews'),
@@ -279,11 +309,11 @@ class OrderService {
         orderBy('createdAt', 'desc'),
         limit(limitCount)
       )
-      
+
       const querySnapshot = await getDocs(q)
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       })) as Review[]
     } catch (error) {
       console.error('Error getting user reviews:', error)
@@ -292,14 +322,16 @@ class OrderService {
   }
 
   // Create referral
-  async createReferral(referralData: Omit<Referral, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+  async createReferral(
+    referralData: Omit<Referral, 'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<string> {
     try {
       const referral = {
         ...referralData,
         createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
       }
-      
+
       const docRef = await addDoc(collection(db, 'referrals'), referral)
       return docRef.id
     } catch (error) {
@@ -316,11 +348,11 @@ class OrderService {
         where('referrerId', '==', userId),
         orderBy('createdAt', 'desc')
       )
-      
+
       const querySnapshot = await getDocs(q)
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       })) as Referral[]
     } catch (error) {
       console.error('Error getting user referrals:', error)
@@ -329,13 +361,16 @@ class OrderService {
   }
 
   // Qualify referral (when referee makes first purchase)
-  async qualifyReferral(referralId: string, qualifyingOrderId: string): Promise<void> {
+  async qualifyReferral(
+    referralId: string,
+    qualifyingOrderId: string
+  ): Promise<void> {
     try {
       await updateDoc(doc(db, 'referrals', referralId), {
         status: 'qualified',
         qualifyingOrderId,
         qualifiedAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
       })
     } catch (error) {
       console.error('Error qualifying referral:', error)
@@ -344,14 +379,16 @@ class OrderService {
   }
 
   // Create Crave Credit
-  async createCredit(creditData: Omit<CraveCredit, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+  async createCredit(
+    creditData: Omit<CraveCredit, 'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<string> {
     try {
       const credit = {
         ...creditData,
         createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
       }
-      
+
       const docRef = await addDoc(collection(db, 'credits'), credit)
       return docRef.id
     } catch (error) {
@@ -368,11 +405,11 @@ class OrderService {
         where('uid', '==', userId),
         orderBy('createdAt', 'desc')
       )
-      
+
       const querySnapshot = await getDocs(q)
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       })) as CraveCredit[]
     } catch (error) {
       console.error('Error getting user credits:', error)
@@ -388,10 +425,10 @@ class OrderService {
         where('uid', '==', userId),
         where('state', '==', 'available')
       )
-      
+
       const querySnapshot = await getDocs(q)
       let total = 0
-      
+
       querySnapshot.docs.forEach(doc => {
         const credit = doc.data() as CraveCredit
         // Check if credit hasn't expired
@@ -399,7 +436,7 @@ class OrderService {
           total += credit.amount
         }
       })
-      
+
       return total
     } catch (error) {
       console.error('Error getting available credit balance:', error)
@@ -408,7 +445,11 @@ class OrderService {
   }
 
   // Use credits for payment
-  async useCredits(userId: string, amount: number, orderId: string): Promise<void> {
+  async useCredits(
+    userId: string,
+    amount: number,
+    orderId: string
+  ): Promise<void> {
     try {
       const q = query(
         collection(db, 'credits'),
@@ -416,28 +457,28 @@ class OrderService {
         where('state', '==', 'available'),
         orderBy('createdAt', 'asc') // Use oldest credits first
       )
-      
+
       const querySnapshot = await getDocs(q)
       let remainingAmount = amount
-      
+
       for (const docSnap of querySnapshot.docs) {
         if (remainingAmount <= 0) break
-        
+
         const credit = docSnap.data() as CraveCredit
-        
+
         // Check if credit hasn't expired
         if (credit.expiresAt && credit.expiresAt.toMillis() <= Date.now()) {
           continue
         }
-        
+
         const useAmount = Math.min(remainingAmount, credit.amount)
-        
+
         if (useAmount === credit.amount) {
           // Use entire credit
           await updateDoc(doc(db, 'credits', docSnap.id), {
             state: 'spent',
             relatedId: orderId,
-            updatedAt: serverTimestamp()
+            updatedAt: serverTimestamp(),
           })
         } else {
           // Partial use - create new spent credit and update remaining
@@ -448,18 +489,18 @@ class OrderService {
             state: 'spent',
             description: `Used for order ${orderId}`,
             relatedId: orderId,
-            expiresAt: credit.expiresAt
+            expiresAt: credit.expiresAt,
           })
-          
+
           await updateDoc(doc(db, 'credits', docSnap.id), {
             amount: credit.amount - useAmount,
-            updatedAt: serverTimestamp()
+            updatedAt: serverTimestamp(),
           })
         }
-        
+
         remainingAmount -= useAmount
       }
-      
+
       if (remainingAmount > 0) {
         throw new Error('Insufficient credit balance')
       }
@@ -470,18 +511,21 @@ class OrderService {
   }
 
   // Award referral credits (called when user gets 5 qualified referrals)
-  async awardReferralCredits(userId: string, amount: number = 200): Promise<string> {
+  async awardReferralCredits(
+    userId: string,
+    amount: number = 200
+  ): Promise<string> {
     try {
       const expiresAt = new Date()
       expiresAt.setFullYear(expiresAt.getFullYear() + 1) // 1 year expiry
-      
+
       return await this.createCredit({
         uid: userId,
         type: 'referral',
         amount,
         state: 'available',
         description: `Referral bonus for 5 qualified referrals`,
-        expiresAt: Timestamp.fromDate(expiresAt)
+        expiresAt: Timestamp.fromDate(expiresAt),
       })
     } catch (error) {
       console.error('Error awarding referral credits:', error)

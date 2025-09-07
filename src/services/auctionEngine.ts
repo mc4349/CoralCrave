@@ -1,7 +1,15 @@
 // Auction Engine Service - Client-side interface for real-time bidding
-import { doc, collection, onSnapshot, query, orderBy, limit } from 'firebase/firestore'
-import { db } from '../lib/firebase'
+import {
+  doc,
+  collection,
+  onSnapshot,
+  query,
+  orderBy,
+  limit,
+} from 'firebase/firestore'
 import { io, Socket } from 'socket.io-client'
+
+import { db } from '../lib/firebase'
 
 export interface Bid {
   id: string
@@ -46,7 +54,7 @@ export const DEFAULT_INCREMENT_RULES: IncrementRule[] = [
   { lt: 20, inc: 1 },
   { lt: 100, inc: 2 },
   { lt: 500, inc: 5 },
-  { lt: Infinity, inc: 10 }
+  { lt: Infinity, inc: 10 },
 ]
 
 export class AuctionEngine {
@@ -65,10 +73,10 @@ export class AuctionEngine {
   private initializeSocket() {
     // Connect to the server's socket - temporarily use local server for testing CORS fixes
     const isProduction = window.location.hostname !== 'localhost'
-    const serverUrl = isProduction 
-      ? (import.meta.env.VITE_PROD_SERVER_URL || 'http://localhost:3001') // Temporarily use local server
-      : (import.meta.env.VITE_SERVER_URL || 'http://localhost:3001')
-    
+    const serverUrl = isProduction
+      ? import.meta.env.VITE_PROD_SERVER_URL || 'http://localhost:3001' // Temporarily use local server
+      : import.meta.env.VITE_SERVER_URL || 'http://localhost:3001'
+
     console.log('Connecting to auction server:', serverUrl)
     this.socket = io(serverUrl)
 
@@ -103,44 +111,61 @@ export class AuctionEngine {
         category: '',
         leadingBidderId: auctionState.leadingBidderId,
         timeLeftMs: auctionState.timeLeftMs,
-        incrementSchemeId: ''
+        incrementSchemeId: '',
       }
       this.onStateUpdate?.(item)
     })
 
     // Listen for bid updates
-    this.socket.on('bidPlaced', (data: { itemId: string; bid: Bid; newPrice: number; leaderId: string }) => {
-      this.onBidUpdate?.(data.bid)
-    })
+    this.socket.on(
+      'bidPlaced',
+      (data: {
+        itemId: string
+        bid: Bid
+        newPrice: number
+        leaderId: string
+      }) => {
+        this.onBidUpdate?.(data.bid)
+      }
+    )
 
     // Listen for timer updates
-    this.socket.on('timerUpdate', (data: { itemId: string; timeLeftMs: number }) => {
-      this.onTimerUpdate?.(data.itemId, data.timeLeftMs)
-    })
+    this.socket.on(
+      'timerUpdate',
+      (data: { itemId: string; timeLeftMs: number }) => {
+        this.onTimerUpdate?.(data.itemId, data.timeLeftMs)
+      }
+    )
 
     // Listen for auction closed events
-    this.socket.on('auctionClosed', (data: { itemId: string; winnerId?: string; finalPrice: number }) => {
-      console.log('Auction closed:', data)
-    })
+    this.socket.on(
+      'auctionClosed',
+      (data: { itemId: string; winnerId?: string; finalPrice: number }) => {
+        console.log('Auction closed:', data)
+      }
+    )
   }
 
   // Subscribe to auction state updates
-  subscribeToItem(itemId: string, callbacks: {
-    onStateUpdate?: (item: AuctionItem) => void
-    onBidUpdate?: (bid: Bid) => void
-    onTimerUpdate?: (itemId: string, timeLeftMs: number) => void
-  }) {
+  subscribeToItem(
+    itemId: string,
+    callbacks: {
+      onStateUpdate?: (item: AuctionItem) => void
+      onBidUpdate?: (bid: Bid) => void
+      onTimerUpdate?: (itemId: string, timeLeftMs: number) => void
+    }
+  ) {
     this.onStateUpdate = callbacks.onStateUpdate
     this.onBidUpdate = callbacks.onBidUpdate
     this.onTimerUpdate = callbacks.onTimerUpdate
 
     // Subscribe to item state
     const itemRef = doc(db, 'livestreams', this.liveId, 'items', itemId)
-    const unsubscribeItem = onSnapshot(itemRef, (doc) => {
+    const unsubscribeItem = onSnapshot(itemRef, doc => {
       if (doc.exists()) {
         const item = { id: doc.id, ...doc.data() } as AuctionItem
         this.onStateUpdate?.(item)
-        
+
         // Calculate time left if auction is running
         if (item.status === 'running' && item.endAt) {
           const timeLeft = item.endAt.toMillis() - Date.now()
@@ -150,10 +175,17 @@ export class AuctionEngine {
     })
 
     // Subscribe to latest bids
-    const bidsRef = collection(db, 'livestreams', this.liveId, 'items', itemId, 'bids')
+    const bidsRef = collection(
+      db,
+      'livestreams',
+      this.liveId,
+      'items',
+      itemId,
+      'bids'
+    )
     const bidsQuery = query(bidsRef, orderBy('timestamp', 'desc'), limit(10))
-    const unsubscribeBids = onSnapshot(bidsQuery, (snapshot) => {
-      snapshot.docChanges().forEach((change) => {
+    const unsubscribeBids = onSnapshot(bidsQuery, snapshot => {
+      snapshot.docChanges().forEach(change => {
         if (change.type === 'added') {
           const bid = { id: change.doc.id, ...change.doc.data() } as Bid
           this.onBidUpdate?.(bid)
@@ -165,7 +197,12 @@ export class AuctionEngine {
   }
 
   // Place a bid
-  async placeBid(itemId: string, amount: number, userId: string, username: string): Promise<void> {
+  async placeBid(
+    itemId: string,
+    amount: number,
+    userId: string,
+    username: string
+  ): Promise<void> {
     try {
       if (!this.socket) {
         throw new Error('Socket not connected')
@@ -177,7 +214,7 @@ export class AuctionEngine {
         itemId,
         amount,
         userId,
-        username
+        username,
       })
     } catch (error) {
       console.error('Failed to place bid:', error)
@@ -186,7 +223,11 @@ export class AuctionEngine {
   }
 
   // Set maximum bid for proxy bidding
-  async setMaxBid(itemId: string, maxAmount: number, userId: string): Promise<void> {
+  async setMaxBid(
+    itemId: string,
+    maxAmount: number,
+    userId: string
+  ): Promise<void> {
     try {
       if (!this.socket) {
         throw new Error('Socket not connected')
@@ -197,7 +238,7 @@ export class AuctionEngine {
         liveId: this.liveId,
         itemId,
         maxAmount,
-        userId
+        userId,
       })
     } catch (error) {
       console.error('Failed to set max bid:', error)
@@ -206,7 +247,10 @@ export class AuctionEngine {
   }
 
   // Calculate minimum bid amount based on current price and increment rules
-  calculateMinimumBid(currentPrice: number, incrementRules: IncrementRule[] = DEFAULT_INCREMENT_RULES): number {
+  calculateMinimumBid(
+    currentPrice: number,
+    incrementRules: IncrementRule[] = DEFAULT_INCREMENT_RULES
+  ): number {
     for (const rule of incrementRules) {
       if (currentPrice < rule.lt) {
         return currentPrice + rule.inc
@@ -216,30 +260,33 @@ export class AuctionEngine {
   }
 
   // Validate bid amount
-  validateBid(amount: number, currentPrice: number, incrementRules?: IncrementRule[]): {
+  validateBid(
+    amount: number,
+    currentPrice: number,
+    incrementRules?: IncrementRule[]
+  ): {
     valid: boolean
     minimumBid: number
     error?: string
   } {
     const minimumBid = this.calculateMinimumBid(currentPrice, incrementRules)
-    
+
     if (amount < minimumBid) {
       return {
         valid: false,
         minimumBid,
-        error: `Minimum bid is $${minimumBid.toFixed(2)}`
+        error: `Minimum bid is $${minimumBid.toFixed(2)}`,
       }
     }
 
     return { valid: true, minimumBid }
   }
 
-
   // Clean up subscriptions
   unsubscribe() {
     this.unsubscribers.forEach(unsubscribe => unsubscribe())
     this.unsubscribers = []
-    
+
     // Disconnect socket
     if (this.socket) {
       this.socket.emit('leaveLive', { liveId: this.liveId })
@@ -273,10 +320,10 @@ export class AuctionEngine {
 // Utility functions for auction timing
 export const formatTimeLeft = (timeLeftMs: number): string => {
   if (timeLeftMs <= 0) return '0s'
-  
+
   const seconds = Math.ceil(timeLeftMs / 1000)
   if (seconds < 60) return `${seconds}s`
-  
+
   const minutes = Math.floor(seconds / 60)
   const remainingSeconds = seconds % 60
   return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`

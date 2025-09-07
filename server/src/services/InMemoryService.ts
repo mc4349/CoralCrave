@@ -19,7 +19,7 @@ export class InMemoryService {
     try {
       this.auctionStates.set(itemId, {
         ...state,
-        proxyBids: new Map(state.proxyBids) // Clone the Map
+        proxyBids: new Map(state.proxyBids), // Clone the Map
       })
       logger.debug(`Saved auction state for item ${itemId} (in-memory)`)
     } catch (error) {
@@ -32,10 +32,10 @@ export class InMemoryService {
     try {
       const state = this.auctionStates.get(itemId)
       if (!state) return null
-      
+
       return {
         ...state,
-        proxyBids: new Map(state.proxyBids) // Clone the Map
+        proxyBids: new Map(state.proxyBids), // Clone the Map
       }
     } catch (error) {
       logger.error(`Failed to get auction state for item ${itemId}:`, error)
@@ -56,7 +56,7 @@ export class InMemoryService {
     try {
       return Array.from(this.auctionStates.values()).map(state => ({
         ...state,
-        proxyBids: new Map(state.proxyBids)
+        proxyBids: new Map(state.proxyBids),
       }))
     } catch (error) {
       logger.error('Failed to get all auction states:', error)
@@ -90,7 +90,10 @@ export class InMemoryService {
       }
       return 0
     } catch (error) {
-      logger.error(`Failed to remove viewer ${userId} from live ${liveId}:`, error)
+      logger.error(
+        `Failed to remove viewer ${userId} from live ${liveId}:`,
+        error
+      )
       return 0
     }
   }
@@ -114,21 +117,25 @@ export class InMemoryService {
   }
 
   // Rate limiting
-  async checkRateLimit(key: string, limit: number, windowMs: number): Promise<{ allowed: boolean; remaining: number }> {
+  async checkRateLimit(
+    key: string,
+    limit: number,
+    windowMs: number
+  ): Promise<{ allowed: boolean; remaining: number }> {
     try {
       const now = Date.now()
       const rateLimitData = this.rateLimits.get(key)
-      
+
       if (!rateLimitData || now > rateLimitData.resetTime) {
         // Reset or create new rate limit window
         this.rateLimits.set(key, { count: 1, resetTime: now + windowMs })
         return { allowed: true, remaining: limit - 1 }
       }
-      
+
       if (rateLimitData.count >= limit) {
         return { allowed: false, remaining: 0 }
       }
-      
+
       rateLimitData.count++
       return { allowed: true, remaining: limit - rateLimitData.count }
     } catch (error) {
@@ -141,7 +148,7 @@ export class InMemoryService {
   // Cache management
   async set(key: string, value: string, ttlSeconds?: number): Promise<void> {
     try {
-      const expiry = ttlSeconds ? Date.now() + (ttlSeconds * 1000) : undefined
+      const expiry = ttlSeconds ? Date.now() + ttlSeconds * 1000 : undefined
       this.cache.set(key, { value, expiry })
     } catch (error) {
       logger.error(`Failed to set cache key ${key}:`, error)
@@ -153,12 +160,12 @@ export class InMemoryService {
     try {
       const cached = this.cache.get(key)
       if (!cached) return null
-      
+
       if (cached.expiry && Date.now() > cached.expiry) {
         this.cache.delete(key)
         return null
       }
-      
+
       return cached.value
     } catch (error) {
       logger.error(`Failed to get cache key ${key}:`, error)
@@ -194,21 +201,21 @@ export class InMemoryService {
   async cleanup(): Promise<void> {
     try {
       const now = Date.now()
-      
+
       // Clean up expired cache entries
       for (const [key, cached] of this.cache.entries()) {
         if (cached.expiry && now > cached.expiry) {
           this.cache.delete(key)
         }
       }
-      
+
       // Clean up expired rate limits
       for (const [key, rateLimitData] of this.rateLimits.entries()) {
         if (now > rateLimitData.resetTime) {
           this.rateLimits.delete(key)
         }
       }
-      
+
       logger.debug('In-memory cleanup completed')
     } catch (error) {
       logger.error('In-memory cleanup failed:', error)

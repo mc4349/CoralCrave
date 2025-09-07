@@ -1,5 +1,6 @@
 import { initializeApp, getApps, cert } from 'firebase-admin/app'
 import { getFirestore, Firestore, FieldValue } from 'firebase-admin/firestore'
+
 import { Bid, AuctionItem } from '../types/auction'
 import { logger } from '../utils/logger'
 
@@ -10,16 +11,16 @@ export class FirebaseService {
     // Initialize Firebase Admin if not already initialized
     if (getApps().length === 0) {
       const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT_KEY
-      
+
       if (serviceAccount) {
         initializeApp({
           credential: cert(JSON.parse(serviceAccount)),
-          projectId: process.env.FIREBASE_PROJECT_ID
+          projectId: process.env.FIREBASE_PROJECT_ID,
         })
       } else {
         // Use default credentials in production (Cloud Run)
         initializeApp({
-          projectId: process.env.FIREBASE_PROJECT_ID
+          projectId: process.env.FIREBASE_PROJECT_ID,
         })
       }
     }
@@ -45,7 +46,7 @@ export class FirebaseService {
 
       const updateData: any = {
         status,
-        updatedAt: FieldValue.serverTimestamp()
+        updatedAt: FieldValue.serverTimestamp(),
       }
 
       if (endAt !== undefined) {
@@ -85,7 +86,7 @@ export class FirebaseService {
         amount: bid.amount,
         timestamp: new Date(bid.timestamp),
         source: bid.source,
-        isValid: bid.isValid
+        isValid: bid.isValid,
       })
 
       logger.debug(`Saved bid ${bid.id} for item ${bid.itemId}`)
@@ -105,7 +106,7 @@ export class FirebaseService {
         .doc(itemId)
 
       const doc = await itemRef.get()
-      
+
       if (!doc.exists) {
         return null
       }
@@ -129,7 +130,7 @@ export class FirebaseService {
         winnerId: data.winnerId,
         orderId: data.orderId,
         createdAt: data.createdAt?.toMillis() || Date.now(),
-        updatedAt: data.updatedAt?.toMillis() || Date.now()
+        updatedAt: data.updatedAt?.toMillis() || Date.now(),
       }
     } catch (error) {
       logger.error(`Failed to get item ${itemId}:`, error)
@@ -142,14 +143,14 @@ export class FirebaseService {
     try {
       const liveRef = this.db.collection('livestreams').doc(liveId)
       const doc = await liveRef.get()
-      
+
       if (!doc.exists) {
         return null
       }
 
       return {
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       }
     } catch (error) {
       logger.error(`Failed to get livestream ${liveId}:`, error)
@@ -168,7 +169,7 @@ export class FirebaseService {
       // Get item and livestream details
       const [item, livestream] = await Promise.all([
         this.getItem(liveId, itemId),
-        this.getLivestream(liveId)
+        this.getLivestream(liveId),
       ])
 
       if (!item || !livestream) {
@@ -178,7 +179,7 @@ export class FirebaseService {
       // Get buyer details
       const buyerRef = this.db.collection('users').doc(buyerId)
       const buyerDoc = await buyerRef.get()
-      
+
       if (!buyerDoc.exists) {
         throw new Error('Buyer not found')
       }
@@ -203,17 +204,25 @@ export class FirebaseService {
         fees: Math.round(amount * 0.05 * 100) / 100, // 5% platform fee
         tax: 0, // Tax calculation would be more complex
         shippingCost: item.shipping,
-        totalAmount: amount + Math.round(amount * 0.05 * 100) / 100 + item.shipping,
+        totalAmount:
+          amount + Math.round(amount * 0.05 * 100) / 100 + item.shipping,
         status: 'pending',
         shippingAddress: buyerData.shippingAddress || {},
         createdAt: FieldValue.serverTimestamp(),
-        updatedAt: FieldValue.serverTimestamp()
+        updatedAt: FieldValue.serverTimestamp(),
       }
 
       await orderRef.set(orderData)
 
       // Update item with order ID
-      await this.updateItemStatus(liveId, itemId, 'sold', undefined, buyerId, amount)
+      await this.updateItemStatus(
+        liveId,
+        itemId,
+        'sold',
+        undefined,
+        buyerId,
+        amount
+      )
       await this.db
         .collection('livestreams')
         .doc(liveId)
@@ -235,7 +244,7 @@ export class FirebaseService {
       const liveRef = this.db.collection('livestreams').doc(liveId)
       await liveRef.update({
         viewerCount: count,
-        updatedAt: FieldValue.serverTimestamp()
+        updatedAt: FieldValue.serverTimestamp(),
       })
     } catch (error) {
       logger.error(`Failed to update viewer count for ${liveId}:`, error)
@@ -247,14 +256,14 @@ export class FirebaseService {
     try {
       const userRef = this.db.collection('users').doc(userId)
       const doc = await userRef.get()
-      
+
       if (!doc.exists) {
         return null
       }
 
       return {
         uid: doc.id,
-        ...doc.data()
+        ...doc.data(),
       }
     } catch (error) {
       logger.error(`Failed to get user ${userId}:`, error)
@@ -266,11 +275,11 @@ export class FirebaseService {
   async updateUserStats(userId: string, saleAmount: number): Promise<void> {
     try {
       const userRef = this.db.collection('users').doc(userId)
-      
+
       await userRef.update({
         'stats.totalSales': FieldValue.increment(1),
         'stats.totalRevenue': FieldValue.increment(saleAmount),
-        lastActiveAt: FieldValue.serverTimestamp()
+        lastActiveAt: FieldValue.serverTimestamp(),
       })
 
       logger.debug(`Updated stats for user ${userId}`)
@@ -291,7 +300,7 @@ export class FirebaseService {
 
       return snapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       }))
     } catch (error) {
       logger.error('Failed to get active livestreams:', error)
@@ -329,7 +338,7 @@ export class FirebaseService {
           winnerId: data.winnerId,
           orderId: data.orderId,
           createdAt: data.createdAt?.toMillis() || Date.now(),
-          updatedAt: data.updatedAt?.toMillis() || Date.now()
+          updatedAt: data.updatedAt?.toMillis() || Date.now(),
         }
       })
     } catch (error) {
@@ -349,7 +358,7 @@ export class FirebaseService {
 
       await chatRef.set({
         ...message,
-        timestamp: FieldValue.serverTimestamp()
+        timestamp: FieldValue.serverTimestamp(),
       })
     } catch (error) {
       logger.error(`Failed to save chat message for ${liveId}:`, error)

@@ -34,11 +34,18 @@ export const validatePassword = (password: string): ValidationResult => {
   }
 
   if (password.length < 8) {
-    return { isValid: false, message: 'Password must be at least 8 characters long' }
+    return {
+      isValid: false,
+      message: 'Password must be at least 8 characters long',
+    }
   }
 
   if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
-    return { isValid: false, message: 'Password must contain at least one uppercase letter, one lowercase letter, and one number' }
+    return {
+      isValid: false,
+      message:
+        'Password must contain at least one uppercase letter, one lowercase letter, and one number',
+    }
   }
 
   return { isValid: true }
@@ -51,15 +58,24 @@ export const validateUsername = (username: string): ValidationResult => {
   }
 
   if (username.length < 3) {
-    return { isValid: false, message: 'Username must be at least 3 characters long' }
+    return {
+      isValid: false,
+      message: 'Username must be at least 3 characters long',
+    }
   }
 
   if (username.length > 20) {
-    return { isValid: false, message: 'Username must be less than 20 characters long' }
+    return {
+      isValid: false,
+      message: 'Username must be less than 20 characters long',
+    }
   }
 
   if (!/^[a-zA-Z0-9_]+$/.test(username)) {
-    return { isValid: false, message: 'Username can only contain letters, numbers, and underscores' }
+    return {
+      isValid: false,
+      message: 'Username can only contain letters, numbers, and underscores',
+    }
   }
 
   return { isValid: true }
@@ -72,18 +88,27 @@ export const validateStreamTitle = (title: string): ValidationResult => {
   }
 
   if (title.length < 3) {
-    return { isValid: false, message: 'Stream title must be at least 3 characters long' }
+    return {
+      isValid: false,
+      message: 'Stream title must be at least 3 characters long',
+    }
   }
 
   if (title.length > 100) {
-    return { isValid: false, message: 'Stream title must be less than 100 characters long' }
+    return {
+      isValid: false,
+      message: 'Stream title must be less than 100 characters long',
+    }
   }
 
   return { isValid: true }
 }
 
 // Generic field validation
-export const validateField = (value: string, rules: ValidationRules): ValidationResult => {
+export const validateField = (
+  value: string,
+  rules: ValidationRules
+): ValidationResult => {
   // Required check
   if (rules.required && !value.trim()) {
     return { isValid: false, message: 'This field is required' }
@@ -96,12 +121,18 @@ export const validateField = (value: string, rules: ValidationRules): Validation
 
   // Min length check
   if (rules.minLength && value.length < rules.minLength) {
-    return { isValid: false, message: `Must be at least ${rules.minLength} characters long` }
+    return {
+      isValid: false,
+      message: `Must be at least ${rules.minLength} characters long`,
+    }
   }
 
   // Max length check
   if (rules.maxLength && value.length > rules.maxLength) {
-    return { isValid: false, message: `Must be less than ${rules.maxLength} characters long` }
+    return {
+      isValid: false,
+      message: `Must be less than ${rules.maxLength} characters long`,
+    }
   }
 
   // Pattern check
@@ -128,7 +159,10 @@ export const sanitizeInput = (input: string): string => {
 }
 
 // Validate form data
-export const validateForm = (data: Record<string, string>, rules: Record<string, ValidationRules>): Record<string, ValidationResult> => {
+export const validateForm = (
+  data: Record<string, string>,
+  rules: Record<string, ValidationRules>
+): Record<string, ValidationResult> => {
   const results: Record<string, ValidationResult> = {}
 
   Object.keys(rules).forEach(field => {
@@ -139,6 +173,8 @@ export const validateForm = (data: Record<string, string>, rules: Record<string,
 }
 
 // Check if form is valid
-export const isFormValid = (validationResults: Record<string, ValidationResult>): boolean => {
+export const isFormValid = (
+  validationResults: Record<string, ValidationResult>
+): boolean => {
   return Object.values(validationResults).every(result => result.isValid)
 }

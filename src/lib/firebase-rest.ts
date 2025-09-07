@@ -32,7 +32,9 @@ class FirestoreRestClient {
       return { stringValue: value }
     }
     if (typeof value === 'number') {
-      return Number.isInteger(value) ? { integerValue: value.toString() } : { doubleValue: value }
+      return Number.isInteger(value)
+        ? { integerValue: value.toString() }
+        : { doubleValue: value }
     }
     if (typeof value === 'boolean') {
       return { booleanValue: value }
@@ -43,8 +45,8 @@ class FirestoreRestClient {
     if (Array.isArray(value)) {
       return {
         arrayValue: {
-          values: value.map(item => this.convertToFirestoreValue(item))
-        }
+          values: value.map(item => this.convertToFirestoreValue(item)),
+        },
       }
     }
     if (typeof value === 'object') {
@@ -64,18 +66,23 @@ class FirestoreRestClient {
 
   private convertFromFirestoreValue(value: any): any {
     if (!value) return null
-    
+
     if (value.nullValue !== undefined) return null
     if (value.stringValue !== undefined) return value.stringValue
     if (value.integerValue !== undefined) return parseInt(value.integerValue)
     if (value.doubleValue !== undefined) return value.doubleValue
     if (value.booleanValue !== undefined) return value.booleanValue
-    if (value.timestampValue !== undefined) return new Date(value.timestampValue)
-    
+    if (value.timestampValue !== undefined)
+      return new Date(value.timestampValue)
+
     if (value.arrayValue) {
-      return value.arrayValue.values?.map((item: any) => this.convertFromFirestoreValue(item)) || []
+      return (
+        value.arrayValue.values?.map((item: any) =>
+          this.convertFromFirestoreValue(item)
+        ) || []
+      )
     }
-    
+
     if (value.mapValue) {
       const result: Record<string, any> = {}
       for (const [key, val] of Object.entries(value.mapValue.fields || {})) {
@@ -83,19 +90,22 @@ class FirestoreRestClient {
       }
       return result
     }
-    
+
     return value
   }
 
-  async createDocument(collection: string, data: Record<string, any>): Promise<string> {
+  async createDocument(
+    collection: string,
+    data: Record<string, any>
+  ): Promise<string> {
     try {
       console.log('🔥 Creating document via REST API...')
       const token = await this.getAuthToken()
-      
+
       const document: FirestoreDocument = {
-        fields: {}
+        fields: {},
       }
-      
+
       // Convert data to Firestore format
       for (const [key, value] of Object.entries(data)) {
         if (key === 'createdAt' || key === 'updatedAt') {
@@ -104,27 +114,26 @@ class FirestoreRestClient {
           document.fields[key] = this.convertToFirestoreValue(value)
         }
       }
-      
+
       const response = await fetch(`${this.baseUrl}/${collection}`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(document)
+        body: JSON.stringify(document),
       })
-      
+
       if (!response.ok) {
         const errorText = await response.text()
         console.error('REST API Error:', response.status, errorText)
         throw new Error(`REST API Error: ${response.status} - ${errorText}`)
       }
-      
+
       const result = await response.json()
       const documentId = result.name.split('/').pop()
       console.log('✅ Document created via REST API:', documentId)
       return documentId
-      
     } catch (error: any) {
       console.error('❌ REST API create failed:', error)
       throw error
@@ -134,44 +143,50 @@ class FirestoreRestClient {
   async getDocument(collection: string, documentId: string): Promise<any> {
     try {
       const token = await this.getAuthToken()
-      
-      const response = await fetch(`${this.baseUrl}/${collection}/${documentId}`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`
+
+      const response = await fetch(
+        `${this.baseUrl}/${collection}/${documentId}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      })
-      
+      )
+
       if (!response.ok) {
         if (response.status === 404) {
           return null
         }
         throw new Error(`REST API Error: ${response.status}`)
       }
-      
+
       const result = await response.json()
       const data: Record<string, any> = { id: documentId }
-      
+
       for (const [key, value] of Object.entries(result.fields || {})) {
         data[key] = this.convertFromFirestoreValue(value)
       }
-      
+
       return data
-      
     } catch (error: any) {
       console.error('❌ REST API get failed:', error)
       throw error
     }
   }
 
-  async updateDocument(collection: string, documentId: string, updates: Record<string, any>): Promise<void> {
+  async updateDocument(
+    collection: string,
+    documentId: string,
+    updates: Record<string, any>
+  ): Promise<void> {
     try {
       const token = await this.getAuthToken()
-      
+
       const document: FirestoreDocument = {
-        fields: {}
+        fields: {},
       }
-      
+
       // Convert updates to Firestore format
       for (const [key, value] of Object.entries(updates)) {
         if (key === 'updatedAt') {
@@ -180,24 +195,26 @@ class FirestoreRestClient {
           document.fields[key] = this.convertToFirestoreValue(value)
         }
       }
-      
+
       const updateMask = Object.keys(updates).join(',')
-      
-      const response = await fetch(`${this.baseUrl}/${collection}/${documentId}?updateMask.fieldPaths=${updateMask}`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(document)
-      })
-      
+
+      const response = await fetch(
+        `${this.baseUrl}/${collection}/${documentId}?updateMask.fieldPaths=${updateMask}`,
+        {
+          method: 'PATCH',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(document),
+        }
+      )
+
       if (!response.ok) {
         throw new Error(`REST API Error: ${response.status}`)
       }
-      
+
       console.log('✅ Document updated via REST API')
-      
     } catch (error: any) {
       console.error('❌ REST API update failed:', error)
       throw error
