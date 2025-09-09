@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import pkg from "agora-access-token";
 const { RtcRole, RtcTokenBuilder } = pkg;
 
-dotenv.config();
+dotenv.config({ path: './server/.env' });
 const app = express();
 app.use(cors());
 
@@ -17,7 +17,8 @@ app.get("/agora/token", (req, res) => {
     if (!channel) return res.status(400).json({ error: "channel required" });
 
     const roleParam = String(req.query.role || "audience");
-    const role = roleParam === "publisher" ? RtcRole.PUBLISHER : RtcRole.SUBSCRIBER;
+    const role = roleParam === "publisher" ? RtcRole.PUBLISHER :
+                 roleParam === "subscriber" ? RtcRole.SUBSCRIBER : RtcRole.SUBSCRIBER;
 
     const ttl = 2 * 60 * 60; // 2h
     const exp = Math.floor(Date.now() / 1000) + ttl;

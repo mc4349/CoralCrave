@@ -120,6 +120,7 @@ const Header = () => {
                 >
                   Go Live
                 </Link>
+
                 <Link
                   to='/activity'
                   className='text-slate-300 hover:text-cyan-300 font-medium transition-colors duration-200 px-3 py-2 rounded-md hover:bg-slate-700/30'
@@ -134,6 +135,26 @@ const Header = () => {
           <div className='flex items-center space-x-2 lg:space-x-4'>
             {currentUser ? (
               <>
+                {/* Cart - Mobile optimized */}
+                <button
+                  onClick={() => navigate('/cart')}
+                  className='p-2 text-slate-400 hover:text-cyan-300 relative transition-colors duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center'
+                >
+                  <svg
+                    className='h-5 w-5 sm:h-6 sm:w-6'
+                    fill='none'
+                    stroke='currentColor'
+                    viewBox='0 0 24 24'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth={2}
+                      d='M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.1 5H19M7 13l-1.1 5M7 13v8a2 2 0 002 2h10a2 2 0 002-2v-3'
+                    />
+                  </svg>
+                </button>
+
                 {/* Notifications - Mobile optimized */}
                 <button
                   onClick={() => navigate('/notifications')}
@@ -345,13 +366,7 @@ const Header = () => {
 
               {/* Mobile Navigation Links */}
               <nav className='space-y-2'>
-                <Link
-                  to='/'
-                  className='block px-4 py-3 text-slate-300 hover:bg-slate-700/50 hover:text-cyan-300 rounded-lg transition-colors duration-200 font-medium'
-                  onClick={() => setShowMobileMenu(false)}
-                >
-                  🏠 Home
-                </Link>
+
                 <Link
                   to='/explore'
                   className='block px-4 py-3 text-slate-300 hover:bg-slate-700/50 hover:text-cyan-300 rounded-lg transition-colors duration-200 font-medium'
@@ -374,6 +389,13 @@ const Header = () => {
                       onClick={() => setShowMobileMenu(false)}
                     >
                       📊 Activity
+                    </Link>
+                    <Link
+                      to='/cart'
+                      className='block px-4 py-3 text-slate-300 hover:bg-slate-700/50 hover:text-cyan-300 rounded-lg transition-colors duration-200 font-medium'
+                      onClick={() => setShowMobileMenu(false)}
+                    >
+                      🛒 Cart
                     </Link>
                     <Link
                       to='/notifications'

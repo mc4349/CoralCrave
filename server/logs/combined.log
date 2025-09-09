@@ -1308,3 +1308,10 @@ AggregateError:
 2025-09-07 12:24:36 [INFO]: Client connected: Ee1ADcYjfUmrofP1AAA- {"service":"coralcrave-auction-engine"}
 2025-09-07 12:24:37 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1757262261352, uid: 629587, role: subscriber {"service":"coralcrave-auction-engine"}
 2025-09-07 12:24:37 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1757262261352, uid: 436442, role: subscriber {"service":"coralcrave-auction-engine"}
+2025-09-07 14:34:33 [INFO]: Client connected: InC5-YJZ4c_sbw3WAABB {"service":"coralcrave-auction-engine"}
+2025-09-07 14:34:33 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1757262261352, uid: 938441, role: subscriber {"service":"coralcrave-auction-engine"}
+2025-09-07 14:34:33 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1757262261352, uid: 232866, role: subscriber {"service":"coralcrave-auction-engine"}
+2025-09-07 14:35:07 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1757270106719, uid: 905968, role: publisher {"service":"coralcrave-auction-engine"}
+2025-09-07 14:35:12 [INFO]: Client connected: bziosnJ7LEu5CwmnAABE {"service":"coralcrave-auction-engine"}
+2025-09-07 14:35:12 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1757270106719, uid: 798862, role: subscriber {"service":"coralcrave-auction-engine"}
+2025-09-07 14:35:12 [INFO]: Generated Agora token for channel: coralcrave_DnGDzWzezAXt21zlXqp9VcTe8P23_1757270106719, uid: 491490, role: subscriber {"service":"coralcrave-auction-engine"}

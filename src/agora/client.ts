@@ -5,7 +5,7 @@ export function createClient(): IAgoraRTCClient {
   return AgoraRTC.createClient({ mode: "live", codec: "vp8" });
 }
 
-export async function fetchToken(channel: string, role: "publisher" | "audience") {
+export async function fetchToken(channel: string, role: "publisher" | "audience" | "subscriber") {
   const url = import.meta.env.VITE_TOKEN_SERVER_URL;
   if (!url) throw new Error("Missing VITE_TOKEN_SERVER_URL");
   const res = await fetch(`${url}?channel=${encodeURIComponent(channel)}&role=${role}`);

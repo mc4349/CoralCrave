@@ -5,137 +5,162 @@ service cloud.firestore {
     match /users/{userId} {
       allow read: if request.auth != null;
       allow write: if request.auth != null && request.auth.uid == userId;
-      
+
       // User's private data
       match /private/{document} {
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
     }
-    
-    // Livestreams collection
-    match /livestreams/{liveId} {
+
+    // Livestreams collection - updated for atomic bidding
+    match /livestreams/{streamId} {
       allow read: if true; // Public read for viewers
-      allow create: if request.auth != null && request.auth.uid == request.resource.data.hostId;
-      allow update: if request.auth != null && request.auth.uid == resource.data.hostId;
-      allow delete: if request.auth != null && request.auth.uid == resource.data.hostId;
-      
-      // Items in livestream
-      match /items/{itemId} {
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.hostUid;
+      allow update: if request.auth != null && request.auth.uid == resource.data.hostUid;
+      allow delete: if request.auth != null && request.auth.uid == resource.data.hostUid;
+
+      // Products in livestream (replaces items)
+      match /products/{productId} {
         allow read: if true; // Public read for bidders
-        allow write: if request.auth != null && 
-          (request.auth.uid == get(/databases/$(database)/documents/livestreams/$(liveId)).data.hostId);
-        
-        // Bids on items
+        allow write: if false; // Only server writes via Cloud Functions
+
+        // Bids on products - only server can create via placeBid function
         match /bids/{bidId} {
           allow read: if true; // Public read for transparency
-          allow create: if request.auth != null && 
-            request.auth.uid == request.resource.data.userId &&
-            validateBid(request.resource.data);
-          allow update, delete: if false; // Bids are immutable
-        }
-        
-        // Proxy bids (private)
-        match /proxyBids/{userId} {
-          allow read, write: if request.auth != null && request.auth.uid == userId;
+          allow write: if false; // Only server writes via Cloud Functions
         }
       }
-      
+
       // Chat messages
       match /messages/{messageId} {
         allow read: if true; // Public read for viewers
-        allow create: if request.auth != null && 
+        allow create: if request.auth != null &&
           request.auth.uid == request.resource.data.userId &&
           validateMessage(request.resource.data);
         allow update, delete: if false; // Messages are immutable
       }
     }
-    
-    // Orders collection
+
+    // Orders collection - for PayPal payments
     match /orders/{orderId} {
-      allow read: if request.auth != null && 
-        (request.auth.uid == resource.data.buyerId || 
-         request.auth.uid == resource.data.sellerId);
-      allow create: if request.auth != null;
-      allow update: if request.auth != null && 
-        (request.auth.uid == resource.data.buyerId || 
-         request.auth.uid == resource.data.sellerId);
+      allow read: if request.auth != null && request.auth.uid == resource.data.winnerUid;
+      allow write: if false; // Only server writes
     }
-    
+
+    // Legacy collections for backward compatibility
+    match /auctions/{auctionId} {
+      allow read: if true; // Public read for viewers
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.sellerId;
+      allow update: if request.auth != null && request.auth.uid == resource.data.sellerId;
+      allow delete: if request.auth != null && request.auth.uid == resource.data.sellerId;
+
+      // Bids subcollection
+      match /bids/{bidId} {
+        allow read: if true; // Public read for transparency
+        allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
+        allow update, delete: if false; // Bids are immutable
+      }
+    }
+
+    // Auction Items collection - for queuing items
+    match /auctionItems/{itemId} {
+      allow read: if true; // Public read for viewers
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.sellerId;
+      allow update: if request.auth != null && request.auth.uid == resource.data.sellerId;
+      allow delete: if request.auth != null && request.auth.uid == resource.data.sellerId;
+    }
+
+    // Chat messages collection
+    match /chatMessages/{messageId} {
+      allow read: if true; // Public read for viewers
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
+      allow update, delete: if false; // Messages are immutable
+    }
+
+    // Invoices collection
+    match /invoices/{invoiceId} {
+      allow read: if request.auth != null &&
+        (request.auth.uid == resource.data.buyerId || request.auth.uid == resource.data.sellerId);
+      allow create: if request.auth != null;
+      allow update: if request.auth != null &&
+        (request.auth.uid == resource.data.buyerId || request.auth.uid == resource.data.sellerId);
+    }
+
     // Reviews collection
     match /reviews/{reviewId} {
       allow read: if true; // Public read
-      allow create: if request.auth != null && 
+      allow create: if request.auth != null &&
         request.auth.uid == request.resource.data.reviewerId &&
         validateReview(request.resource.data);
-      allow update: if request.auth != null && 
+      allow update: if request.auth != null &&
         request.auth.uid == resource.data.reviewerId;
-      allow delete: if request.auth != null && 
+      allow delete: if request.auth != null &&
         request.auth.uid == resource.data.reviewerId;
     }
-    
+
     // Messages (DMs) collection
     match /messages/{threadId} {
-      allow read, write: if request.auth != null && 
+      allow read, write: if request.auth != null &&
         request.auth.uid in resource.data.participants;
-      
+
       match /msgs/{msgId} {
-        allow read, write: if request.auth != null && 
+        allow read, write: if request.auth != null &&
           request.auth.uid in get(/databases/$(database)/documents/messages/$(threadId)).data.participants;
       }
     }
-    
+
     // Referrals collection
     match /referrals/{referralId} {
-      allow read: if request.auth != null && 
-        (request.auth.uid == resource.data.referrerId || 
+      allow read: if request.auth != null &&
+        (request.auth.uid == resource.data.referrerId ||
          request.auth.uid == resource.data.refereeId);
       allow create: if request.auth != null;
       allow update: if request.auth != null; // For system updates
     }
-    
+
     // Credits collection
     match /credits/{creditId} {
       allow read: if request.auth != null && request.auth.uid == resource.data.uid;
       allow create, update: if request.auth != null; // For system updates
     }
-    
+
     // Analytics collection (seller only)
     match /analytics/seller/{sellerId}/{document=**} {
       allow read, write: if request.auth != null && request.auth.uid == sellerId;
     }
-    
+
     // Notifications collection
     match /notifications/{userId}/events/{eventId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
-    
+
     // Configuration (read-only for users)
     match /config/{document=**} {
       allow read: if true;
       allow write: if false; // Admin only via server
     }
-    
+
     // Helper functions
     function validateBid(bid) {
-      return bid.amount is number && 
-             bid.amount > 0 && 
-             bid.userId is string && 
+      return bid.amount is number &&
+             bid.amount > 0 &&
+             bid.userId is string &&
              bid.username is string &&
              bid.timestamp == request.time &&
              bid.source in ['user', 'auto'];
     }
-    
+
     function validateMessage(message) {
-      return message.text is string && 
+      return message.text is string &&
              message.text.size() <= 500 &&
              message.userId is string &&
              message.username is string &&
              message.timestamp == request.time;
     }
-    
+
     function validateReview(review) {
-      return review.rating is number && 
-             review.rating >= 1 && 
+      return review.rating is number &&
+             review.rating >= 1 &&
              review.rating <= 5 &&
              review.text is string &&
              review.text.size() <= 1000;

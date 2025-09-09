@@ -1,19 +1,22 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { collection, query, where, limit, getDocs } from 'firebase/firestore'
+import { collection, query, where, onSnapshot, orderBy, limit } from 'firebase/firestore'
 
 import { db } from '../lib/firebase'
 import { StreamCardSkeleton } from '../components/LoadingSkeleton'
+import LiveCard from '../components/LiveCard'
 
 interface LiveStream {
   id: string
-  title: string
-  hostId: string
-  hostUsername: string
-  viewerCount: number
+  title?: string
+  hostId?: string
+  hostUsername?: string
+  channelName: string
+  viewerCount?: number
   status: 'live' | 'offline' | 'ended'
-  categories: string[]
-  startedAt: any
+  categories?: string[]
+  startedAt?: any
+  previewUrl?: string | null
 }
 
 const Explore = () => {
@@ -29,42 +32,48 @@ const Explore = () => {
   const [showFilters, setShowFilters] = useState(false)
 
   useEffect(() => {
-    const fetchLiveStreams = async () => {
-      try {
-        console.log('🔍 Explore: Fetching live streams from Firestore only...')
+    console.log('🔍 Explore: Setting up real-time listener for live streams...')
 
-        // Direct Firestore query - no offline fallback
-        const liveQuery = query(
-          collection(db, 'livestreams'),
-          where('status', '==', 'live'),
-          limit(20)
-        )
+    // Real-time Firestore query for live streams
+    const liveQuery = query(
+      collection(db, 'livestreams'),
+      where('status', '==', 'live'),
+      orderBy('startedAt', 'desc'),
+      limit(20)
+    )
 
-        const snapshot = await getDocs(liveQuery)
-        const streams = snapshot.docs.map(doc => ({
+    const unsubscribe = onSnapshot(
+      liveQuery,
+      (snapshot) => {
+        const streams = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         })) as LiveStream[]
 
         console.log(
-          '✅ Explore: Found',
+          '✅ Explore: Real-time update - Found',
           streams.length,
-          'live streams in Firestore'
+          'live streams'
         )
         setLiveStreams(streams)
-      } catch (error) {
+        setLoading(false)
+      },
+      (error) => {
         console.error(
-          '❌ Explore: Error fetching live streams from Firestore:',
+          '❌ Explore: Error in real-time listener:',
           error
         )
         console.error('❌ This means no streams will be visible to viewers!')
-        setLiveStreams([]) // Clear streams on error - don't show offline streams
-      } finally {
+        setLiveStreams([])
         setLoading(false)
       }
-    }
+    )
 
-    fetchLiveStreams()
+    // Cleanup subscription on unmount
+    return () => {
+      console.log('🔄 Explore: Cleaning up real-time listener')
+      unsubscribe()
+    }
   }, [])
 
   const handleFilterClick = (filter: string) => {
@@ -393,52 +402,7 @@ const Explore = () => {
           ) : getFilteredStreams().length > 0 ? (
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
               {getFilteredStreams().map(stream => (
-                <Link
-                  key={stream.id}
-                  to={`/live/${stream.id}`}
-                  className='bg-slate-700/50 backdrop-blur-sm rounded-2xl p-6 border border-blue-500/20 hover:border-cyan-400/40 transition-all duration-300 hover:transform hover:scale-105 group block'
-                >
-                  <div className='aspect-video bg-gradient-to-br from-slate-700 to-slate-800 rounded-lg mb-4 relative overflow-hidden'>
-                    {/* Animated water effect */}
-                    <div className='absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent'></div>
-                    <div className='absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-cyan-500/5 to-transparent animate-pulse'></div>
-
-                    <div className='absolute top-3 left-3 bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg'>
-                      LIVE
-                    </div>
-                    <div className='absolute bottom-3 right-3 bg-slate-900/80 backdrop-blur-sm text-slate-100 px-3 py-1 rounded-full text-sm border border-slate-700'>
-                      {stream.viewerCount || 0} viewers
-                    </div>
-
-                    {/* Floating bubbles effect */}
-                    <div className='absolute bottom-4 left-4 w-2 h-2 bg-cyan-400/40 rounded-full animate-bounce'></div>
-                    <div className='absolute bottom-8 left-8 w-1 h-1 bg-blue-400/60 rounded-full animate-pulse'></div>
-                  </div>
-
-                  <div>
-                    <h3 className='font-semibold text-slate-100 mb-2 group-hover:text-cyan-300 transition-colors duration-300'>
-                      {stream.title}
-                    </h3>
-                    <p className='text-slate-400 text-sm mb-3'>
-                      by @{stream.hostUsername || stream.hostId}
-                    </p>
-                    <div className='flex justify-between items-center'>
-                      <div className='flex space-x-1'>
-                        {stream.categories?.map(category => (
-                          <span
-                            key={category}
-                            className='text-xs px-2 py-1 bg-slate-800/50 text-slate-300 rounded-full border border-slate-600'
-                          >
-                            {category}
-                          </span>
-                        ))}
-                      </div>
-                      <span className='text-sm text-slate-500 bg-slate-800/50 px-2 py-1 rounded-full'>
-                        Live
-                      </span>
-                    </div>
-                  </div>
-                </Link>
+                <LiveCard key={stream.id} stream={stream} />
               ))}
             </div>
           ) : (

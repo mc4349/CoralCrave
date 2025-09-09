@@ -10,6 +10,7 @@ import dotenv from 'dotenv'
 import { initializeFirebase } from './config/firebase'
 import { initializeRedis } from './config/redis'
 import { setupRoutes } from './routes'
+import { paypalRouter } from './routes/paypal'
 import { setupSocketHandlers } from './socket/handlers'
 import { logger } from './utils/logger'
 import { errorHandler } from './middleware/errorHandler'
@@ -74,6 +75,9 @@ async function startServer() {
 
     // API routes
     setupRoutes(app)
+
+    // PayPal routes
+    app.use("/paypal", paypalRouter);
 
     // Socket.IO handlers
     setupSocketHandlers(io)

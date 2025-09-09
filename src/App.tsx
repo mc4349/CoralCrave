@@ -14,8 +14,10 @@ const Profile = lazy(() => import('./pages/Profile'))
 const Notifications = lazy(() => import('./pages/Notifications'))
 const Auth = lazy(() => import('./pages/Auth'))
 const SetupUsername = lazy(() => import('./pages/SetupUsername'))
-const Live = lazy(() => import('./pages/live'))
-const Streamer = lazy(() => import('./pages/stream'))
+const GoLive = lazy(() => import('./pages/GoLive'))
+const LiveViewer = lazy(() => import('./pages/LiveViewer'))
+const LiveNow = lazy(() => import('./pages/LiveNow'))
+const Cart = lazy(() => import('./pages/Cart'))
 
 // Loading component for Suspense fallback
 const PageLoader = () => (
@@ -38,8 +40,10 @@ function App() {
               <Routes>
                 <Route path='/' element={<Home />} />
                 <Route path='/explore' element={<Explore />} />
-                <Route path='/live' element={<Live />} />
-                <Route path='/stream' element={<Streamer />} />
+                <Route path='/live' element={<LiveViewer />} />
+                <Route path='/live-now' element={<LiveNow />} />
+                <Route path='/go-live' element={<GoLive />} />
+                <Route path='/cart' element={<Cart />} />
                 <Route path='/activity' element={<Activity />} />
                 <Route path='/account' element={<Account />} />
                 <Route path='/seller-hub' element={<SellerHub />} />
