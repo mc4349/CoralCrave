@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { db } from '../lib/firebase'
-import { collection, onSnapshot, query, orderBy, limit, where, doc, getDoc, getDocs, updateDoc, addDoc } from 'firebase/firestore'
+import { collection, onSnapshot, query, orderBy, limit, where, doc, getDocs, updateDoc, addDoc } from 'firebase/firestore'
 import { useAuth } from '../contexts/AuthContext'
 import { chatService } from '../services/chatService'
 import { httpsCallable, getFunctions } from 'firebase/functions'
@@ -67,7 +67,6 @@ export default function AuctionPanel({ roomId, isHost = false, className = '' }:
     shippingPrice: '',
     duration: '10'
   })
-  const timerRef = useRef<NodeJS.Timeout | null>(null)
   const { currentUser, userProfile } = useAuth()
 
   // Load auction queue (for sellers)
@@ -384,44 +383,7 @@ export default function AuctionPanel({ roomId, isHost = false, className = '' }:
     }
   }
 
-  const addToQueue = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!currentUser) return
 
-    const { title, description, startingPrice } = auctionForm
-    const price = parseFloat(startingPrice)
-
-    if (!title.trim() || !description.trim() || isNaN(price) || price <= 0) {
-      alert('Please fill in all fields with valid values')
-      return
-    }
-
-    try {
-      await addDoc(collection(db, 'auctionItems'), {
-        title: title.trim(),
-        description: description.trim(),
-        startingPrice: price,
-        category: 'General',
-        sellerId: currentUser.uid,
-        roomId,
-        status: 'queued',
-        createdAt: new Date(),
-      })
-
-      // Reset form
-      setAuctionForm({
-        title: '',
-        description: '',
-        startingPrice: '',
-        shippingPrice: '',
-        duration: '10'
-      })
-      setShowCreateForm(false)
-    } catch (error) {
-      console.error('Error adding to queue:', error)
-      alert('Failed to add item to queue. Please try again.')
-    }
-  }
 
   const startNextAuction = async (item: AuctionItem) => {
     if (!currentUser) return

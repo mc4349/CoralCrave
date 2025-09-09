@@ -1,4 +1,3 @@
-import React from 'react'
 import { PayPalButtons } from '@paypal/react-paypal-js'
 import { paypalService } from '../services/paypalService'
 
