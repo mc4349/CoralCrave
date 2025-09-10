@@ -199,9 +199,7 @@ export class AuctionEngine {
   // Place a bid using Cloud Function for atomic transactions
   async placeBid(
     itemId: string,
-    amount: number,
-    userId: string,
-    username: string
+    amount: number
   ): Promise<void> {
     try {
       // Use Cloud Function for atomic bidding
