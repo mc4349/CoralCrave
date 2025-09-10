@@ -52,8 +52,7 @@ export default function GoLive() {
 
       const client = clientRef.current!;
       await client.setClientRole("host");
-      const { token } = await fetchToken(channel, "publisher");
-      await client.join(APP_ID, channel, token || null, null);
+      await client.join(APP_ID, channel, null, null);
       const [mic, cam] = await AgoraRTC.createMicrophoneAndCameraTracks();
       tracksRef.current.mic = mic; tracksRef.current.cam = cam;
       if (localRef.current) cam.play(localRef.current);

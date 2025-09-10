@@ -27,23 +27,23 @@ export default function WinnerPayButton({ streamId, productId, amountUSD, isWinn
       // @ts-ignore
       window.paypal.Buttons({
         createOrder: async () => {
-          const res = await fetch("/paypal/create-order", {
+          const res = await fetch("/api/paypal/create-order", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ streamId, productId, amountUSD }),
           });
           const data = await res.json();
-          if (!res.ok) throw new Error(data.error || "create-order failed");
+          if (!res.ok || !data.success) throw new Error(data.error?.message || "create-order failed");
           return data.orderId;
         },
         onApprove: async (data: any) => {
-          const res = await fetch("/paypal/capture", {
+          const res = await fetch("/api/paypal/capture", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ orderId: data.orderID }),
           });
           const out = await res.json();
-          if (!res.ok) throw new Error(out.error || "capture failed");
+          if (!res.ok || !out.success) throw new Error(out.error?.message || "capture failed");
           alert("Payment successful!");
         },
         onError: (err: any) => {

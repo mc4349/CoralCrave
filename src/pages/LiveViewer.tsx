@@ -68,8 +68,7 @@ export default function LiveViewer() {
       try {
         setErr(null);
         await client.setClientRole("audience");
-        const { token } = await fetchToken(channel, "subscriber");
-        await client.join(APP_ID, channel, token || null, null);
+        await client.join(APP_ID, channel, null, null);
 
         // Subscribe to already-published users
         for (const u of client.remoteUsers) {
