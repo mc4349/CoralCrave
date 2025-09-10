@@ -19,22 +19,22 @@ export const placeBid = functions.https.onCall(async (data, context) => {
     )
   }
 
-  const productRef = db.doc(`livestreams/${streamId}/products/${productId}`)
-  const bidsCol = productRef.collection('bids')
+  const itemRef = db.doc(`livestreams/${streamId}/items/${productId}`)
+  const bidsCol = itemRef.collection('bids')
   const streamRef = db.doc(`livestreams/${streamId}`)
 
   return db.runTransaction(async tx => {
-    const [streamSnap, productSnap] = await Promise.all([
+    const [streamSnap, itemSnap] = await Promise.all([
       tx.get(streamRef),
-      tx.get(productRef),
+      tx.get(itemRef),
     ])
 
     if (!streamSnap.exists) {
       throw new functions.https.HttpsError('not-found', 'Stream not found')
     }
 
-    if (!productSnap.exists) {
-      throw new functions.https.HttpsError('not-found', 'Product not found')
+    if (!itemSnap.exists) {
+      throw new functions.https.HttpsError('not-found', 'Item not found')
     }
 
     const stream = streamSnap.data() as any
@@ -45,8 +45,8 @@ export const placeBid = functions.https.onCall(async (data, context) => {
       )
     }
 
-    const product = productSnap.data() as any
-    if (product.status !== 'active') {
+    const item = itemSnap.data() as any
+    if (item.status !== 'running') {
       throw new functions.https.HttpsError(
         'failed-precondition',
         'Auction not active'
@@ -54,12 +54,12 @@ export const placeBid = functions.https.onCall(async (data, context) => {
     }
 
     const now = admin.firestore.Timestamp.now()
-    if (product.endAt && product.endAt.toMillis() <= now.toMillis()) {
+    if (item.endAt && item.endAt.toMillis() <= now.toMillis()) {
       throw new functions.https.HttpsError('deadline-exceeded', 'Auction ended')
     }
 
-    const currentHigh = Number(product.highestBid || 0)
-    const minInc = Number(product.minIncrement || 1)
+    const currentHigh = Number(item.currentPrice || item.startingPrice || 0)
+    const minInc = 1 // Default increment, could be made configurable
     if (amount < currentHigh + minInc) {
       throw new functions.https.HttpsError('failed-precondition', 'Bid too low')
     }
@@ -69,11 +69,16 @@ export const placeBid = functions.https.onCall(async (data, context) => {
       amount,
       bidderUid: uid,
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      userId: uid,
+      username: '', // Will be populated from user profile
+      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      source: 'user',
+      isValid: true
     })
 
-    tx.update(productRef, {
-      highestBid: amount,
-      highestBidderUid: uid,
+    tx.update(itemRef, {
+      currentPrice: amount,
+      leadingBidderId: uid,
       updatedAt: admin.firestore.FieldValue.serverTimestamp(),
     })
 

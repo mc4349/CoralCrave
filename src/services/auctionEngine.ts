@@ -196,7 +196,7 @@ export class AuctionEngine {
     this.unsubscribers.push(unsubscribeItem, unsubscribeBids)
   }
 
-  // Place a bid
+  // Place a bid using Cloud Function for atomic transactions
   async placeBid(
     itemId: string,
     amount: number,
@@ -204,18 +204,21 @@ export class AuctionEngine {
     username: string
   ): Promise<void> {
     try {
-      if (!this.socket) {
-        throw new Error('Socket not connected')
-      }
+      // Use Cloud Function for atomic bidding
+      const { getFunctions, httpsCallable } = await import('firebase/functions')
+      const { getApp } = await import('firebase/app')
 
-      // Send bid through socket to server
-      this.socket.emit('placeBid', {
-        liveId: this.liveId,
-        itemId,
+      const placeBidFn = httpsCallable(getFunctions(getApp()), 'placeBid')
+      const result = await placeBidFn({
+        streamId: this.liveId,
+        productId: itemId,
         amount,
-        userId,
-        username,
       })
+
+      console.log('Bid placed successfully:', result.data)
+
+      // The Cloud Function will update Firestore, which will trigger our listeners
+      // No need to emit socket events as the real-time listeners will handle updates
     } catch (error) {
       console.error('Failed to place bid:', error)
       throw error
