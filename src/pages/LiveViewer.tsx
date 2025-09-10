@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { IAgoraRTCClient, IAgoraRTCRemoteUser, IRemoteVideoTrack, IRemoteAudioTrack } from "agora-rtc-sdk-ng";
-import { APP_ID, createClient } from "../agora/client";
+import { APP_ID, createClient, fetchToken } from "../agora/client";
 import LiveChat from "../components/LiveChat";
 import AuctionPanel from "../components/AuctionPanel";
 import { useAuth } from "../contexts/AuthContext";
@@ -68,7 +68,10 @@ export default function LiveViewer() {
       try {
         setErr(null);
         await client.setClientRole("audience");
-        await client.join(APP_ID, channel, null, null);
+
+        // Fetch token for audience role
+        const tokenData = await fetchToken(channel, "audience");
+        await client.join(APP_ID, channel, tokenData.token, null);
 
         // Subscribe to already-published users
         for (const u of client.remoteUsers) {

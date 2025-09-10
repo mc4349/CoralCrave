@@ -17,12 +17,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const uidStr = uid as string
   const roleStr = role as string
 
-  if (!channelNameStr || !uidStr) {
+  if (!channelNameStr) {
     return res.status(400).json({
       success: false,
-      error: { message: 'channelName and uid are required' }
+      error: { message: 'channelName is required' }
     })
   }
+
+  // Auto-generate UID if not provided (0-999999 range)
+  const uidNum = uidStr ? parseInt(uidStr) : Math.floor(Math.random() * 1000000)
 
   const appId = process.env.AGORA_APP_ID
   const appCertificate = process.env.AGORA_APP_CERTIFICATE
@@ -45,17 +48,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       appId,
       appCertificate,
       channelNameStr,
-      parseInt(uidStr),
+      uidNum,
       userRole,
       privilegeExpiredTs
     )
 
-    console.log(`Generated Agora token for channel: ${channelNameStr}, uid: ${uidStr}, role: ${roleStr}`)
+    console.log(`Generated Agora token for channel: ${channelNameStr}, uid: ${uidNum}, role: ${roleStr}`)
 
     res.json({
       success: true,
       token,
-      uid: parseInt(uidStr),
+      uid: uidNum,
       channelName: channelNameStr,
       expiresAt: privilegeExpiredTs,
     })

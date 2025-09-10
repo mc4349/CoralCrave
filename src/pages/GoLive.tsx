@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import AgoraRTC, { IAgoraRTCClient, ILocalAudioTrack, ILocalVideoTrack } from "agora-rtc-sdk-ng";
-import { APP_ID, createClient } from "../agora/client";
+import { APP_ID, createClient, fetchToken } from "../agora/client";
 import LiveChat from "../components/LiveChat";
 import AuctionPanel from "../components/AuctionPanel";
 import { useAuth } from "../contexts/AuthContext";
@@ -52,7 +52,11 @@ export default function GoLive() {
 
       const client = clientRef.current!;
       await client.setClientRole("host");
-      await client.join(APP_ID, channel, null, null);
+
+      // Fetch token for publisher role (host)
+      const tokenData = await fetchToken(channel, "publisher");
+      await client.join(APP_ID, channel, tokenData.token, null);
+
       const [mic, cam] = await AgoraRTC.createMicrophoneAndCameraTracks();
       tracksRef.current.mic = mic; tracksRef.current.cam = cam;
       if (localRef.current) cam.play(localRef.current);
