@@ -28,19 +28,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const db = admin.firestore()
 
     // Validate winner server-side
-    const productRef = db.doc(`livestreams/${streamId}/products/${productId}`)
-    const snap = await productRef.get()
+    const itemRef = db.doc(`livestreams/${streamId}/items/${productId}`)
+    const snap = await itemRef.get()
 
     if (!snap.exists) {
       return res.status(404).json({
         success: false,
-        error: { message: 'Product not found' },
+        error: { message: 'Item not found' },
       })
     }
 
-    const product = snap.data()
+    const item = snap.data()
 
-    if (product?.status !== 'sold') {
+    if (item?.status !== 'sold') {
       return res.status(400).json({
         success: false,
         error: { message: 'Auction not finalized yet' },
@@ -92,7 +92,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         amount: amountUSD,
         paypalOrderId: result.result.id,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
-        winnerUid: product.highestBidderUid || null,
+        winnerUid: item.highestBidderId || null,
       })
 
     res.json({

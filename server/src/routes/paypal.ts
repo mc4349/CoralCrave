@@ -33,13 +33,13 @@ paypalRouter.post('/create-order', async (req, res) => {
     }
 
     // Validate winner server-side
-    const productRef = db.doc(`livestreams/${streamId}/products/${productId}`)
-    const snap = await productRef.get()
+    const itemRef = db.doc(`livestreams/${streamId}/items/${productId}`)
+    const snap = await itemRef.get()
     if (!snap.exists)
-      return res.status(404).json({ error: 'Product not found' })
-    const product = snap.data()
+      return res.status(404).json({ error: 'Item not found' })
+    const item = snap.data()
 
-    if (product?.status !== 'sold') {
+    if (item?.status !== 'sold') {
       return res.status(400).json({ error: 'Auction not finalized yet' })
     }
 
@@ -69,7 +69,7 @@ paypalRouter.post('/create-order', async (req, res) => {
         amount: amountUSD,
         paypalOrderId: result.result.id,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
-        winnerUid: product.highestBidderUid || null,
+        winnerUid: item.highestBidderId || null,
       })
 
     res.json({ orderId: result.result.id, approveLinks: result.result.links })
