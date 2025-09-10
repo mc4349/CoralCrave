@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { IAgoraRTCClient, IAgoraRTCRemoteUser, IRemoteVideoTrack, IRemoteAudioTrack } from "agora-rtc-sdk-ng";
-import { APP_ID, createClient, fetchToken } from "../agora/client";
+import { APP_ID, createClient } from "../agora/client";
 import LiveChat from "../components/LiveChat";
 import AuctionPanel from "../components/AuctionPanel";
 import { useAuth } from "../contexts/AuthContext";
