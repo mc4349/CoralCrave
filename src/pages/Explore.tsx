@@ -1,6 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { collection, query, where, onSnapshot, orderBy, limit } from 'firebase/firestore'
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  orderBy,
+  limit,
+} from 'firebase/firestore'
 
 import { db } from '../lib/firebase'
 import { StreamCardSkeleton } from '../components/LoadingSkeleton'
@@ -44,8 +51,8 @@ const Explore = () => {
 
     const unsubscribe = onSnapshot(
       liveQuery,
-      (snapshot) => {
-        const streams = snapshot.docs.map((doc) => ({
+      snapshot => {
+        const streams = snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
         })) as LiveStream[]
@@ -58,11 +65,8 @@ const Explore = () => {
         setLiveStreams(streams)
         setLoading(false)
       },
-      (error) => {
-        console.error(
-          '❌ Explore: Error in real-time listener:',
-          error
-        )
+      error => {
+        console.error('❌ Explore: Error in real-time listener:', error)
         console.error('❌ This means no streams will be visible to viewers!')
         setLiveStreams([])
         setLoading(false)

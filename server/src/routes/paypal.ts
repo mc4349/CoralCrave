@@ -1,97 +1,102 @@
-import express from "express";
-import cors from "cors";
-import * as paypal from "@paypal/checkout-server-sdk";
-import admin from "firebase-admin";
-import dotenv from "dotenv";
+import express from 'express'
+import cors from 'cors'
+import * as paypal from '@paypal/checkout-server-sdk'
+import admin from 'firebase-admin'
+import dotenv from 'dotenv'
 
-dotenv.config();
+dotenv.config()
 
 if (!admin.apps.length) {
-  admin.initializeApp();
+  admin.initializeApp()
 }
-const db = admin.firestore();
+const db = admin.firestore()
 
-const clientId = process.env.PAYPAL_CLIENT_ID;
-const clientSecret = process.env.PAYPAL_SECRET;
-const environment = process.env.PAYPAL_ENV === "live"
-  ? new paypal.core.LiveEnvironment(clientId!, clientSecret!)
-  : new paypal.core.SandboxEnvironment(clientId!, clientSecret!);
-const payPalClient = new paypal.core.PayPalHttpClient(environment);
+const clientId = process.env.PAYPAL_CLIENT_ID
+const clientSecret = process.env.PAYPAL_SECRET
+const environment =
+  process.env.PAYPAL_ENV === 'live'
+    ? new paypal.core.LiveEnvironment(clientId!, clientSecret!)
+    : new paypal.core.SandboxEnvironment(clientId!, clientSecret!)
+const payPalClient = new paypal.core.PayPalHttpClient(environment)
 
-export const paypalRouter = express.Router();
-paypalRouter.use(cors());
-paypalRouter.use(express.json());
+export const paypalRouter = express.Router()
+paypalRouter.use(cors())
+paypalRouter.use(express.json())
 
 // POST /paypal/create-order
 // body: { streamId, productId, amountUSD }
-paypalRouter.post("/create-order", async (req, res) => {
+paypalRouter.post('/create-order', async (req, res) => {
   try {
-    const { streamId, productId, amountUSD } = req.body || {};
-    if (!streamId || !productId || typeof amountUSD !== "number") {
-      return res.status(400).json({ error: "Missing/invalid fields" });
+    const { streamId, productId, amountUSD } = req.body || {}
+    if (!streamId || !productId || typeof amountUSD !== 'number') {
+      return res.status(400).json({ error: 'Missing/invalid fields' })
     }
 
     // Validate winner server-side
-    const productRef = db.doc(`livestreams/${streamId}/products/${productId}`);
-    const snap = await productRef.get();
-    if (!snap.exists) return res.status(404).json({ error: "Product not found" });
-    const product = snap.data();
+    const productRef = db.doc(`livestreams/${streamId}/products/${productId}`)
+    const snap = await productRef.get()
+    if (!snap.exists)
+      return res.status(404).json({ error: 'Product not found' })
+    const product = snap.data()
 
-    if (product?.status !== "sold") {
-      return res.status(400).json({ error: "Auction not finalized yet" });
+    if (product?.status !== 'sold') {
+      return res.status(400).json({ error: 'Auction not finalized yet' })
     }
 
-    const order = new paypal.orders.OrdersCreateRequest();
-    order.prefer("return=representation");
+    const order = new paypal.orders.OrdersCreateRequest()
+    order.prefer('return=representation')
     order.requestBody({
-      intent: "CAPTURE",
+      intent: 'CAPTURE',
       purchase_units: [
         {
-          amount: { currency_code: "USD", value: amountUSD.toFixed(2) },
+          amount: { currency_code: 'USD', value: amountUSD.toFixed(2) },
           custom_id: `${streamId}:${productId}`,
         },
       ],
-    });
+    })
 
-    const result = await payPalClient.execute(order);
+    const result = await payPalClient.execute(order)
 
     // Create order doc
-    await db.collection("orders").doc(result.result.id).set({
-      provider: "paypal",
-      status: "created",
-      streamId,
-      productId,
-      amount: amountUSD,
-      paypalOrderId: result.result.id,
-      createdAt: admin.firestore.FieldValue.serverTimestamp(),
-      winnerUid: product.highestBidderUid || null,
-    });
+    await db
+      .collection('orders')
+      .doc(result.result.id)
+      .set({
+        provider: 'paypal',
+        status: 'created',
+        streamId,
+        productId,
+        amount: amountUSD,
+        paypalOrderId: result.result.id,
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        winnerUid: product.highestBidderUid || null,
+      })
 
-    res.json({ orderId: result.result.id, approveLinks: result.result.links });
+    res.json({ orderId: result.result.id, approveLinks: result.result.links })
   } catch (e) {
-    console.error(e);
-    res.status(500).json({ error: "PayPal create failed" });
+    console.error(e)
+    res.status(500).json({ error: 'PayPal create failed' })
   }
-});
+})
 
 // POST /paypal/capture
 // body: { orderId }
-paypalRouter.post("/capture", async (req, res) => {
+paypalRouter.post('/capture', async (req, res) => {
   try {
-    const { orderId } = req.body || {};
-    const captureReq = new paypal.orders.OrdersCaptureRequest(orderId);
-    captureReq.requestBody({});
-    const result = await payPalClient.execute(captureReq);
+    const { orderId } = req.body || {}
+    const captureReq = new paypal.orders.OrdersCaptureRequest(orderId)
+    captureReq.requestBody({})
+    const result = await payPalClient.execute(captureReq)
 
     // Mark paid
-    await db.collection("orders").doc(orderId).update({
-      status: "paid",
+    await db.collection('orders').doc(orderId).update({
+      status: 'paid',
       paidAt: admin.firestore.FieldValue.serverTimestamp(),
-    });
+    })
 
-    res.json({ ok: true, result });
+    res.json({ ok: true, result })
   } catch (e) {
-    console.error(e);
-    res.status(500).json({ error: "PayPal capture failed" });
+    console.error(e)
+    res.status(500).json({ error: 'PayPal capture failed' })
   }
-});
+})

@@ -27,7 +27,9 @@ class PayPalService {
 
   constructor() {
     if (!this.PAYPAL_CLIENT_ID) {
-      console.warn('PayPal client ID not configured. PayPal payments will not work.')
+      console.warn(
+        'PayPal client ID not configured. PayPal payments will not work.'
+      )
     }
   }
 
@@ -104,20 +106,17 @@ class PayPalService {
     reason?: string
   ): Promise<any> {
     try {
-      const response = await fetch(
-        `${this.API_BASE_URL}/api/paypal/refund`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            captureId,
-            amount: amount?.toFixed(2),
-            reason,
-          }),
-        }
-      )
+      const response = await fetch(`${this.API_BASE_URL}/api/paypal/refund`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          captureId,
+          amount: amount?.toFixed(2),
+          reason,
+        }),
+      })
 
       if (!response.ok) {
         throw new Error('Failed to process PayPal refund')

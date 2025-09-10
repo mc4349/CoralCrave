@@ -1,4 +1,5 @@
 import { PayPalButtons } from '@paypal/react-paypal-js'
+
 import { paypalService } from '../services/paypalService'
 
 export interface PayPalButtonProps {
@@ -56,8 +57,8 @@ export default function PayPalButton({
 
   if (!paypalService.isConfigured()) {
     return (
-      <div className="text-center p-4 bg-yellow-50 border border-yellow-200 rounded">
-        <p className="text-yellow-800 text-sm">
+      <div className='text-center p-4 bg-yellow-50 border border-yellow-200 rounded'>
+        <p className='text-yellow-800 text-sm'>
           PayPal payment is not configured. Please contact support.
         </p>
       </div>

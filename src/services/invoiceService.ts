@@ -1,6 +1,7 @@
 import OpenAI from 'openai'
-import { db } from '../lib/firebase'
 import { collection, addDoc, doc, updateDoc, getDoc } from 'firebase/firestore'
+
+import { db } from '../lib/firebase'
 
 export interface InvoiceData {
   invoiceId: string
@@ -41,7 +42,7 @@ export class InvoiceService {
   constructor() {
     this.openai = new OpenAI({
       apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-      dangerouslyAllowBrowser: true
+      dangerouslyAllowBrowser: true,
     })
   }
 
@@ -71,13 +72,17 @@ INVOICE DETAILS:
 - Payment Method: PayPal
 - Transaction ID: ${invoiceData.paymentDetails.paypalOrderId}
 
-${!isSellerInvoice ? `
+${
+  !isSellerInvoice
+    ? `
 SHIPPING ADDRESS:
 ${invoiceData.shippingAddress.fullName}
 ${invoiceData.shippingAddress.addressLine1}
 ${invoiceData.shippingAddress.addressLine2 ? invoiceData.shippingAddress.addressLine2 + '\n' : ''}${invoiceData.shippingAddress.city}, ${invoiceData.shippingAddress.state} ${invoiceData.shippingAddress.zipCode}
 ${invoiceData.shippingAddress.country}
-` : ''}
+`
+    : ''
+}
 
 ${invoiceData.trackingNumber ? `TRACKING NUMBER: ${invoiceData.trackingNumber}` : ''}
 
@@ -95,19 +100,20 @@ Make it look like a real business invoice.
 
     try {
       const completion = await this.openai.chat.completions.create({
-        model: "gpt-4",
+        model: 'gpt-4',
         messages: [
           {
-            role: "system",
-            content: "You are a professional invoice generator. Generate clean, modern HTML invoices with proper styling."
+            role: 'system',
+            content:
+              'You are a professional invoice generator. Generate clean, modern HTML invoices with proper styling.',
           },
           {
-            role: "user",
-            content: prompt
-          }
+            role: 'user',
+            content: prompt,
+          },
         ],
         max_tokens: 2000,
-        temperature: 0.7
+        temperature: 0.7,
       })
 
       const htmlContent = completion.choices[0]?.message?.content || ''
@@ -215,7 +221,9 @@ Make it look like a real business invoice.
             </div>
         </div>
 
-        ${!isSellerInvoice ? `
+        ${
+          !isSellerInvoice
+            ? `
         <!-- Shipping Address -->
         <div class="mb-8">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">Shipping Address</h2>
@@ -227,7 +235,9 @@ Make it look like a real business invoice.
                 <p>${invoiceData.shippingAddress.country}</p>
             </div>
         </div>
-        ` : ''}
+        `
+            : ''
+        }
 
         <!-- Payment Details -->
         <div class="mb-8">
@@ -239,7 +249,9 @@ Make it look like a real business invoice.
             </div>
         </div>
 
-        ${invoiceData.trackingNumber ? `
+        ${
+          invoiceData.trackingNumber
+            ? `
         <!-- Tracking Information -->
         <div class="mb-8">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">Tracking Information</h2>
@@ -248,7 +260,9 @@ Make it look like a real business invoice.
                 <p class="text-green-700 mt-2">Your item has been shipped and is on its way!</p>
             </div>
         </div>
-        ` : ''}
+        `
+            : ''
+        }
 
         <!-- QR Code Placeholder -->
         <div class="text-center mb-8">
@@ -296,7 +310,10 @@ Make it look like a real business invoice.
   }
 
   // Update invoice with tracking number
-  async updateTrackingNumber(invoiceId: string, trackingNumber: string): Promise<void> {
+  async updateTrackingNumber(
+    invoiceId: string,
+    trackingNumber: string
+  ): Promise<void> {
     try {
       const invoiceRef = doc(db, 'invoices', invoiceId)
       await updateDoc(invoiceRef, {

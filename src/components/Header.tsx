@@ -366,7 +366,6 @@ const Header = () => {
 
               {/* Mobile Navigation Links */}
               <nav className='space-y-2'>
-
                 <Link
                   to='/explore'
                   className='block px-4 py-3 text-slate-300 hover:bg-slate-700/50 hover:text-cyan-300 rounded-lg transition-colors duration-200 font-medium'

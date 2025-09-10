@@ -1,10 +1,21 @@
 import { useState, useEffect } from 'react'
-import { db } from '../lib/firebase'
-import { collection, query, where, onSnapshot, doc, updateDoc, deleteDoc } from 'firebase/firestore'
-import { useAuth } from '../contexts/AuthContext'
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from 'firebase/firestore'
 import { PayPalScriptProvider } from '@paypal/react-paypal-js'
+
+import { db } from '../lib/firebase'
+import { useAuth } from '../contexts/AuthContext'
 import PayPalButton from '../components/PayPalButton'
-import ShippingAddressForm, { ShippingAddress } from '../components/ShippingAddressForm'
+import ShippingAddressForm, {
+  ShippingAddress,
+} from '../components/ShippingAddressForm'
 import { invoiceService } from '../services/invoiceService'
 
 interface CartItem {
@@ -36,9 +47,9 @@ export default function Cart() {
       where('status', '==', 'pending_payment')
     )
 
-    const unsubscribe = onSnapshot(cartQuery, (snapshot) => {
+    const unsubscribe = onSnapshot(cartQuery, snapshot => {
       const items: CartItem[] = []
-      snapshot.forEach((doc) => {
+      snapshot.forEach(doc => {
         const data = doc.data()
         items.push({
           id: doc.id,
@@ -112,8 +123,10 @@ export default function Cart() {
 
       // Generate and store invoices
       try {
-        const buyerInvoiceId = await invoiceService.generateInvoice(buyerInvoiceData)
-        const sellerInvoiceId = await invoiceService.generateInvoice(sellerInvoiceData)
+        const buyerInvoiceId =
+          await invoiceService.generateInvoice(buyerInvoiceData)
+        const sellerInvoiceId =
+          await invoiceService.generateInvoice(sellerInvoiceData)
 
         console.log('Invoices generated:', { buyerInvoiceId, sellerInvoiceId })
 
@@ -128,10 +141,14 @@ export default function Cart() {
       }
 
       console.log('Payment successful:', details)
-      alert('Payment successful! Your item will be shipped soon. Invoices have been generated.')
+      alert(
+        'Payment successful! Your item will be shipped soon. Invoices have been generated.'
+      )
     } catch (error) {
       console.error('Error updating payment status:', error)
-      alert('Payment was successful but there was an error updating your order. Please contact support.')
+      alert(
+        'Payment was successful but there was an error updating your order. Please contact support.'
+      )
     }
   }
 
@@ -155,10 +172,13 @@ export default function Cart() {
     if (!currentUser || !selectedItemId) return
 
     try {
-      await updateDoc(doc(db, 'users', currentUser.uid, 'cart', selectedItemId), {
-        shippingAddress: address,
-        addressProvided: true,
-      })
+      await updateDoc(
+        doc(db, 'users', currentUser.uid, 'cart', selectedItemId),
+        {
+          shippingAddress: address,
+          addressProvided: true,
+        }
+      )
       setShowAddressForm(false)
       setSelectedItemId(null)
     } catch (error) {
@@ -179,61 +199,68 @@ export default function Cart() {
 
   if (!currentUser) {
     return (
-      <div className="min-h-screen bg-slate-900 text-white p-4">
-        <div className="max-w-4xl mx-auto">
-          <p className="text-center text-slate-400">Please log in to view your cart</p>
+      <div className='min-h-screen bg-slate-900 text-white p-4'>
+        <div className='max-w-4xl mx-auto'>
+          <p className='text-center text-slate-400'>
+            Please log in to view your cart
+          </p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white p-4">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">Your Cart</h1>
+    <div className='min-h-screen bg-slate-900 text-white p-4'>
+      <div className='max-w-4xl mx-auto'>
+        <h1 className='text-3xl font-bold mb-8'>Your Cart</h1>
 
         {isLoading ? (
-          <div className="text-center text-slate-400">Loading your cart...</div>
+          <div className='text-center text-slate-400'>Loading your cart...</div>
         ) : cartItems.length === 0 ? (
-          <div className="text-center text-slate-400">
-            <p className="text-xl mb-4">Your cart is empty</p>
+          <div className='text-center text-slate-400'>
+            <p className='text-xl mb-4'>Your cart is empty</p>
             <p>Items you win in auctions will appear here for payment</p>
           </div>
         ) : (
-          <div className="space-y-6">
-            {cartItems.map((item) => {
+          <div className='space-y-6'>
+            {cartItems.map(item => {
               const totalPrice = item.finalPrice + (item.shippingPrice || 0)
 
               return (
-                <div key={item.id} className="bg-slate-800 rounded-lg p-6">
-                  <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4">
-                    <div className="flex-1">
-                      <h3 className="text-xl font-semibold mb-2">{item.itemTitle}</h3>
-                      <p className="text-slate-300 mb-4">{item.itemDescription}</p>
+                <div key={item.id} className='bg-slate-800 rounded-lg p-6'>
+                  <div className='flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4'>
+                    <div className='flex-1'>
+                      <h3 className='text-xl font-semibold mb-2'>
+                        {item.itemTitle}
+                      </h3>
+                      <p className='text-slate-300 mb-4'>
+                        {item.itemDescription}
+                      </p>
 
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
+                      <div className='space-y-2 text-sm'>
+                        <div className='flex justify-between'>
                           <span>Item Price:</span>
                           <span>${item.finalPrice.toFixed(2)}</span>
                         </div>
                         {item.shippingPrice && item.shippingPrice > 0 && (
-                          <div className="flex justify-between">
+                          <div className='flex justify-between'>
                             <span>Shipping:</span>
                             <span>${item.shippingPrice.toFixed(2)}</span>
                           </div>
                         )}
-                        <div className="flex justify-between font-semibold text-lg border-t border-slate-600 pt-2">
+                        <div className='flex justify-between font-semibold text-lg border-t border-slate-600 pt-2'>
                           <span>Total:</span>
                           <span>${totalPrice.toFixed(2)}</span>
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-3 min-w-[200px]">
+                    <div className='flex flex-col gap-3 min-w-[200px]'>
                       {item.addressProvided ? (
                         <PayPalScriptProvider
                           options={{
-                            clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID || 'test',
+                            clientId:
+                              import.meta.env.VITE_PAYPAL_CLIENT_ID || 'test',
                             currency: 'USD',
                           }}
                         >
@@ -243,14 +270,16 @@ export default function Cart() {
                             auctionId={item.auctionId}
                             sellerId={item.sellerId}
                             buyerId={currentUser.uid}
-                            onSuccess={(details) => handlePaymentSuccess(details, item.id)}
+                            onSuccess={details =>
+                              handlePaymentSuccess(details, item.id)
+                            }
                             onError={handlePaymentError}
                           />
                         </PayPalScriptProvider>
                       ) : (
                         <button
                           onClick={() => initiatePayment(item.id)}
-                          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-medium transition-colors"
+                          className='bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-medium transition-colors'
                         >
                           Add Shipping Address
                         </button>
@@ -258,7 +287,7 @@ export default function Cart() {
 
                       <button
                         onClick={() => removeFromCart(item.id)}
-                        className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded font-medium transition-colors"
+                        className='bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded font-medium transition-colors'
                       >
                         Remove from Cart
                       </button>

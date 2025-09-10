@@ -3,12 +3,15 @@
 ## 📍 WHERE TO FIND THE RULES
 
 ### Step 1: Go to Firebase Console
+
 1. **Open**: https://console.firebase.google.com/project/coralcrave
 2. **Click**: "Firestore Database" in the left sidebar
 3. **Click**: "Rules" tab (next to "Data" tab)
 
 ### Step 2: You'll See Current Rules
+
 - **Default rules** look like this (THESE WON'T WORK):
+
 ```javascript
 rules_version = '2';
 service cloud.firestore {
@@ -25,6 +28,7 @@ service cloud.firestore {
 ## 🔧 REPLACE WITH THESE RULES
 
 ### Step 3: Copy This Entire Code Block
+
 **Select all the text in the rules editor and replace it with:**
 
 ```javascript
@@ -35,27 +39,27 @@ service cloud.firestore {
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
-    
+
     // Allow authenticated users to create and read livestreams
     match /livestreams/{streamId} {
       allow read: if true; // Anyone can view streams
       allow create: if request.auth != null; // Only authenticated users can create
-      allow update, delete: if request.auth != null && 
-        (request.auth.uid == resource.data.hostId || 
+      allow update, delete: if request.auth != null &&
+        (request.auth.uid == resource.data.hostId ||
          request.auth.uid in resource.data.moderators);
-      
+
       // Allow access to stream items and messages
       match /{document=**} {
         allow read: if true; // Anyone can read stream content
         allow write: if request.auth != null; // Only authenticated users can write
       }
     }
-    
+
     // Allow authenticated users to read/write auction data
     match /auctions/{auctionId} {
       allow read, write: if request.auth != null;
     }
-    
+
     // Allow authenticated users to read/write bids
     match /bids/{bidId} {
       allow read, write: if request.auth != null;
@@ -65,6 +69,7 @@ service cloud.firestore {
 ```
 
 ### Step 4: Publish the Rules
+
 1. **Click**: "Publish" button (blue button at top)
 2. **Wait**: 10-30 seconds for "Rules published successfully"
 3. **Success**: You should see a green checkmark
@@ -74,6 +79,7 @@ service cloud.firestore {
 ## ✅ WHAT THESE RULES DO
 
 ### For Livestreams (Most Important):
+
 - ✅ **Anyone can view streams** (allow read: if true)
 - ✅ **Only signed-in users can create streams** (allow create: if request.auth != null)
 - ✅ **Only stream owners can edit/delete** (security)
@@ -81,10 +87,12 @@ service cloud.firestore {
 - ✅ **Only signed-in users can write** (send messages, place bids)
 
 ### For User Data:
+
 - ✅ **Users can only access their own profile data**
 - ✅ **Prevents unauthorized access to other users' data**
 
 ### For Auctions & Bids:
+
 - ✅ **Only signed-in users can participate**
 - ✅ **Prevents anonymous bidding**
 
@@ -93,11 +101,13 @@ service cloud.firestore {
 ## 🚨 CRITICAL: WHY THIS FIXES 400 ERRORS
 
 ### Before (Default Rules):
+
 ```javascript
 allow read, write: if false;  // ❌ BLOCKS EVERYTHING
 ```
 
 ### After (Our Rules):
+
 ```javascript
 allow create: if request.auth != null;  // ✅ ALLOWS AUTHENTICATED USERS
 ```
@@ -109,12 +119,14 @@ allow create: if request.auth != null;  // ✅ ALLOWS AUTHENTICATED USERS
 ## 🧪 READY TO TEST
 
 ### After publishing the rules:
+
 1. **Go to**: http://localhost:5173
 2. **Sign in**: With Google or email/password
 3. **Try creating a stream**: Go to "Go Live" page
 4. **Check browser console**: Should see success messages
 
 ### Expected Success:
+
 ```
 🚀 Creating livestream with FAST execution...
 ⚡ FAST: Livestream created in Firestore: abc123
@@ -122,6 +134,7 @@ allow create: if request.auth != null;  // ✅ ALLOWS AUTHENTICATED USERS
 ```
 
 ### If Still Getting Errors:
+
 - **Wait 5 minutes**: Rules need time to propagate
 - **Hard refresh**: Ctrl+Shift+R to clear cache
 - **Check authentication**: Make sure you're signed in

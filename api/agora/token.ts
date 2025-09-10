@@ -6,7 +6,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'GET') {
     return res.status(405).json({
       success: false,
-      error: { message: 'Method not allowed' }
+      error: { message: 'Method not allowed' },
     })
   }
 
@@ -20,7 +20,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!channelNameStr) {
     return res.status(400).json({
       success: false,
-      error: { message: 'channelName is required' }
+      error: { message: 'channelName is required' },
     })
   }
 
@@ -34,7 +34,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.error('Agora credentials not configured')
     return res.status(500).json({
       success: false,
-      error: { message: 'Agora credentials not configured' }
+      error: { message: 'Agora credentials not configured' },
     })
   }
 
@@ -53,7 +53,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       privilegeExpiredTs
     )
 
-    console.log(`Generated Agora token for channel: ${channelNameStr}, uid: ${uidNum}, role: ${roleStr}`)
+    console.log(
+      `Generated Agora token for channel: ${channelNameStr}, uid: ${uidNum}, role: ${roleStr}`
+    )
 
     res.json({
       success: true,
@@ -66,7 +68,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.error('Error generating Agora token:', error)
     res.status(500).json({
       success: false,
-      error: { message: 'Failed to generate token' }
+      error: { message: 'Failed to generate token' },
     })
   }
 }

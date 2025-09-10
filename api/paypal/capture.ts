@@ -7,7 +7,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({
       success: false,
-      error: { message: 'Method not allowed' }
+      error: { message: 'Method not allowed' },
     })
   }
 
@@ -17,7 +17,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (!orderId) {
       return res.status(400).json({
         success: false,
-        error: { message: 'Missing orderId' }
+        error: { message: 'Missing orderId' },
       })
     }
 
@@ -35,13 +35,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       console.error('PayPal credentials not configured')
       return res.status(500).json({
         success: false,
-        error: { message: 'PayPal credentials not configured' }
+        error: { message: 'PayPal credentials not configured' },
       })
     }
 
-    const environment = process.env.PAYPAL_ENV === 'live'
-      ? new paypal.core.LiveEnvironment(clientId, clientSecret)
-      : new paypal.core.SandboxEnvironment(clientId, clientSecret)
+    const environment =
+      process.env.PAYPAL_ENV === 'live'
+        ? new paypal.core.LiveEnvironment(clientId, clientSecret)
+        : new paypal.core.SandboxEnvironment(clientId, clientSecret)
 
     const payPalClient = new paypal.core.PayPalHttpClient(environment)
 
@@ -58,13 +59,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     res.json({
       success: true,
       ok: true,
-      result
+      result,
     })
   } catch (error) {
     console.error('PayPal capture error:', error)
     res.status(500).json({
       success: false,
-      error: { message: 'PayPal capture failed' }
+      error: { message: 'PayPal capture failed' },
     })
   }
 }

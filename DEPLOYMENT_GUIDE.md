@@ -7,17 +7,19 @@ Deploy your CoralCrave marketplace so users worldwide can access it! Here are th
 **Why Vercel**: Free tier, automatic deployments, perfect for React apps, built-in SSL
 
 ### Steps:
+
 1. **Create Vercel Account**
    - Go to [vercel.com](https://vercel.com)
    - Sign up with GitHub (recommended)
 
 2. **Push Code to GitHub**
+
    ```bash
    # In your CoralCrave directory
    git init
    git add .
    git commit -m "Initial CoralCrave deployment"
-   
+
    # Create repository on GitHub, then:
    git remote add origin https://github.com/yourusername/coralcrave.git
    git push -u origin main
@@ -60,7 +62,9 @@ Deploy your CoralCrave marketplace so users worldwide can access it! Here are th
 **Why Netlify**: Free tier, drag-and-drop deployment, great for static sites
 
 ### Steps:
+
 1. **Build Your App**
+
    ```bash
    npm run build
    ```
@@ -85,13 +89,16 @@ Deploy your CoralCrave marketplace so users worldwide can access it! Here are th
 **Why Firebase**: Integrated with your Firebase backend, fast CDN
 
 ### Steps:
+
 1. **Install Firebase CLI**
+
    ```bash
    npm install -g firebase-tools
    firebase login
    ```
 
 2. **Initialize Hosting**
+
    ```bash
    firebase init hosting
    # Select your Firebase project
@@ -101,6 +108,7 @@ Deploy your CoralCrave marketplace so users worldwide can access it! Here are th
    ```
 
 3. **Build and Deploy**
+
    ```bash
    npm run build
    firebase deploy
@@ -115,7 +123,9 @@ Deploy your CoralCrave marketplace so users worldwide can access it! Here are th
 ## 🔧 Pre-Deployment Checklist
 
 ### 1. Environment Variables
+
 Make sure these are set in your deployment platform:
+
 ```
 VITE_FIREBASE_API_KEY=
 VITE_FIREBASE_AUTH_DOMAIN=
@@ -127,16 +137,19 @@ VITE_AGORA_APP_ID=
 ```
 
 ### 2. Firebase Configuration
+
 - ✅ Firestore security rules deployed
 - ✅ Authentication methods enabled (Email/Password, Google)
 - ✅ Add your deployment domain to authorized domains
 
 ### 3. Agora Configuration
+
 - ✅ Agora project created
 - ✅ App ID configured
 - ✅ For production: Set up token server for security
 
 ### 4. Build Test
+
 ```bash
 npm run build
 npm run preview  # Test the production build locally
@@ -147,6 +160,7 @@ npm run preview  # Test the production build locally
 ## 🌍 Custom Domain (Optional)
 
 ### For Vercel:
+
 1. Buy domain from any registrar (Namecheap, GoDaddy, etc.)
 2. In Vercel dashboard → Project → Settings → Domains
 3. Add your custom domain
@@ -154,6 +168,7 @@ npm run preview  # Test the production build locally
 5. Add custom domain to Firebase authorized domains
 
 ### For Netlify:
+
 1. In Netlify dashboard → Domain settings
 2. Add custom domain
 3. Update DNS records
@@ -164,6 +179,7 @@ npm run preview  # Test the production build locally
 ## 🚀 Quick Start (Vercel - 10 minutes)
 
 1. **Push to GitHub**:
+
    ```bash
    git init
    git add .
@@ -188,7 +204,9 @@ npm run preview  # Test the production build locally
 Your deployed app will work on mobile browsers, but for better mobile experience:
 
 ### Progressive Web App (PWA)
+
 - Add to `vite.config.ts`:
+
 ```javascript
 import { VitePWA } from 'vite-plugin-pwa'
 
@@ -198,14 +216,15 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg}']
-      }
-    })
-  ]
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+      },
+    }),
+  ],
 })
 ```
 
 ### Camera/Microphone on Mobile
+
 - Requires HTTPS (all deployment options provide this)
 - iOS Safari may need special handling for camera access
 
@@ -214,6 +233,7 @@ export default defineConfig({
 ## 🔒 Security Notes
 
 ### Production Checklist:
+
 - ✅ All environment variables secured
 - ✅ Firebase security rules deployed
 - ✅ HTTPS enabled (automatic with all platforms)
@@ -222,7 +242,9 @@ export default defineConfig({
 - ✅ CORS properly configured
 
 ### Agora Security (Production):
+
 For production, implement Agora token server:
+
 1. Deploy the `server` folder to Cloud Run or similar
 2. Generate tokens server-side for each stream
 3. Update client to request tokens from your server
@@ -232,6 +254,7 @@ For production, implement Agora token server:
 ## 💰 Cost Estimates
 
 ### Free Tiers:
+
 - **Vercel**: 100GB bandwidth/month, unlimited projects
 - **Netlify**: 100GB bandwidth/month, 300 build minutes
 - **Firebase Hosting**: 10GB storage, 360MB/day transfer
@@ -239,6 +262,7 @@ For production, implement Agora token server:
 - **Agora**: 10,000 minutes/month free
 
 ### Scaling:
+
 - Most apps stay within free tiers initially
 - Paid plans start around $20-50/month for significant traffic
 - Monitor usage in each platform's dashboard

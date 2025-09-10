@@ -10,7 +10,6 @@ import {
 } from 'firebase/firestore'
 
 import { db } from '../lib/firebase'
-
 import { userService } from '../services/userService'
 import { useAuth } from '../contexts/AuthContext'
 import { ProfileSkeleton } from '../components/LoadingSkeleton'

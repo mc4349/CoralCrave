@@ -77,7 +77,7 @@ async function startServer() {
     setupRoutes(app)
 
     // PayPal routes
-    app.use("/paypal", paypalRouter);
+    app.use('/paypal', paypalRouter)
 
     // Socket.IO handlers
     setupSocketHandlers(io)

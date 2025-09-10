@@ -7,7 +7,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({
       success: false,
-      error: { message: 'Method not allowed' }
+      error: { message: 'Method not allowed' },
     })
   }
 
@@ -17,7 +17,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (!streamId || !productId || typeof amountUSD !== 'number') {
       return res.status(400).json({
         success: false,
-        error: { message: 'Missing/invalid fields' }
+        error: { message: 'Missing/invalid fields' },
       })
     }
 
@@ -34,7 +34,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (!snap.exists) {
       return res.status(404).json({
         success: false,
-        error: { message: 'Product not found' }
+        error: { message: 'Product not found' },
       })
     }
 
@@ -43,7 +43,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (product?.status !== 'sold') {
       return res.status(400).json({
         success: false,
-        error: { message: 'Auction not finalized yet' }
+        error: { message: 'Auction not finalized yet' },
       })
     }
 
@@ -55,13 +55,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       console.error('PayPal credentials not configured')
       return res.status(500).json({
         success: false,
-        error: { message: 'PayPal credentials not configured' }
+        error: { message: 'PayPal credentials not configured' },
       })
     }
 
-    const environment = process.env.PAYPAL_ENV === 'live'
-      ? new paypal.core.LiveEnvironment(clientId, clientSecret)
-      : new paypal.core.SandboxEnvironment(clientId, clientSecret)
+    const environment =
+      process.env.PAYPAL_ENV === 'live'
+        ? new paypal.core.LiveEnvironment(clientId, clientSecret)
+        : new paypal.core.SandboxEnvironment(clientId, clientSecret)
 
     const payPalClient = new paypal.core.PayPalHttpClient(environment)
 
@@ -80,27 +81,30 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const result = await payPalClient.execute(order)
 
     // Create order doc
-    await db.collection('orders').doc(result.result.id).set({
-      provider: 'paypal',
-      status: 'created',
-      streamId,
-      productId,
-      amount: amountUSD,
-      paypalOrderId: result.result.id,
-      createdAt: admin.firestore.FieldValue.serverTimestamp(),
-      winnerUid: product.highestBidderUid || null,
-    })
+    await db
+      .collection('orders')
+      .doc(result.result.id)
+      .set({
+        provider: 'paypal',
+        status: 'created',
+        streamId,
+        productId,
+        amount: amountUSD,
+        paypalOrderId: result.result.id,
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        winnerUid: product.highestBidderUid || null,
+      })
 
     res.json({
       success: true,
       orderId: result.result.id,
-      approveLinks: result.result.links
+      approveLinks: result.result.links,
     })
   } catch (error) {
     console.error('PayPal create order error:', error)
     res.status(500).json({
       success: false,
-      error: { message: 'PayPal create order failed' }
+      error: { message: 'PayPal create order failed' },
     })
   }
 }

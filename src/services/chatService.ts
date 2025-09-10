@@ -1,5 +1,14 @@
+import {
+  collection,
+  addDoc,
+  onSnapshot,
+  query,
+  orderBy,
+  limit,
+  where,
+} from 'firebase/firestore'
+
 import { db } from '../lib/firebase'
-import { collection, addDoc, onSnapshot, query, orderBy, limit, where } from 'firebase/firestore'
 
 export interface ChatMessage {
   id: string
@@ -100,9 +109,9 @@ export class ChatService {
       limit(50)
     )
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
+    const unsubscribe = onSnapshot(q, snapshot => {
       const messages: ChatMessage[] = []
-      snapshot.forEach((doc) => {
+      snapshot.forEach(doc => {
         const data = doc.data()
         messages.push({
           id: doc.id,
