@@ -2,6 +2,8 @@
 
 CoralCrave is a livestream-only marketplace where items can be listed and sold exclusively during live streams. Built with React, TypeScript, and modern web technologies.
 
+<!-- Latest Update: Serverless API architecture implemented with Vercel functions for Agora token generation and PayPal payments -->
+
 ## 🚀 Features
 
 - **Live-Only Marketplace**: Items can only be listed and purchased during active livestreams
