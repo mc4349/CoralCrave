@@ -121,13 +121,15 @@ export const verifyAppIdMatch = async () => {
   let clientAppId = null
 
   // Try various sources for client App ID
-  const sources = [
+  const getSources = () => [
     () => (window as any).APP_ID,
     () => (window as any).agoraDebug?.APP_ID,
     () => (document as any).env?.VITE_AGORA_APP_ID,
     () => localStorage.getItem('VITE_AGORA_APP_ID'),
     () => sessionStorage.getItem('VITE_AGORA_APP_ID')
   ]
+
+  const sources = getSources()
 
   for (const source of sources) {
     try {
