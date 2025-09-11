@@ -34,7 +34,7 @@ export const agoraDebugCommands = {
   checkEnvironment: () => {
     console.log('🔎 Environment Check:')
     console.log('VITE_AGORA_APP_ID:', import.meta.env.VITE_AGORA_APP_ID ? 'Present' : 'MISSING')
-    console.log('APP_ID from client:', APP_ID ? 'Present' : 'MISSING')
+    console.log('APP_ID from client:', (window as any).APP_ID ? 'Present' : 'MISSING')
     console.log('Is Production:', !window.location.hostname.includes('localhost'))
     console.log('Origin:', window.location.origin)
   },
@@ -78,16 +78,75 @@ if (typeof window !== 'undefined') {
   console.log('🔧 Agora Debug Utilities loaded! Run agoraDebug.runSanityChecklist() to test.')
 }
 
-// Import APP_ID for environment check
-import { APP_ID } from '../agora/client'
+// Browser-compatible App ID revealer
+export const revealActualValues = () => {
+  console.log('🔍 REVEALING ACTUAL ENVIRONMENT VALUES:')
 
-// Add App ID verification function
+  // Try to get App ID from various sources
+  const sources = {
+    'window.APP_ID': (window as any).APP_ID,
+    'window.agoraDebug.APP_ID': (window as any).agoraDebug?.APP_ID,
+    'document.env.VITE_AGORA_APP_ID': (document as any).env?.VITE_AGORA_APP_ID,
+    'localStorage.VITE_AGORA_APP_ID': localStorage.getItem('VITE_AGORA_APP_ID'),
+    'sessionStorage.VITE_AGORA_APP_ID': sessionStorage.getItem('VITE_AGORA_APP_ID')
+  }
+
+  console.log('Available App ID sources:')
+  Object.entries(sources).forEach(([source, value]) => {
+    if (value) {
+      console.log(`✅ ${source}: ${value}`)
+    } else {
+      console.log(`❌ ${source}: undefined`)
+    }
+  })
+
+  // Try to access via global window object if available
+  if (typeof window !== 'undefined' && (window as any).getAgoraAppId) {
+    try {
+      const appId = (window as any).getAgoraAppId()
+      console.log('✅ Via window.getAgoraAppId():', appId)
+    } catch (e) {
+      console.log('❌ Via window.getAgoraAppId(): failed')
+    }
+  }
+
+  return sources
+}
+
+// Enhanced App ID verification function
 export const verifyAppIdMatch = async () => {
   console.log('🔍 App ID Verification:')
 
-  // Get client-side App ID
-  const clientAppId = APP_ID
-  console.log('Client APP_ID:', clientAppId)
+  // Get client-side App ID from multiple sources
+  let clientAppId = null
+
+  // Try various sources for client App ID
+  const sources = [
+    () => (window as any).APP_ID,
+    () => (window as any).agoraDebug?.APP_ID,
+    () => (document as any).env?.VITE_AGORA_APP_ID,
+    () => localStorage.getItem('VITE_AGORA_APP_ID'),
+    () => sessionStorage.getItem('VITE_AGORA_APP_ID')
+  ]
+
+  for (const source of sources) {
+    try {
+      const value = source()
+      if (value && typeof value === 'string' && value.length > 10) {
+        clientAppId = value
+        console.log('✅ Found client App ID:', clientAppId)
+        break
+      }
+    } catch (e) {
+      // Continue to next source
+    }
+  }
+
+  if (!clientAppId) {
+    console.error('❌ Could not find client App ID from any source!')
+    console.log('Available sources checked:', sources.length)
+    return null
+  }
 
   // Test token generation to see server-side App ID
   try {
@@ -95,7 +154,7 @@ export const verifyAppIdMatch = async () => {
     const data = await response.json()
 
     if (data.success && data.token) {
-      // Extract App ID from token (first 35 characters after '006')
+      // Extract App ID from token (first 32 characters after '006')
       const tokenAppId = data.token.substring(3, 35)
       console.log('Server APP_ID (from token):', tokenAppId)
 
@@ -108,9 +167,14 @@ export const verifyAppIdMatch = async () => {
         console.error('Client:', clientAppId)
         console.error('Server:', tokenAppId)
         console.error('This is causing the "invalid token" error!')
+        console.error('🔧 SOLUTION: Ensure VITE_AGORA_APP_ID and AGORA_APP_ID are identical in Vercel')
+      } else {
+        console.log('✅ App IDs match - token should work!')
       }
 
       return { clientAppId, tokenAppId, match }
+    } else {
+      console.error('❌ Token generation failed:', data.error)
     }
   } catch (error) {
     console.error('❌ Failed to verify App ID:', error)
@@ -121,5 +185,6 @@ export const verifyAppIdMatch = async () => {
 
 // Add to global debug object
 if (typeof window !== 'undefined') {
+  (window as any).agoraDebug.revealActualValues = revealActualValues
   (window as any).agoraDebug.verifyAppIdMatch = verifyAppIdMatch
 }

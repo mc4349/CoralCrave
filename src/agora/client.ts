@@ -1,6 +1,13 @@
 import AgoraRTC, { IAgoraRTCClient } from 'agora-rtc-sdk-ng'
 export const APP_ID = import.meta.env.VITE_AGORA_APP_ID as string
 
+// Expose APP_ID globally for debugging purposes
+if (typeof window !== 'undefined') {
+  (window as any).APP_ID = APP_ID
+  console.log('🔧 Agora Client: APP_ID loaded:', APP_ID ? '✅ Present' : '❌ MISSING')
+  console.log('🔧 Agora Client: VITE_AGORA_APP_ID from env:', import.meta.env.VITE_AGORA_APP_ID || '❌ MISSING')
+}
+
 export function createClient(): IAgoraRTCClient {
   return AgoraRTC.createClient({ mode: 'live', codec: 'vp8' })
 }
