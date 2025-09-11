@@ -10,6 +10,7 @@ import {
 } from 'firebase/firestore'
 
 import { db } from '../lib/firebase'
+import { useAuth } from '../contexts/AuthContext'
 import { StreamCardSkeleton } from '../components/LoadingSkeleton'
 import LiveCard from '../components/LiveCard'
 
@@ -27,6 +28,7 @@ interface LiveStream {
 }
 
 const Explore = () => {
+  const { loading: authLoading } = useAuth()
   const [activeFilter, setActiveFilter] = useState<string | null>('For You')
   const [liveStreams, setLiveStreams] = useState<LiveStream[]>([])
   const [loading, setLoading] = useState(true)
@@ -39,6 +41,12 @@ const Explore = () => {
   const [showFilters, setShowFilters] = useState(false)
 
   useEffect(() => {
+    // Wait for authentication to complete before setting up Firestore listener
+    if (authLoading) {
+      console.log('🔍 Explore: Waiting for authentication to complete...')
+      return
+    }
+
     console.log('🔍 Explore: Setting up real-time listener for live streams...')
 
     // Real-time Firestore query for live streams
@@ -78,7 +86,7 @@ const Explore = () => {
       console.log('🔄 Explore: Cleaning up real-time listener')
       unsubscribe()
     }
-  }, [])
+  }, [authLoading])
 
   const handleFilterClick = (filter: string) => {
     if (activeFilter === filter) {
