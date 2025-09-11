@@ -29,10 +29,23 @@ export default function GoLive() {
   const [streamTitle, setStreamTitle] = useState('')
   const [streamDescription, setStreamDescription] = useState('')
   const [streamCategory, setStreamCategory] = useState('General')
+  const [isChatVisible, setIsChatVisible] = useState(true)
+  const [showShareModal, setShowShareModal] = useState(false)
+  const [isEditingStreamInfo, setIsEditingStreamInfo] = useState(false)
+  const [editTitle, setEditTitle] = useState('')
+  const [editDescription, setEditDescription] = useState('')
+  const [editCategory, setEditCategory] = useState('')
   const { currentUser, userProfile } = useAuth()
 
   useEffect(() => {
     clientRef.current = createClient()
+
+    // Load chat preference from localStorage
+    const savedChatPreference = localStorage.getItem('chatVisible')
+    if (savedChatPreference !== null) {
+      setIsChatVisible(savedChatPreference === 'true')
+    }
+
     return () => {
       ;(async () => {
         try {
@@ -221,12 +234,20 @@ export default function GoLive() {
                       🚀 GO LIVE
                     </button>
                   ) : (
-                    <button
-                      onClick={stop}
-                      className='px-8 py-4 rounded-lg bg-gray-600 hover:bg-gray-700 text-white font-bold text-lg transition-all shadow-lg'
-                    >
-                      ⏹️ END STREAM
-                    </button>
+                    <>
+                      <button
+                        onClick={() => setShowShareModal(true)}
+                        className='px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-all shadow-lg'
+                      >
+                        📤 Share Stream
+                      </button>
+                      <button
+                        onClick={stop}
+                        className='px-6 py-3 rounded-lg bg-gray-600 hover:bg-gray-700 text-white font-semibold transition-all shadow-lg'
+                      >
+                        ⏹️ END STREAM
+                      </button>
+                    </>
                   )}
                 </div>
               </div>
@@ -279,6 +300,43 @@ export default function GoLive() {
                 )}
               </div>
 
+              {/* Stream Information Display */}
+              {publishing && (
+                <div className='mt-4 p-4 bg-slate-700/50 border border-slate-600 rounded-lg'>
+                  <div className='flex justify-between items-start mb-3'>
+                    <div className='flex-1'>
+                      <h3 className='text-xl font-bold text-white mb-1'>
+                        {streamTitle}
+                      </h3>
+                      {streamDescription && (
+                        <p className='text-slate-300 text-sm mb-2'>
+                          {streamDescription}
+                        </p>
+                      )}
+                      <div className='flex items-center space-x-2'>
+                        <span className='px-2 py-1 bg-cyan-600 text-white text-xs rounded-full'>
+                          {streamCategory}
+                        </span>
+                        <span className='text-slate-400 text-xs'>
+                          Started {new Date().toLocaleTimeString()}
+                        </span>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setIsEditingStreamInfo(true)
+                        setEditTitle(streamTitle)
+                        setEditDescription(streamDescription)
+                        setEditCategory(streamCategory)
+                      }}
+                      className='px-3 py-1 bg-slate-600 hover:bg-slate-500 text-white text-sm rounded transition-colors'
+                    >
+                      ✏️ Edit
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {publishing && (
                 <div className='mt-4 p-4 bg-green-900/30 border border-green-700 rounded-lg'>
                   <div className='flex items-center space-x-3'>
@@ -307,7 +365,28 @@ export default function GoLive() {
             />
 
             {/* Live Chat */}
-            <LiveChat roomId={channel} className='h-[350px]' />
+            {isChatVisible && (
+              <div className='transition-all duration-300 ease-in-out'>
+                <LiveChat roomId={channel} className='h-[350px]' />
+              </div>
+            )}
+
+            {/* Chat Toggle */}
+            <div className='bg-slate-800 rounded-lg p-3'>
+              <button
+                onClick={() => {
+                  const newVisibility = !isChatVisible
+                  setIsChatVisible(newVisibility)
+                  localStorage.setItem('chatVisible', newVisibility.toString())
+                }}
+                className='w-full flex items-center justify-center space-x-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded transition-colors'
+              >
+                <span>{isChatVisible ? '🙈' : '👁️'}</span>
+                <span className='text-sm font-medium'>
+                  {isChatVisible ? 'Hide Chat' : 'Show Chat'}
+                </span>
+              </button>
+            </div>
 
             {/* Stream Stats */}
             {publishing && (
@@ -331,6 +410,181 @@ export default function GoLive() {
             )}
           </div>
         </div>
+
+        {/* Stream Info Edit Modal */}
+        {isEditingStreamInfo && publishing && (
+          <div className='fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4'>
+            <div className='bg-slate-800 rounded-lg p-6 w-full max-w-md'>
+              <h3 className='text-xl font-bold text-white mb-4'>
+                Edit Stream Information
+              </h3>
+
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  setStreamTitle(editTitle)
+                  setStreamDescription(editDescription)
+                  setStreamCategory(editCategory)
+                  setIsEditingStreamInfo(false)
+                }}
+                className='space-y-4'
+              >
+                <div>
+                  <label className='block text-sm font-medium text-slate-300 mb-2'>
+                    Stream Title *
+                  </label>
+                  <input
+                    type='text'
+                    value={editTitle}
+                    onChange={e => setEditTitle(e.target.value)}
+                    placeholder='Enter your stream title...'
+                    className='w-full bg-slate-700 text-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500'
+                    required
+                    maxLength={100}
+                  />
+                </div>
+
+                <div>
+                  <label className='block text-sm font-medium text-slate-300 mb-2'>
+                    Description (Optional)
+                  </label>
+                  <textarea
+                    value={editDescription}
+                    onChange={e => setEditDescription(e.target.value)}
+                    placeholder='Describe your auction stream...'
+                    className='w-full bg-slate-700 text-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500 h-20 resize-none'
+                    maxLength={500}
+                  />
+                </div>
+
+                <div>
+                  <label className='block text-sm font-medium text-slate-300 mb-2'>
+                    Category
+                  </label>
+                  <select
+                    value={editCategory}
+                    onChange={e => setEditCategory(e.target.value)}
+                    className='w-full bg-slate-700 text-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500'
+                  >
+                    <option value='General'>General</option>
+                    <option value='Art'>Art</option>
+                    <option value='Collectibles'>Collectibles</option>
+                    <option value='Electronics'>Electronics</option>
+                    <option value='Fashion'>Fashion</option>
+                    <option value='Home'>Home & Garden</option>
+                    <option value='Sports'>Sports</option>
+                    <option value='Vehicles'>Vehicles</option>
+                  </select>
+                </div>
+
+                <div className='flex space-x-3 pt-4'>
+                  <button
+                    type='button'
+                    onClick={() => setIsEditingStreamInfo(false)}
+                    className='flex-1 bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded font-semibold transition-colors'
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type='submit'
+                    disabled={!editTitle.trim()}
+                    className='flex-1 bg-cyan-600 hover:bg-cyan-700 disabled:bg-slate-600 text-white px-4 py-2 rounded font-semibold transition-colors disabled:cursor-not-allowed'
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Share Stream Modal */}
+        {showShareModal && publishing && (
+          <div className='fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4'>
+            <div className='bg-slate-800 rounded-lg p-6 w-full max-w-md'>
+              <h3 className='text-xl font-bold text-white mb-4'>
+                Share Your Stream
+              </h3>
+
+              <div className='space-y-4'>
+                <div>
+                  <label className='block text-sm font-medium text-slate-300 mb-2'>
+                    Stream Link
+                  </label>
+                  <div className='flex space-x-2'>
+                    <input
+                      type='text'
+                      value={`${window.location.origin}/live?room=${channel}`}
+                      readOnly
+                      className='flex-1 bg-slate-700 text-white rounded px-3 py-2 text-sm'
+                    />
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(`${window.location.origin}/live?room=${channel}`)
+                        // Could add a toast notification here
+                      }}
+                      className='px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded font-semibold transition-colors'
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className='block text-sm font-medium text-slate-300 mb-3'>
+                    Share on Social Media
+                  </label>
+                  <div className='grid grid-cols-3 gap-3'>
+                    <button
+                      onClick={() => {
+                        const url = encodeURIComponent(`${window.location.origin}/live?room=${channel}`)
+                        const text = encodeURIComponent(`Join my live auction stream: ${streamTitle}`)
+                        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank')
+                      }}
+                      className='flex flex-col items-center space-y-2 p-3 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors'
+                    >
+                      <span className='text-xl'>📘</span>
+                      <span className='text-xs font-medium'>Facebook</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        const url = encodeURIComponent(`${window.location.origin}/live?room=${channel}`)
+                        const text = encodeURIComponent(`Join my live auction stream: ${streamTitle}`)
+                        window.open(`https://wa.me/?text=${text}%20${url}`, '_blank')
+                      }}
+                      className='flex flex-col items-center space-y-2 p-3 bg-green-600 hover:bg-green-700 text-white rounded transition-colors'
+                    >
+                      <span className='text-xl'>💬</span>
+                      <span className='text-xs font-medium'>WhatsApp</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        const url = encodeURIComponent(`${window.location.origin}/live?room=${channel}`)
+                        const text = encodeURIComponent(`Join my live auction stream: ${streamTitle}`)
+                        window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank')
+                      }}
+                      className='flex flex-col items-center space-y-2 p-3 bg-blue-400 hover:bg-blue-500 text-white rounded transition-colors'
+                    >
+                      <span className='text-xl'>🐦</span>
+                      <span className='text-xs font-medium'>Twitter</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className='pt-4'>
+                  <button
+                    onClick={() => setShowShareModal(false)}
+                    className='w-full bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded font-semibold transition-colors'
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Stream Setup Modal */}
         {showSetup && !publishing && (
