@@ -80,3 +80,46 @@ if (typeof window !== 'undefined') {
 
 // Import APP_ID for environment check
 import { APP_ID } from '../agora/client'
+
+// Add App ID verification function
+export const verifyAppIdMatch = async () => {
+  console.log('🔍 App ID Verification:')
+
+  // Get client-side App ID
+  const clientAppId = APP_ID
+  console.log('Client APP_ID:', clientAppId)
+
+  // Test token generation to see server-side App ID
+  try {
+    const response = await fetch('/api/agora/token?channelName=test-appid&role=host')
+    const data = await response.json()
+
+    if (data.success && data.token) {
+      // Extract App ID from token (first 35 characters after '006')
+      const tokenAppId = data.token.substring(3, 35)
+      console.log('Server APP_ID (from token):', tokenAppId)
+
+      // Compare
+      const match = clientAppId === tokenAppId
+      console.log('App IDs Match:', match ? '✅ YES' : '❌ NO')
+
+      if (!match) {
+        console.error('❌ APP ID MISMATCH DETECTED!')
+        console.error('Client:', clientAppId)
+        console.error('Server:', tokenAppId)
+        console.error('This is causing the "invalid token" error!')
+      }
+
+      return { clientAppId, tokenAppId, match }
+    }
+  } catch (error) {
+    console.error('❌ Failed to verify App ID:', error)
+  }
+
+  return null
+}
+
+// Add to global debug object
+if (typeof window !== 'undefined') {
+  (window as any).agoraDebug.verifyAppIdMatch = verifyAppIdMatch
+}
