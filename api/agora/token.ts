@@ -1,5 +1,5 @@
 import { VercelRequest, VercelResponse } from '@vercel/node'
-import { RtcTokenBuilder, RtcRole } from 'agora-access-token'
+import { RtcTokenBuilder } from 'agora-access-token'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Only allow GET requests
@@ -38,7 +38,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     })
   }
 
-  const userRole = roleStr === 'host' ? RtcRole.PUBLISHER : RtcRole.SUBSCRIBER
+  const userRole = roleStr === 'host' ? 1 : 2 // 1 = PUBLISHER, 2 = SUBSCRIBER
   const expirationTimeInSeconds = 3600 // 1 hour
   const currentTimestamp = Math.floor(Date.now() / 1000)
   const privilegeExpiredTs = currentTimestamp + expirationTimeInSeconds
