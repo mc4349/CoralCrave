@@ -1,8 +1,8 @@
 // Agora Debugging Utilities for Production Verification
 // Run these commands in browser console to verify Agora token authentication
 
-export const agoraDebugCommands = {
-  // Test health check endpoint
+// Core debug commands object
+const agoraDebugCommands = {
   testHealthCheck: async () => {
     console.log('🔍 Testing Agora Health Check...')
     try {
@@ -16,7 +16,6 @@ export const agoraDebugCommands = {
     }
   },
 
-  // Test token generation
   testTokenGeneration: async (channel = 'test-channel') => {
     console.log('🗝️ Testing Token Generation...')
     try {
@@ -30,7 +29,6 @@ export const agoraDebugCommands = {
     }
   },
 
-  // Verify environment variables
   checkEnvironment: () => {
     console.log('🔎 Environment Check:')
     console.log('VITE_AGORA_APP_ID:', import.meta.env.VITE_AGORA_APP_ID ? 'Present' : 'MISSING')
@@ -39,23 +37,18 @@ export const agoraDebugCommands = {
     console.log('Origin:', window.location.origin)
   },
 
-  // Run complete sanity checklist
   runSanityChecklist: async () => {
     console.log('🚀 Running Agora Sanity Checklist...')
 
-    // 1. Environment check
     console.log('1️⃣ Environment Check:')
     agoraDebugCommands.checkEnvironment()
 
-    // 2. Health check
     console.log('2️⃣ Health Check:')
     const healthResult = await agoraDebugCommands.testHealthCheck()
 
-    // 3. Token generation test
     console.log('3️⃣ Token Generation Test:')
     const tokenResult = await agoraDebugCommands.testTokenGeneration()
 
-    // 4. Summary
     console.log('4️⃣ Summary:')
     const isHealthy = healthResult?.status === 'healthy'
     const hasToken = tokenResult?.success === true
@@ -72,6 +65,9 @@ export const agoraDebugCommands = {
   }
 }
 
+// Export the commands object
+export { agoraDebugCommands }
+
 // Make available globally for console testing
 if (typeof window !== 'undefined') {
   (window as any).agoraDebug = agoraDebugCommands
@@ -82,10 +78,8 @@ if (typeof window !== 'undefined') {
 export const revealActualValues = () => {
   console.log('🔍 REVEALING ACTUAL ENVIRONMENT VALUES:')
 
-  // Try to get App ID from various sources
   const sources = {
     'window.APP_ID': (window as any).APP_ID,
-    'window.agoraDebug.APP_ID': (window as any).agoraDebug?.APP_ID,
     'document.env.VITE_AGORA_APP_ID': (document as any).env?.VITE_AGORA_APP_ID,
     'localStorage.VITE_AGORA_APP_ID': localStorage.getItem('VITE_AGORA_APP_ID'),
     'sessionStorage.VITE_AGORA_APP_ID': sessionStorage.getItem('VITE_AGORA_APP_ID')
@@ -100,7 +94,6 @@ export const revealActualValues = () => {
     }
   })
 
-  // Try to access via global window object if available
   if (typeof window !== 'undefined' && (window as any).getAgoraAppId) {
     try {
       const appId = (window as any).getAgoraAppId()
@@ -117,19 +110,14 @@ export const revealActualValues = () => {
 export const verifyAppIdMatch = async () => {
   console.log('🔍 App ID Verification:')
 
-  // Get client-side App ID from multiple sources
   let clientAppId = null
 
-  // Try various sources for client App ID
-  const getSources = () => [
+  const sources = [
     () => (window as any).APP_ID,
-    () => (window as any).agoraDebug?.APP_ID,
     () => (document as any).env?.VITE_AGORA_APP_ID,
     () => localStorage.getItem('VITE_AGORA_APP_ID'),
     () => sessionStorage.getItem('VITE_AGORA_APP_ID')
   ]
-
-  const sources = getSources()
 
   for (const source of sources) {
     try {
@@ -150,17 +138,14 @@ export const verifyAppIdMatch = async () => {
     return null
   }
 
-  // Test token generation to see server-side App ID
   try {
     const response = await fetch('/api/agora/token?channelName=test-appid&role=host')
     const data = await response.json()
 
     if (data.success && data.token) {
-      // Extract App ID from token (first 32 characters after '006')
       const tokenAppId = data.token.substring(3, 35)
       console.log('Server APP_ID (from token):', tokenAppId)
 
-      // Compare
       const match = clientAppId === tokenAppId
       console.log('App IDs Match:', match ? '✅ YES' : '❌ NO')
 
@@ -183,10 +168,4 @@ export const verifyAppIdMatch = async () => {
   }
 
   return null
-}
-
-// Add to global debug object
-if (typeof window !== 'undefined') {
-  (window as any).agoraDebug.revealActualValues = revealActualValues
-  (window as any).agoraDebug.verifyAppIdMatch = verifyAppIdMatch
 }

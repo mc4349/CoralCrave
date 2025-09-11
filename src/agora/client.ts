@@ -2,8 +2,11 @@ import AgoraRTC, { IAgoraRTCClient } from 'agora-rtc-sdk-ng'
 
 console.log('🔧 Agora Client: Module loading...')
 
+// Initialize APP_ID outside try/catch blocks to avoid TypeScript compilation errors
+let APP_ID: string
+
 try {
-  export const APP_ID = import.meta.env.VITE_AGORA_APP_ID as string
+  APP_ID = import.meta.env.VITE_AGORA_APP_ID as string
 
   console.log('🔧 Agora Client: APP_ID loaded:', APP_ID ? '✅ Present' : '❌ MISSING')
   console.log('🔧 Agora Client: VITE_AGORA_APP_ID from env:', import.meta.env.VITE_AGORA_APP_ID || '❌ MISSING')
@@ -17,8 +20,11 @@ try {
   console.log('🔧 Agora Client: AgoraRTC SDK available:', typeof AgoraRTC)
 } catch (error) {
   console.error('❌ Agora Client: Failed to initialize:', error)
-  export const APP_ID = ''
+  APP_ID = ''
 }
+
+// Export APP_ID after initialization
+export { APP_ID }
 
 export function createClient(): IAgoraRTCClient {
   return AgoraRTC.createClient({ mode: 'live', codec: 'vp8' })
