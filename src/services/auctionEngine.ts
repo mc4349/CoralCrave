@@ -197,10 +197,7 @@ export class AuctionEngine {
   }
 
   // Place a bid using Cloud Function for atomic transactions
-  async placeBid(
-    itemId: string,
-    amount: number
-  ): Promise<void> {
+  async placeBid(itemId: string, amount: number): Promise<void> {
     try {
       // Use Cloud Function for atomic bidding
       const { getFunctions, httpsCallable } = await import('firebase/functions')

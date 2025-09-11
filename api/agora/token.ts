@@ -4,7 +4,9 @@ import { RtcTokenBuilder } from 'agora-access-token'
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Only allow GET requests
   if (req.method !== 'GET') {
-    console.error('❌ TOKEN REQUEST FAILED: Method not allowed', { method: req.method })
+    console.error('❌ TOKEN REQUEST FAILED: Method not allowed', {
+      method: req.method,
+    })
     return res.status(405).json({
       success: false,
       error: { message: 'Method not allowed' },
@@ -26,7 +28,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     role: roleStr,
     userAgent: req.headers['user-agent'],
     origin: req.headers.origin,
-    method: req.method
+    method: req.method,
   })
 
   if (!channelNameStr) {
@@ -51,7 +53,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     appCertificatePresent: !!appCertificate,
     appCertificateLength: appCertificate?.length || 0,
     environment: process.env.NODE_ENV || 'unknown',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   })
 
   if (!appId || !appCertificate) {
@@ -69,10 +71,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   } else if (roleStr === 'subscriber' || roleStr === 'audience') {
     userRole = 2 // SUBSCRIBER role for Watch (viewing)
   } else {
-    console.error('❌ TOKEN REQUEST FAILED: Invalid role specified', { role: roleStr })
+    console.error('❌ TOKEN REQUEST FAILED: Invalid role specified', {
+      role: roleStr,
+    })
     return res.status(400).json({
       success: false,
-      error: { message: 'Invalid role. Use "publisher"/"host" for streaming or "subscriber"/"audience" for viewing' },
+      error: {
+        message:
+          'Invalid role. Use "publisher"/"host" for streaming or "subscriber"/"audience" for viewing',
+      },
     })
   }
   const expirationTimeInSeconds = 3600 // 1 hour
@@ -88,7 +95,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     expirationTimeInSeconds,
     currentTimestamp,
     privilegeExpiredTs,
-    appIdPrefix: appId.substring(0, 8) + '...'
+    appIdPrefix: appId.substring(0, 8) + '...',
   })
 
   try {
@@ -110,7 +117,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       tokenLength: token.length,
       expiresAt: privilegeExpiredTs,
       expiresIn: expirationTimeInSeconds,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     })
 
     const response = {
@@ -127,7 +134,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       uid: uidNum,
       channelName: channelNameStr,
       expiresAt: privilegeExpiredTs,
-      tokenPrefix: token.substring(0, 20) + '...'
+      tokenPrefix: token.substring(0, 20) + '...',
     })
 
     res.json(response)
@@ -140,14 +147,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       role: roleStr,
       error: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : undefined,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     })
 
     res.status(500).json({
       success: false,
       error: {
         message: 'Failed to generate token',
-        details: error instanceof Error ? error.message : String(error)
+        details: error instanceof Error ? error.message : String(error),
       },
     })
   }

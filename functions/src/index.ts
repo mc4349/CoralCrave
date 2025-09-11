@@ -73,7 +73,7 @@ export const placeBid = functions.https.onCall(async (data, context) => {
       username: '', // Will be populated from user profile
       timestamp: admin.firestore.FieldValue.serverTimestamp(),
       source: 'user',
-      isValid: true
+      isValid: true,
     })
 
     tx.update(itemRef, {

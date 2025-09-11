@@ -22,7 +22,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       appCertificatePresent: !!appCertificate,
       appCertificateLength: appCertificate?.length || 0,
       nodeVersion: process.version,
-      environment: process.env.NODE_ENV || 'development'
+      environment: process.env.NODE_ENV || 'development',
     })
 
     // Validate required environment variables
@@ -36,9 +36,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           message: 'Agora credentials not configured',
           details: {
             appIdPresent: !!appId,
-            appCertificatePresent: !!appCertificate
-          }
-        }
+            appCertificatePresent: !!appCertificate,
+          },
+        },
       })
     }
 
@@ -51,13 +51,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       agora: {
         appIdConfigured: true,
         appCertificateConfigured: true,
-        serverTime: timestamp
+        serverTime: timestamp,
       },
       environment: {
         nodeVersion: process.version,
         platform: process.platform,
-        environment: process.env.NODE_ENV || 'development'
-      }
+        environment: process.env.NODE_ENV || 'development',
+      },
     })
   } catch (error) {
     console.error('❌ HEALTH CHECK ERROR:', error)
@@ -67,8 +67,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       timestamp: Math.floor(Date.now() / 1000),
       error: {
         message: 'Health check failed',
-        details: error instanceof Error ? error.message : String(error)
-      }
+        details: error instanceof Error ? error.message : String(error),
+      },
     })
   }
 }

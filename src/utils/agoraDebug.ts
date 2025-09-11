@@ -19,7 +19,9 @@ const agoraDebugCommands = {
   testTokenGeneration: async (channel = 'test-channel') => {
     console.log('🗝️ Testing Token Generation...')
     try {
-      const response = await fetch(`/api/agora/token?channelName=${channel}&role=host`)
+      const response = await fetch(
+        `/api/agora/token?channelName=${channel}&role=host`
+      )
       const data = await response.json()
       console.log('✅ Token Generation Response:', data)
       return data
@@ -31,9 +33,18 @@ const agoraDebugCommands = {
 
   checkEnvironment: () => {
     console.log('🔎 Environment Check:')
-    console.log('VITE_AGORA_APP_ID:', import.meta.env.VITE_AGORA_APP_ID ? 'Present' : 'MISSING')
-    console.log('APP_ID from client:', (window as any).APP_ID ? 'Present' : 'MISSING')
-    console.log('Is Production:', !window.location.hostname.includes('localhost'))
+    console.log(
+      'VITE_AGORA_APP_ID:',
+      import.meta.env.VITE_AGORA_APP_ID ? 'Present' : 'MISSING'
+    )
+    console.log(
+      'APP_ID from client:',
+      (window as any).APP_ID ? 'Present' : 'MISSING'
+    )
+    console.log(
+      'Is Production:',
+      !window.location.hostname.includes('localhost')
+    )
     console.log('Origin:', window.location.origin)
   },
 
@@ -62,7 +73,7 @@ const agoraDebugCommands = {
     }
 
     return { isHealthy, hasToken, healthResult, tokenResult }
-  }
+  },
 }
 
 // Export the commands object
@@ -70,8 +81,10 @@ export { agoraDebugCommands }
 
 // Make available globally for console testing
 if (typeof window !== 'undefined') {
-  (window as any).agoraDebug = agoraDebugCommands
-  console.log('🔧 Agora Debug Utilities loaded! Run agoraDebug.runSanityChecklist() to test.')
+  ;(window as any).agoraDebug = agoraDebugCommands
+  console.log(
+    '🔧 Agora Debug Utilities loaded! Run agoraDebug.runSanityChecklist() to test.'
+  )
 }
 
 // Browser-compatible App ID revealer
@@ -82,7 +95,8 @@ export const revealActualValues = () => {
     'window.APP_ID': (window as any).APP_ID,
     'document.env.VITE_AGORA_APP_ID': (document as any).env?.VITE_AGORA_APP_ID,
     'localStorage.VITE_AGORA_APP_ID': localStorage.getItem('VITE_AGORA_APP_ID'),
-    'sessionStorage.VITE_AGORA_APP_ID': sessionStorage.getItem('VITE_AGORA_APP_ID')
+    'sessionStorage.VITE_AGORA_APP_ID':
+      sessionStorage.getItem('VITE_AGORA_APP_ID'),
   }
 
   console.log('Available App ID sources:')
@@ -116,7 +130,7 @@ export const verifyAppIdMatch = async () => {
     () => (window as any).APP_ID,
     () => (document as any).env?.VITE_AGORA_APP_ID,
     () => localStorage.getItem('VITE_AGORA_APP_ID'),
-    () => sessionStorage.getItem('VITE_AGORA_APP_ID')
+    () => sessionStorage.getItem('VITE_AGORA_APP_ID'),
   ]
 
   for (const source of sources) {
@@ -139,7 +153,9 @@ export const verifyAppIdMatch = async () => {
   }
 
   try {
-    const response = await fetch('/api/agora/token?channelName=test-appid&role=host')
+    const response = await fetch(
+      '/api/agora/token?channelName=test-appid&role=host'
+    )
     const data = await response.json()
 
     if (data.success && data.token) {
@@ -154,7 +170,9 @@ export const verifyAppIdMatch = async () => {
         console.error('Client:', clientAppId)
         console.error('Server:', tokenAppId)
         console.error('This is causing the "invalid token" error!')
-        console.error('🔧 SOLUTION: Ensure VITE_AGORA_APP_ID and AGORA_APP_ID are identical in Vercel')
+        console.error(
+          '🔧 SOLUTION: Ensure VITE_AGORA_APP_ID and AGORA_APP_ID are identical in Vercel'
+        )
       } else {
         console.log('✅ App IDs match - token should work!')
       }

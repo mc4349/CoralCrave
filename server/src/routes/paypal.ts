@@ -35,8 +35,7 @@ paypalRouter.post('/create-order', async (req, res) => {
     // Validate winner server-side
     const itemRef = db.doc(`livestreams/${streamId}/items/${productId}`)
     const snap = await itemRef.get()
-    if (!snap.exists)
-      return res.status(404).json({ error: 'Item not found' })
+    if (!snap.exists) return res.status(404).json({ error: 'Item not found' })
     const item = snap.data()
 
     if (item?.status !== 'sold') {
