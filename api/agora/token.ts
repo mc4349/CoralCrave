@@ -47,8 +47,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   console.log('🔐 CREDENTIALS CHECK:', {
     appIdPresent: !!appId,
     appIdLength: appId?.length || 0,
+    appIdValue: appId ? appId.substring(0, 8) + '...' : 'MISSING',
     appCertificatePresent: !!appCertificate,
-    appCertificateLength: appCertificate?.length || 0
+    appCertificateLength: appCertificate?.length || 0,
+    environment: process.env.NODE_ENV || 'unknown',
+    timestamp: new Date().toISOString()
   })
 
   if (!appId || !appCertificate) {
