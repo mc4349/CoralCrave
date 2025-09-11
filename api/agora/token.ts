@@ -59,7 +59,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     })
   }
 
-  const userRole = roleStr === 'host' ? 1 : 2 // 1 = PUBLISHER, 2 = SUBSCRIBER
+  // 🎭 ROLE MAPPING: Proper Publisher/Subscriber roles
+  let userRole: number
+  if (roleStr === 'publisher' || roleStr === 'host') {
+    userRole = 1 // PUBLISHER role for Go Live (streaming)
+  } else if (roleStr === 'subscriber' || roleStr === 'audience') {
+    userRole = 2 // SUBSCRIBER role for Watch (viewing)
+  } else {
+    console.error('❌ TOKEN REQUEST FAILED: Invalid role specified', { role: roleStr })
+    return res.status(400).json({
+      success: false,
+      error: { message: 'Invalid role. Use "publisher"/"host" for streaming or "subscriber"/"audience" for viewing' },
+    })
+  }
   const expirationTimeInSeconds = 3600 // 1 hour
   const currentTimestamp = Math.floor(Date.now() / 1000)
   const privilegeExpiredTs = currentTimestamp + expirationTimeInSeconds
