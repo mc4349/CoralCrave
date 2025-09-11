@@ -4,6 +4,89 @@ import * as admin from 'firebase-admin'
 admin.initializeApp()
 const db = admin.firestore()
 
+/**
+ * Scheduled function to cleanup orphaned live streams
+ * Runs every 2 minutes to remove streams that haven't been updated recently
+ */
+export const cleanupOrphanedStreams = functions.pubsub
+  .schedule('every 2 minutes')
+  .onRun(async (context) => {
+    console.log('🧹 Starting scheduled cleanup of orphaned live streams...')
+
+    try {
+      const cutoffTime = new Date()
+      cutoffTime.setMinutes(cutoffTime.getMinutes() - 2) // 2 minute threshold
+
+      // Query all streams with status "live"
+      const q = db.collection('livestreams').where('status', '==', 'live')
+      const querySnapshot = await q.get()
+
+      const deletePromises: Promise<any>[] = []
+      let orphanedCount = 0
+
+      querySnapshot.forEach((document) => {
+        const data = document.data()
+        const updatedAt = data.updatedAt?.toDate?.() || new Date(data.updatedAt)
+        const lastHeartbeat = data.lastHeartbeat?.toDate?.() || new Date(data.lastHeartbeat)
+
+        // Check if stream has been updated recently
+        const mostRecentUpdate = lastHeartbeat > updatedAt ? lastHeartbeat : updatedAt
+
+        if (mostRecentUpdate < cutoffTime) {
+          console.log(`🗑️ Deleting orphaned stream: ${document.id} (last updated: ${mostRecentUpdate})`)
+          deletePromises.push(document.ref.delete())
+          orphanedCount++
+        }
+      })
+
+      // Delete orphaned streams
+      await Promise.all(deletePromises)
+
+      if (orphanedCount > 0) {
+        console.log(`✅ Cleaned up ${orphanedCount} orphaned streams`)
+      } else {
+        console.log('ℹ️ No orphaned streams found to clean up')
+      }
+
+      return { success: true, cleanedCount: orphanedCount }
+    } catch (error) {
+      console.error('❌ Failed to cleanup orphaned streams:', error)
+      throw error
+    }
+  })
+
+/**
+ * Manual cleanup function that can be called via HTTP
+ * Useful for immediate cleanup or testing
+ */
+export const manualCleanup = functions.https.onCall(async (data, context) => {
+  console.log('🧹 Starting manual cleanup of old live streams...')
+
+  try {
+    // Query all streams with status "live"
+    const q = db.collection('livestreams').where('status', '==', 'live')
+    const querySnapshot = await q.get()
+
+    const deletePromises: Promise<any>[] = []
+
+    console.log(`📊 Found ${querySnapshot.size} live streams to clean up`)
+
+    querySnapshot.forEach((document) => {
+      console.log(`🗑️ Deleting old live stream: ${document.id}`)
+      deletePromises.push(document.ref.delete())
+    })
+
+    // Delete all old streams
+    await Promise.all(deletePromises)
+
+    console.log(`✅ Successfully deleted ${deletePromises.length} old live streams`)
+    return { success: true, deletedCount: deletePromises.length }
+  } catch (error) {
+    console.error('❌ Failed to cleanup old live streams:', error)
+    throw error
+  }
+})
+
 export const placeBid = functions.https.onCall(async (data, context) => {
   const { streamId, productId, amount } = data || {}
   const uid = context.auth?.uid

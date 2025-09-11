@@ -9,6 +9,7 @@ import { APP_ID, createClient, fetchToken } from '../agora/client'
 import LiveChat from '../components/LiveChat'
 import AuctionPanel from '../components/AuctionPanel'
 import { useAuth } from '../contexts/AuthContext'
+import { livestreamService } from '../services/livestreamService'
 
 function getRoom(defaultName = 'main') {
   const u = new URL(window.location.href)
@@ -35,6 +36,8 @@ export default function GoLive() {
   const [editTitle, setEditTitle] = useState('')
   const [editDescription, setEditDescription] = useState('')
   const [editCategory, setEditCategory] = useState('')
+  const [livestreamId, setLivestreamId] = useState<string | null>(null)
+  const [heartbeatInterval, setHeartbeatInterval] = useState<NodeJS.Timeout | null>(null)
   const { currentUser, userProfile } = useAuth()
 
   useEffect(() => {
@@ -49,8 +52,23 @@ export default function GoLive() {
     return () => {
       ;(async () => {
         try {
+          // Stop heartbeat interval
+          if (heartbeatInterval) {
+            clearInterval(heartbeatInterval)
+          }
+
           await clientRef.current?.unpublish().catch(() => {})
           await clientRef.current?.leave().catch(() => {})
+
+          // Delete stream document if component unmounts while streaming
+          if (livestreamId) {
+            try {
+              await livestreamService.deleteStream(livestreamId)
+              console.log('📝 Livestream deleted on component unmount:', livestreamId)
+            } catch (firestoreError) {
+              console.error('❌ Failed to delete livestream on unmount:', firestoreError)
+            }
+          }
         } finally {
           tracksRef.current.cam?.stop()
           tracksRef.current.cam?.close()
@@ -137,6 +155,47 @@ export default function GoLive() {
       setPublishing(true)
       setIsHost(true)
 
+      // 📝 Create livestream document in Firestore
+      try {
+        if (!currentUser) {
+          throw new Error('User not authenticated')
+        }
+
+        const livestreamData = {
+          title: streamTitle.trim(),
+          description: streamDescription.trim(),
+          hostId: currentUser.uid,
+          hostUsername: userProfile?.username || currentUser.email || 'Anonymous',
+          channelName: channel,
+          categories: streamCategory !== 'General' ? [streamCategory.toLowerCase()] : [],
+        }
+
+        const createdLivestreamId = await livestreamService.createLivestream(livestreamData)
+        setLivestreamId(createdLivestreamId)
+
+        console.log('📝 Livestream document created:', {
+          id: createdLivestreamId,
+          title: streamTitle,
+          channel,
+        })
+
+        // Start heartbeat updates every 30 seconds to keep stream alive
+        const heartbeatIntervalId = setInterval(async () => {
+          if (createdLivestreamId) {
+            try {
+              await livestreamService.updateHeartbeat(createdLivestreamId)
+            } catch (error) {
+              console.error('❌ Failed to update heartbeat:', error)
+            }
+          }
+        }, 30000) // 30 seconds
+
+        setHeartbeatInterval(heartbeatIntervalId)
+      } catch (firestoreError) {
+        console.error('❌ Failed to create livestream document:', firestoreError)
+        // Continue with stream even if Firestore fails
+      }
+
       // ✅ STREAM SUCCESS: Complete authentication flow successful
       console.log(
         '✅ STREAM SUCCESS: Complete authentication flow successful',
@@ -160,7 +219,23 @@ export default function GoLive() {
       const client = clientRef.current!
       await client.unpublish().catch(() => {})
       await client.leave().catch(() => {})
+
+      // 📝 Delete livestream document from Firestore
+      if (livestreamId) {
+        try {
+          await livestreamService.deleteStream(livestreamId)
+          console.log('📝 Livestream deleted:', livestreamId)
+        } catch (firestoreError) {
+          console.error('❌ Failed to delete livestream:', firestoreError)
+        }
+      }
     } finally {
+      // Stop heartbeat interval
+      if (heartbeatInterval) {
+        clearInterval(heartbeatInterval)
+        setHeartbeatInterval(null)
+      }
+
       tracksRef.current.cam?.stop()
       tracksRef.current.cam?.close()
       tracksRef.current.cam = undefined
@@ -169,6 +244,7 @@ export default function GoLive() {
       tracksRef.current.mic = undefined
       setPublishing(false)
       setIsHost(false)
+      setLivestreamId(null) // Clear the livestream ID
     }
   }
 

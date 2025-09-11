@@ -185,12 +185,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
       setUserProfile(profile)
 
-      // Update last active time
-      await setDoc(
-        doc(db, 'users', user.uid),
-        { lastActiveAt: new Date() },
-        { merge: true }
-      )
+      // Update last active time (with error handling for permission issues)
+      try {
+        await setDoc(
+          doc(db, 'users', user.uid),
+          { lastActiveAt: new Date() },
+          { merge: true }
+        )
+      } catch (updateError) {
+        console.warn('Could not update lastActiveAt timestamp:', updateError)
+        // Continue without failing - this is not critical for authentication
+      }
     }
   }
 

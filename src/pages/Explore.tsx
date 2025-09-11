@@ -1,30 +1,25 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import {
-  collection,
-  query,
-  where,
-  onSnapshot,
-  orderBy,
-  limit,
-} from 'firebase/firestore'
 
-import { db } from '../lib/firebase'
 import { useAuth } from '../contexts/AuthContext'
+import { livestreamService, Livestream } from '../services/livestreamService'
 import { StreamCardSkeleton } from '../components/LoadingSkeleton'
-import LiveCard from '../components/LiveCard'
+import LiveCard, { LiveStream } from '../components/LiveCard'
 
-interface LiveStream {
-  id: string
-  title?: string
-  hostId?: string
-  hostUsername?: string
-  channelName: string
-  viewerCount?: number
-  status: 'live' | 'offline' | 'ended'
-  categories?: string[]
-  startedAt?: any
-  previewUrl?: string | null
+// Convert service Livestream to UI LiveStream format
+function convertToUILiveStream(serviceStream: Livestream): LiveStream {
+  return {
+    id: serviceStream.id,
+    title: serviceStream.title || undefined,
+    hostId: serviceStream.hostId || undefined,
+    hostUsername: serviceStream.hostUsername || undefined,
+    channelName: serviceStream.channelName,
+    viewerCount: serviceStream.viewerCount || 0,
+    status: serviceStream.status,
+    categories: serviceStream.categories || [],
+    startedAt: serviceStream.startedAt,
+    previewUrl: serviceStream.previewUrl || null,
+  }
 }
 
 const Explore = () => {
@@ -49,34 +44,25 @@ const Explore = () => {
 
     console.log('🔍 Explore: Setting up real-time listener for live streams...')
 
-    // Real-time Firestore query for live streams
-    const liveQuery = query(
-      collection(db, 'livestreams'),
-      where('status', '==', 'live'),
-      orderBy('startedAt', 'desc'),
-      limit(20)
-    )
-
-    const unsubscribe = onSnapshot(
-      liveQuery,
-      snapshot => {
-        const streams = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-        })) as LiveStream[]
-
+    // Use the livestream service for real-time updates
+    const unsubscribe = livestreamService.subscribeToActiveLivestreams(
+      (serviceStreams: Livestream[]) => {
         console.log(
           '✅ Explore: Real-time update - Found',
-          streams.length,
-          'live streams'
+          serviceStreams.length,
+          'live streams from service'
         )
-        setLiveStreams(streams)
-        setLoading(false)
-      },
-      error => {
-        console.error('❌ Explore: Error in real-time listener:', error)
-        console.error('❌ This means no streams will be visible to viewers!')
-        setLiveStreams([])
+
+        // Convert service streams to UI format
+        const uiStreams = serviceStreams.map(convertToUILiveStream)
+
+        console.log(
+          '🔄 Explore: Converted to UI format -',
+          uiStreams.length,
+          'streams'
+        )
+
+        setLiveStreams(uiStreams)
         setLoading(false)
       }
     )

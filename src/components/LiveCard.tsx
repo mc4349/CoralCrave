@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import PreviewModal from './PreviewModal'
 
-interface LiveStream {
+export interface LiveStream {
   id: string
   title?: string
   hostId?: string
