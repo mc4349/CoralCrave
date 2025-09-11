@@ -63,11 +63,13 @@ export default function GoLive() {
       console.log('🔎 LIVESTREAM DEBUG:', {
         channel,
         APP_ID: APP_ID ? 'Present' : 'MISSING',
-        VITE_AGORA_APP_ID: import.meta.env.VITE_AGORA_APP_ID ? 'Present' : 'MISSING',
+        VITE_AGORA_APP_ID: import.meta.env.VITE_AGORA_APP_ID
+          ? 'Present'
+          : 'MISSING',
         userAgent: navigator.userAgent,
         timestamp: new Date().toISOString(),
         streamTitle: streamTitle.trim(),
-        currentUser: currentUser?.email || 'No user'
+        currentUser: currentUser?.email || 'No user',
       })
 
       const client = clientRef.current!
@@ -82,7 +84,7 @@ export default function GoLive() {
         role: 'host', // Changed from 'publisher' to 'host' for consistency
         uid: 'auto-generated',
         endpoint: '/api/agora/token',
-        note: 'Using host role to match client.setClientRole and server mapping'
+        note: 'Using host role to match client.setClientRole and server mapping',
       })
 
       // Fetch token for host role (maps to PUBLISHER on server)
@@ -94,7 +96,7 @@ export default function GoLive() {
         tokenLength: tokenData.token?.length || 0,
         exp: tokenData.exp,
         channelName: channel,
-        uid: 'auto-generated'
+        uid: 'auto-generated',
       })
 
       // 🎯 JOIN CALL: Attempting to join channel
@@ -102,16 +104,16 @@ export default function GoLive() {
         APP_ID: APP_ID.substring(0, 8) + '...',
         channel,
         tokenPrefix: tokenData.token.substring(0, 20) + '...',
-        uid: null
+        uid: tokenData.uid,
       })
 
-      await client.join(APP_ID, channel, tokenData.token, null)
+      await client.join(APP_ID, channel, tokenData.token, tokenData.uid)
 
       // 🎯 JOIN CALL: Successfully joined channel
       console.log('🎯 JOIN CALL: Successfully joined channel', {
         channel,
-        uid: null,
-        timestamp: new Date().toISOString()
+        uid: tokenData.uid,
+        timestamp: new Date().toISOString(),
       })
 
       const [mic, cam] = await AgoraRTC.createMicrophoneAndCameraTracks()
@@ -123,13 +125,16 @@ export default function GoLive() {
       setIsHost(true)
 
       // ✅ STREAM SUCCESS: Complete authentication flow successful
-      console.log('✅ STREAM SUCCESS: Complete authentication flow successful', {
-        channel,
-        isHost: true,
-        publishing: true,
-        timestamp: new Date().toISOString(),
-        message: 'Agora token authentication working correctly!'
-      })
+      console.log(
+        '✅ STREAM SUCCESS: Complete authentication flow successful',
+        {
+          channel,
+          isHost: true,
+          publishing: true,
+          timestamp: new Date().toISOString(),
+          message: 'Agora token authentication working correctly!',
+        }
+      )
     } catch (e: any) {
       console.error(e)
       setErr(e?.message || String(e))
