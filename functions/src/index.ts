@@ -5,52 +5,52 @@ admin.initializeApp()
 const db = admin.firestore()
 
 /**
- * Scheduled function to cleanup orphaned live streams
- * Runs every 2 minutes to remove streams that haven't been updated recently
+ * Scheduled function to mark stale live streams as ended
+ * Runs every 5 minutes to mark streams as ended if heartbeat is stale (> 2 minutes)
  */
-export const cleanupOrphanedStreams = functions.pubsub
-  .schedule('every 2 minutes')
+export const endStaleLiveStreams = functions.pubsub
+  .schedule('every 5 minutes')
   .onRun(async (context) => {
-    console.log('🧹 Starting scheduled cleanup of orphaned live streams...')
+    console.log('🧹 Starting scheduled cleanup of stale live streams...')
 
     try {
-      const cutoffTime = new Date()
-      cutoffTime.setMinutes(cutoffTime.getMinutes() - 2) // 2 minute threshold
+      const now = admin.firestore.Timestamp.now()
+      const staleMillis = 2 * 60 * 1000 // 2 minutes
+      const cutoff = new Date(now.toMillis() - staleMillis)
 
       // Query all streams with status "live"
       const q = db.collection('livestreams').where('status', '==', 'live')
       const querySnapshot = await q.get()
 
-      const deletePromises: Promise<any>[] = []
-      let orphanedCount = 0
+      const batch = db.batch()
+      let count = 0
 
-      querySnapshot.forEach((document) => {
-        const data = document.data()
-        const updatedAt = data.updatedAt?.toDate?.() || new Date(data.updatedAt)
-        const lastHeartbeat = data.lastHeartbeat?.toDate?.() || new Date(data.lastHeartbeat)
+      querySnapshot.forEach((docSnap) => {
+        const d = docSnap.data() as any
+        const last = d.lastHeartbeat?.toDate?.() || d.lastHeartbeat
+        const lastMs = last instanceof Date ? last.getTime() : 0
 
-        // Check if stream has been updated recently
-        const mostRecentUpdate = lastHeartbeat > updatedAt ? lastHeartbeat : updatedAt
-
-        if (mostRecentUpdate < cutoffTime) {
-          console.log(`🗑️ Deleting orphaned stream: ${document.id} (last updated: ${mostRecentUpdate})`)
-          deletePromises.push(document.ref.delete())
-          orphanedCount++
+        // If lastHeartbeat missing or older than cutoff -> mark as ended
+        if (!lastMs || lastMs < cutoff.getTime()) {
+          batch.update(docSnap.ref, {
+            status: 'ended',
+            endedAt: admin.firestore.FieldValue.serverTimestamp(),
+            staleEnded: true,
+          })
+          count++
         }
       })
 
-      // Delete orphaned streams
-      await Promise.all(deletePromises)
-
-      if (orphanedCount > 0) {
-        console.log(`✅ Cleaned up ${orphanedCount} orphaned streams`)
+      if (count > 0) {
+        await batch.commit()
+        console.log(`✅ endStaleLiveStreams: marked ${count} streams as ended`)
       } else {
-        console.log('ℹ️ No orphaned streams found to clean up')
+        console.log('ℹ️ endStaleLiveStreams: no stale streams found')
       }
 
-      return { success: true, cleanedCount: orphanedCount }
+      return { success: true, endedCount: count }
     } catch (error) {
-      console.error('❌ Failed to cleanup orphaned streams:', error)
+      console.error('❌ endStaleLiveStreams failed:', error)
       throw error
     }
   })

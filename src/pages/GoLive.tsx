@@ -60,13 +60,13 @@ export default function GoLive() {
           await clientRef.current?.unpublish().catch(() => {})
           await clientRef.current?.leave().catch(() => {})
 
-          // Delete stream document if component unmounts while streaming
+          // Mark stream as ended if component unmounts while streaming
           if (livestreamId) {
             try {
-              await livestreamService.deleteStream(livestreamId)
-              console.log('📝 Livestream deleted on component unmount:', livestreamId)
+              await livestreamService.updateLivestreamStatus(livestreamId, 'ended')
+              console.log('📝 Livestream marked as ended on component unmount:', livestreamId)
             } catch (firestoreError) {
-              console.error('❌ Failed to delete livestream on unmount:', firestoreError)
+              console.error('❌ Failed to mark livestream as ended on unmount:', firestoreError)
             }
           }
         } finally {
@@ -179,7 +179,7 @@ export default function GoLive() {
           channel,
         })
 
-        // Start heartbeat updates every 30 seconds to keep stream alive
+        // Start heartbeat updates every 20 seconds to keep stream alive
         const heartbeatIntervalId = setInterval(async () => {
           if (createdLivestreamId) {
             try {
@@ -188,7 +188,7 @@ export default function GoLive() {
               console.error('❌ Failed to update heartbeat:', error)
             }
           }
-        }, 30000) // 30 seconds
+        }, 20000) // 20 seconds
 
         setHeartbeatInterval(heartbeatIntervalId)
       } catch (firestoreError) {
@@ -220,13 +220,13 @@ export default function GoLive() {
       await client.unpublish().catch(() => {})
       await client.leave().catch(() => {})
 
-      // 📝 Delete livestream document from Firestore
+      // 📝 Mark livestream as ended (don't delete - keep for history)
       if (livestreamId) {
         try {
-          await livestreamService.deleteStream(livestreamId)
-          console.log('📝 Livestream deleted:', livestreamId)
+          await livestreamService.updateLivestreamStatus(livestreamId, 'ended')
+          console.log('📝 Livestream marked as ended:', livestreamId)
         } catch (firestoreError) {
-          console.error('❌ Failed to delete livestream:', firestoreError)
+          console.error('❌ Failed to mark livestream as ended:', firestoreError)
         }
       }
     } finally {
