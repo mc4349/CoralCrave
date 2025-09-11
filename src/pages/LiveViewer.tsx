@@ -32,6 +32,12 @@ export default function LiveViewer() {
   const { currentUser, userProfile } = useAuth()
 
   useEffect(() => {
+    // Wait for authentication to complete before setting up Agora client
+    if (!currentUser) {
+      console.log('🔍 LiveViewer: Waiting for authentication to complete...')
+      return
+    }
+
     const client = createClient()
     clientRef.current = client
 
@@ -125,7 +131,7 @@ export default function LiveViewer() {
       if (joinTimerRef.current) window.clearTimeout(joinTimerRef.current)
       joinTimerRef.current = null
     }
-  }, [channel])
+  }, [channel, currentUser])
 
   if (!currentUser) {
     return (

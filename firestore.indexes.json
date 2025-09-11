@@ -33,6 +33,24 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
+          "fieldPath": "roomId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "timestamp",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "__name__",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "chatMessages",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
           "fieldPath": "timestamp",
           "order": "DESCENDING"
         }
@@ -120,7 +138,7 @@
         },
         {
           "fieldPath": "startedAt",
-          "order": "DESCENDING"
+          "order": "ASCENDING"
         }
       ]
     },
